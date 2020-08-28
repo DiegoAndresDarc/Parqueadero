@@ -3,8 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Bibliotecas/Documentos/NetBeansProjects/Parqueadero/web/index.html</file>
-            <file>file:/D:/Bibliotecas/Documentos/NetBeansProjects/Parqueadero/src/java/servlet/MainServlet.java</file>
+            <file>file:/D:/Bibliotecas/Documentos/GitHub/Parqueadero/Parqueadero/web/index.html</file>
+            <file>file:/D:/Bibliotecas/Documentos/GitHub/Parqueadero/Parqueadero/src/java/logic/objects/Parqueadero.java</file>
+            <file>file:/D:/Bibliotecas/Documentos/GitHub/Parqueadero/Parqueadero/src/java/logic/connection/DBManager.java</file>
+            <file>file:/D:/Bibliotecas/Documentos/GitHub/Parqueadero/Parqueadero/src/java/servlet/MainServlet.java</file>
         </group>
     </open-files>
 </project-private>
