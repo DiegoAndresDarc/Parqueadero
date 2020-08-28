@@ -1,0 +1,26 @@
+#app{
+    padding-right: 0em;
+}
+.login{
+    width: 450px;    
+    box-shadow: none;
+    border: 1px solid #dcdada;
+    margin: auto;    
+}
+.box {
+    max-width: 1367px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    box-shadow: none;
+    border-radius: 3px !important;
+    color: #000000 !important;
+    font-size: .875rem;
+    box-shadow: 0 10px 40px 0 rgba(18,106,211,.07), 0 2px 9px 0 rgba(18,106,211,.06);    
+}
+.content-login{    
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+} 

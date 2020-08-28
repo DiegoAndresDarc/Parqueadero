@@ -3,7 +3,7 @@
     <div class="content-login">
       <div class="box login">
         <div class="field">
-          <form @submit.prevent="login()" autocomplete="off" name="form">
+          <form @submit="loginUser()" autocomplete="off" name="form">
             <h1 class="subtitle has-text-link is-size-3">Incio de Sesión</h1>
             <div class="field">
               <div class="control has-icons-left">
@@ -71,7 +71,7 @@ export default {
     };
   },
   methods: {
-    async login() {
+    async loginUser() {
       console.log("metodo de login");
       var responseObject = {
         usuario: document.getElementById("usuario").value,

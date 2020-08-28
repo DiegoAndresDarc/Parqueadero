@@ -5,6 +5,7 @@
  */
 package servlet;
 
+import base.process.UrlUtil;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,12 +14,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author Brian Botina
  */
-@WebServlet(name = "MainServlet", urlPatterns = {"/MainServlet"})
+@WebServlet(name = "MainServlet", urlPatterns = {"/MainServlet/*"})
 public class MainServlet extends HttpServlet {
 
     /**
@@ -32,14 +34,39 @@ public class MainServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        response.addHeader("Access-Control-Allow-Origin", "*");
+        response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
-        response.setCharacterEncoding("utf-8");
         PrintWriter out = response.getWriter();
+        String body, action;
+        Gson gson = new Gson();
+        action = UrlUtil.getMethodName(request.getRequestURI());
         Object object = null;
-        object = true;
-        Gson gson = Gson.class.cast(object);
-        
-       
+        body = request.getReader().lines().reduce("", (accumulator, actual) -> accumulator + actual);
+        switch (action) {
+            case "login":
+                object = true;
+                break;
+            case "logout":
+                request.getSession().invalidate();
+                object = true;
+                break;
+            case "checkSession":
+                if (this.checkSession(request.getSession())) {
+                    object = true;
+                } else {
+                    object = false;
+                }
+                break;
+            default:
+                break;
+        }
+        out.print(new Gson().toJson(object));
+    }
+
+    private boolean checkSession(HttpSession session) {
+//        System.out.println(session.getAttribute("name"));
+        return session.getAttribute("names") != null;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
