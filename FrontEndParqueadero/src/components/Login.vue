@@ -45,7 +45,7 @@
           <div class="control">
             <p>
               ¿No tienes una cuenta?
-              <a href="#">Crear cuenta</a>
+              <router-link to="/signup">Crear cuenta</router-link>
             </p>
           </div>
         </div>
@@ -53,7 +53,7 @@
           <div class="control">
             <p>
               ¿Olvidaste la contraseña?
-              <a href="#">Recuperar contraseña</a>
+              <router-link to="/recoverPassword">Recuperar contraseña</router-link>
             </p>
           </div>
         </div>
@@ -62,7 +62,7 @@
   </div>
 </template>
 <script>
-export default {
+module.exports = {
   name: "login",
   components: {},
   data() {
@@ -71,27 +71,29 @@ export default {
     };
   },
   methods: {
-    async loginUser() {
+    loginUser() {
       console.log("metodo de login");
       var responseObject = {
         usuario: document.getElementById("usuario").value,
         password: document.getElementById("password").value,
       };
       console.log(responseObject);
-      const response = await this.$axios.post(
-        "MainServlet/login",
-        responseObject
-      );
-      if (response) {
-        var loginInfo = {
-          response: response.data,
-        };
-        this.$emit("login:loginInfo", loginInfo);
-      } else {
-        this.error = true;
-        this.cleanMgsError();
-      }
-      //console.log(forms);
+      this.$axios
+        .post("MainServlet/login", responseObject)
+        .then((response) => {
+          if (response) {
+            var loginInfo = {
+              response: response.data,
+            };
+            this.$emit("login:loginInfo", loginInfo);
+          } else {
+            this.error = true;
+            this.cleanMgsError();
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
     cleanMgsError() {
       this.seg = 0;
@@ -101,7 +103,7 @@ export default {
           this.error = false;
         }
       }, 2000);
-    },
+    }
   },
   created() {
     console.log("Login.vue");
