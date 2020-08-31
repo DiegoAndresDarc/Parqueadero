@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div class="login">
     <div class="content-login">
-      <div class="box login">
+      <div class="box clogin">
         <div class="field">
-          <form @submit="loginUser()" autocomplete="off" name="form">
+          <form @submit.prevent="loginUser()" autocomplete="off" name="form">
             <h1 class="subtitle has-text-link is-size-3">Incio de Sesión</h1>
             <div class="field">
               <div class="control has-icons-left">
@@ -33,11 +33,30 @@
                 </span>
               </div>
             </div>
-            <transition name="slide">
-              <p v-if="error" class="help is-danger">Datos incorrectos</p>
-            </transition>
-            <div class="control">
-              <button class="button is-info is-fullwidth is-medium">Iniciar Sesión</button>
+            <div class="field">
+              <div class="control">
+                <transition name="slide">
+                  <p
+                    v-if="invalidData"
+                    class="help is-danger is-medium"
+                  >Usuario o contraseña incorrectos</p>
+                </transition>
+              </div>
+            </div>
+            <div class="field">
+              <div class="control">
+                <transition name="slide">
+                  <p
+                    v-if="error"
+                    class="help is-danger is-medium"
+                  >Hubo un error en la comunicación con el servidor. Si persiste, por favor pongase en contacto con el administrador de la página</p>
+                </transition>
+              </div>
+            </div>
+            <div class="field">
+              <div class="control">
+                <button class="button is-info is-fullwidth is-medium">Iniciar Sesión</button>
+              </div>
             </div>
           </form>
         </div>
@@ -62,15 +81,31 @@
   </div>
 </template>
 <script>
-module.exports = {
+import Container from "./Container";
+export default {
   name: "login",
-  components: {},
+  components: {
+    container: Container,
+  },
   data() {
     return {
       error: false,
+      LoggedIn: false,
+      invalidData: false,
     };
   },
   methods: {
+    checkSession() {
+      this.$axios
+        .get("MainServlet/checkSession")
+        .then((response) => {
+          this.LoggedIn = response.data != null ? true : false;
+        })
+        .catch((e) => {
+          console.log(e);
+          this.LoggedIn = false;
+        });
+    },
     loginUser() {
       console.log("metodo de login");
       var responseObject = {
@@ -87,25 +122,30 @@ module.exports = {
             };
             this.$emit("login:loginInfo", loginInfo);
           } else {
-            this.error = true;
-            this.cleanMgsError();
+            this.invalidData = true;
+            this.cleanMessages();
           }
         })
         .catch((e) => {
           console.log(e);
+          this.error = true;
+          this.cleanMessages();
         });
+      this.$router.push("/Home");
     },
-    cleanMgsError() {
+    cleanMessages() {
       this.seg = 0;
       setInterval(() => {
         this.seg += 1;
         if (this.seg === 3) {
           this.error = false;
+          this.invalidData = false;
         }
       }, 2000);
-    }
+    },
   },
   created() {
+    this.checkSession();
     console.log("Login.vue");
   },
 };
