@@ -131,7 +131,7 @@ export default {
           this.error = true;
           this.cleanMessages();
         });
-      this.$router.push("/Home");
+      //this.$router.push("/Home");
     },
     cleanMessages() {
       this.seg = 0;

@@ -7,7 +7,13 @@
           <div class="field">
             <label class="label">Nombres Completos</label>
             <div class="control">
-              <input class="input is-medium" type="text" placeholder="Nombres" id="names" required />
+              <input
+                class="input is-medium"
+                type="text"
+                placeholder="Nombres"
+                id="nombres"
+                required
+              />
             </div>
           </div>
           <div class="field">
@@ -16,7 +22,7 @@
                 class="input is-medium"
                 type="text"
                 placeholder="Apellidos"
-                id="lastNames"
+                id="apellidos"
                 required
               />
             </div>
@@ -81,15 +87,28 @@
             </div>
           </div>
           <div class="field">
-          <div class="control">
-            <button class="button is-link is-fullwidth is-medium">Registro</button>
-          </div>
+            <div class="control">
+              <button class="button is-link is-fullwidth is-medium" type="submit">Registro</button>
+            </div>
           </div>
         </form>
       </div>
       <div class="field">
         <div class="control">
-          <button class="button is-fullwidth is-medium is-link is-light" v-on:click="cancelar">Cancelar</button>
+          <transition name="slide">
+            <p
+              v-if="error"
+              class="help is-danger is-medium"
+            >Hubo un error en la comunicación con el servidor. Si persiste, por favor pongase en contacto con el administrador de la página</p>
+          </transition>
+        </div>
+      </div>
+      <div class="field">
+        <div class="control">
+          <button
+            class="button is-fullwidth is-medium is-link is-light"
+            v-on:click="cancelar"
+          >Cancelar</button>
         </div>
       </div>
     </div>
@@ -102,15 +121,60 @@ export default {
   data() {
     return {
       mssg: "Registro exitoso",
+      error: false
     };
   },
   methods: {
     signup() {
+      const txtnombres = document.getElementById("nombres");
+      const txtapellidos = document.getElementById("apellidos");
+      const txtusuario = document.getElementById("usuario");
+      const txtpassword = document.getElementById("password");
+      const txtemail = document.getElementById("email");
+      const txttelefono = document.getElementById("telefono");
+      const txtcelular = document.getElementById("celular");
+      var responseObject = {
+        nombres: txtnombres.value,
+        apellidos: txtapellidos.value,
+        usuario: txtusuario.value,
+        password: txtpassword.value,
+        email: txtemail.value,
+        telefono: txttelefono.value,
+        celular: txtcelular.value,
+      };
+      console.log(responseObject);
+      this.$axios
+        .post("MainServlet/signup", responseObject)
+        .then((response) => {
+          if (response) {
+            var loginInfo = {
+              response: response.data,
+            };
+          } else {
+            this.invalidData = true;
+            this.cleanMessages();
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+          this.error = true;
+          this.cleanMessages();
+        });
       console.log("registro");
     },
     cancelar(event) {
       //Limpiar la pantalla
       this.$router.push("/");
+    },
+    cleanMessages() {
+      this.seg = 0;
+      setInterval(() => {
+        this.seg += 1;
+        if (this.seg === 3) {
+          this.error = false;
+          this.invalidData = false;
+        }
+      }, 2000);
     },
   },
   created() {

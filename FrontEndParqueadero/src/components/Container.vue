@@ -1,15 +1,7 @@
 <template>
   <div id="container">
     <div class="content-container">
-      <Motion :value="offset" tag="div">
-        <div
-          class="motion"
-          slot-scope="props"
-          :style="{ transform: `translateX(${props.value}px)` }"
-        >
-          <menu></menu>
-        </div>
-      </Motion>
+      <appmenu></appmenu>
     </div>
   </div>
 </template>
@@ -18,7 +10,7 @@ import Menu from "./Menu.vue";
 export default {
   name: "container",
   components: {
-    menu: Menu,
+    appmenu: Menu,
   },
   data() {
     return {
@@ -34,7 +26,6 @@ export default {
     },
   },
   created() {
-      this.showMenu();
     console.log("Container.vue");
   },
 };

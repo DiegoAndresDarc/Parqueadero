@@ -1,10 +1,16 @@
 <template>
   <div id="menu">
-    <aside>
-      <nav>
+    <div class="field">
+      <div class="control">
         <h1>Menu de navegación</h1>
+      </div>
+    </div>
+    <aside class="menu">
+      <nav>
         <ul>
-          <li>Administrar usuarios</li>
+          <li>
+            <a>Administrar usuarios</a>
+          </li>
           <li>Administrar Parqueaderos</li>
           <li>Actualizar datos</li>
           <li>Salir</li>
