@@ -1,0 +1,4 @@
+/Parqueadero/dist/
+*.class
+*.dpf
+glassfish-web.xml
