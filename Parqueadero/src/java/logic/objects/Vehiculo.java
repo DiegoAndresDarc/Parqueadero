@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package logic.connection;
+package logic.objects;
 
 /**
  *
- * @author Brian Botina
+ * @author Prog7
  */
-public class DBManager {
+public class Vehiculo {
     
 }

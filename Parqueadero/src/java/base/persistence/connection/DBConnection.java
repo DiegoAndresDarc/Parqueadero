@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Lord_Nightmare
+ * @author Brian Botina
  */
 public class DBConnection {
 
@@ -34,17 +34,16 @@ public class DBConnection {
         }
     }
 
-    public static Connection connect() {
+    public static Connection connect(String user_type) {
         DBConnection cn = new DBConnection();
         Connection cnn = null;
         cn.setGeneralProperties();
+        String user = databasProperties.getProperty("mysql_" + user_type + "_user");
+        String password = databasProperties.getProperty("mysql_" + user_type + "_password");
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             cnn = DriverManager.getConnection(
-                    databasProperties.getProperty("mysql_url"),
-                    databasProperties.getProperty("mysql_user"),
-                    databasProperties.getProperty("mysql_password"));
-
+                    databasProperties.getProperty("mysql_url"), user, password);
             cnn.setAutoCommit(false);
 //            System.out.println(String.valueOf(++nconn) + " abriendo  conexion");
 

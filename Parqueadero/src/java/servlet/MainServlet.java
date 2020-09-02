@@ -5,10 +5,15 @@
  */
 package servlet;
 
+import base.dao.BasicDao;
 import base.process.UrlUtil;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -45,6 +50,7 @@ public class MainServlet extends HttpServlet {
         body = request.getReader().lines().reduce("", (accumulator, actual) -> accumulator + actual);
         switch (action) {
             case "login":
+                //devolver menu y tipo de usuario
                 object = true;
                 break;
             case "logout":
@@ -58,12 +64,46 @@ public class MainServlet extends HttpServlet {
                     object = false;
                 }
                 break;
+            case "signup":
+                String table = (String) request.getSession().getAttribute("tabla");
+                HashMap<String, String> data = new HashMap();
+                if(table.equals("usuario")){
+                data.put("nombres", (String) request.getSession().getAttribute("nombres"));
+                data.put("apellidos", (String) request.getSession().getAttribute("apellidos"));
+                data.put("usuario", (String) request.getSession().getAttribute("usuario"));
+                data.put("password", (String) request.getSession().getAttribute("password"));
+                data.put("email", (String) request.getSession().getAttribute("email"));
+                data.put("telefono", (String) request.getSession().getAttribute("telefono"));
+                data.put("celular", (String) request.getSession().getAttribute("celular"));
+                data.put("identificacion", (String) request.getSession().getAttribute("identificacion"));
+                data.put("tipo_identificacion", (String) request.getSession().getAttribute("tipo_identificacion"));
+                }else if(table.equals("parqueadero")){
+                    
+                }
+                this.insert(table,data);
+                break;
+            case "recoverPassword":
+                break;
+            case "getMenu":
+                break;
+            case "update":
+                break;
+            case "select":
+                break;
             default:
                 break;
         }
         out.print(new Gson().toJson(object));
     }
-
+    
+    private void insert(String table, HashMap<String,String> data){
+        BasicDao basicDao = new BasicDao("r");
+        List<String> tables = new ArrayList();
+        tables.add(table);
+        basicDao.insert(tables, data);
+        
+    }
+    
     private boolean checkSession(HttpSession session) {
 //        System.out.println(session.getAttribute("name"));
         return session.getAttribute("names") != null;

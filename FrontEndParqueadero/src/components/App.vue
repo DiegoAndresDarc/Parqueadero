@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
@@ -14,6 +14,22 @@ export default {
     };
   },
   methods: {
+    checkSession() {
+      this.$axios
+        .get("MainServlet/checkSession")
+        .then((response) => {
+          this.LoggedIn = response.data != null ? true : false;
+        })
+        .catch((e) => {
+          console.log(e);
+          this.LoggedIn = false;
+        });
+      if (this.LoggedIn) {
+        this.$router.push("/Home");
+      } else {
+        this.$router.push("/login");
+      }
+    },
     logout() {
       this.$$axios
         .get("MainServlet/logout")
@@ -26,6 +42,7 @@ export default {
     },
   },
   created() {
+    this.checkSession();
     console.log("App.vue");
   },
 };
@@ -37,7 +54,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: #502c4e;
   margin-top: 60px;
 }
 </style>

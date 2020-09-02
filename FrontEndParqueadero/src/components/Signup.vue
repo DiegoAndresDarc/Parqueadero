@@ -4,6 +4,28 @@
       <h1>Registro</h1>
       <div class="field">
         <form @submit.prevent="signup()" autocomplete="off">
+          <div class="control">
+            <label class="label">Tipo y número de documento</label>
+          </div>
+          <div class="field has-addons">
+            <div class="control">
+              <div class="select">
+                <select v-model="tipo_doc">
+                  <option>CC</option>
+                  <option>CE</option>
+                </select>
+              </div>
+            </div>
+            <div class="control">
+              <input
+                class="input is-expanded"
+                type="number"
+                placeholder="numero de documento"
+                id="identificacion"
+                required
+              />
+            </div>
+          </div>
           <div class="field">
             <label class="label">Nombres Completos</label>
             <div class="control">
@@ -17,6 +39,7 @@
             </div>
           </div>
           <div class="field">
+            <label class="label">Apellidos</label>
             <div class="control">
               <input
                 class="input is-medium"
@@ -28,6 +51,7 @@
             </div>
           </div>
           <div class="field">
+            <label class="label">Usuario</label>
             <div class="control">
               <input
                 class="input is-medium"
@@ -39,6 +63,7 @@
             </div>
           </div>
           <div class="field">
+            <label class="label">Contraseña</label>
             <div class="control">
               <input
                 class="input is-medium"
@@ -50,6 +75,7 @@
             </div>
           </div>
           <div class="field">
+            <label class="label">Dirección de correo electrónico</label>
             <div class="control">
               <input
                 class="input is-medium"
@@ -61,6 +87,7 @@
             </div>
           </div>
           <div class="field">
+            <label class="label">Número de teléfono fijo</label>
             <div class="control">
               <input
                 class="input is-medium"
@@ -74,6 +101,7 @@
             </div>
           </div>
           <div class="field">
+            <label class="label">Número de teléfono celular</label>
             <div class="control">
               <input
                 class="input is-medium"
@@ -121,7 +149,8 @@ export default {
   data() {
     return {
       mssg: "Registro exitoso",
-      error: false
+      error: false,
+      tipo_doc: "CC",
     };
   },
   methods: {
@@ -133,7 +162,9 @@ export default {
       const txtemail = document.getElementById("email");
       const txttelefono = document.getElementById("telefono");
       const txtcelular = document.getElementById("celular");
+      const txtidentificacion = document.getElementById("identificacion");
       var responseObject = {
+        tabla: "usuario",
         nombres: txtnombres.value,
         apellidos: txtapellidos.value,
         usuario: txtusuario.value,
@@ -141,6 +172,8 @@ export default {
         email: txtemail.value,
         telefono: txttelefono.value,
         celular: txtcelular.value,
+        identificacion: txtidentificacion.value,
+        tipo_identificacion: this.tipo_doc,
       };
       console.log(responseObject);
       this.$axios
@@ -160,11 +193,12 @@ export default {
           this.error = true;
           this.cleanMessages();
         });
+      this.$router.push("/login");
       console.log("registro");
     },
     cancelar(event) {
       //Limpiar la pantalla
-      this.$router.push("/");
+      this.$router.push("/login");
     },
     cleanMessages() {
       this.seg = 0;

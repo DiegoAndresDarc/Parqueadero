@@ -21,7 +21,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author prog14
+ * @author Brian Botina
  */
 public class BasicDao {
 
@@ -32,9 +32,9 @@ public class BasicDao {
     static int nconn = 0;
 
     //------------Métodos para manipular conexión y metadata--------------------//
-    public BasicDao() {
+    public BasicDao(String user_type) {
         nconn++;
-        this.cnn = DBConnection.connect();
+        this.cnn = DBConnection.connect(user_type);
         this.sb = new StringBuilder();
         //System.out.println("Conexiones abiertas:" + nconn);
 
@@ -91,7 +91,7 @@ public class BasicDao {
         return rowCount;
     }
 
-    public boolean insert(List<String> tables, Map<String, String> values, Integer user) {
+    public boolean insert(List<String> tables, Map<String, String> values) {
         Boolean result = false;
         try {
             Map<String, String> insertValues = new HashMap();

@@ -2,3 +2,5 @@
 *.class
 *.dpf
 glassfish-web.xml
+private.properties
+project.properties

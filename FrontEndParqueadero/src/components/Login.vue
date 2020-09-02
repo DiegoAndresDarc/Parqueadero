@@ -55,7 +55,7 @@
             </div>
             <div class="field">
               <div class="control">
-                <button class="button is-info is-fullwidth is-medium">Iniciar Sesión</button>
+                <button class="button is-link is-fullwidth is-medium">Iniciar Sesión</button>
               </div>
             </div>
           </form>
@@ -81,12 +81,9 @@
   </div>
 </template>
 <script>
-import Container from "./Container";
 export default {
   name: "login",
-  components: {
-    container: Container,
-  },
+  components: {},
   data() {
     return {
       error: false,
@@ -95,17 +92,6 @@ export default {
     };
   },
   methods: {
-    checkSession() {
-      this.$axios
-        .get("MainServlet/checkSession")
-        .then((response) => {
-          this.LoggedIn = response.data != null ? true : false;
-        })
-        .catch((e) => {
-          console.log(e);
-          this.LoggedIn = false;
-        });
-    },
     loginUser() {
       console.log("metodo de login");
       var responseObject = {
@@ -145,7 +131,6 @@ export default {
     },
   },
   created() {
-    this.checkSession();
     console.log("Login.vue");
   },
 };
@@ -156,7 +141,7 @@ h2 {
   font-weight: normal;
 }
 a {
-  color: #42b983;
+  color: #b98142;
 }
 .input {
   background-color: #fff;
