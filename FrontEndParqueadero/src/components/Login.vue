@@ -107,6 +107,7 @@ export default {
               response: response.data,
             };
             this.$emit("login:loginInfo", loginInfo);
+            this.$router.push("/Home");
           } else {
             this.invalidData = true;
             this.cleanMessages();
@@ -117,7 +118,6 @@ export default {
           this.error = true;
           this.cleanMessages();
         });
-      //this.$router.push("/Home");
     },
     cleanMessages() {
       this.seg = 0;
@@ -141,7 +141,7 @@ h2 {
   font-weight: normal;
 }
 a {
-  color: #b98142;
+  color: #42b983;
 }
 .input {
   background-color: #fff;

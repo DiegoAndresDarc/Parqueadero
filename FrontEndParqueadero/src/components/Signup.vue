@@ -151,6 +151,7 @@ export default {
       mssg: "Registro exitoso",
       error: false,
       tipo_doc: "CC",
+      tipo_usr: "C",
     };
   },
   methods: {
@@ -174,27 +175,20 @@ export default {
         celular: txtcelular.value,
         identificacion: txtidentificacion.value,
         tipo_identificacion: this.tipo_doc,
+        tipo_usuario: this.tipo_usr,
       };
       console.log(responseObject);
       this.$axios
         .post("MainServlet/signup", responseObject)
         .then((response) => {
-          if (response) {
-            var loginInfo = {
-              response: response.data,
-            };
-          } else {
-            this.invalidData = true;
-            this.cleanMessages();
-          }
+          this.$router.push("/login");
+          console.log("registro");
         })
         .catch((e) => {
           console.log(e);
           this.error = true;
           this.cleanMessages();
         });
-      this.$router.push("/login");
-      console.log("registro");
     },
     cancelar(event) {
       //Limpiar la pantalla

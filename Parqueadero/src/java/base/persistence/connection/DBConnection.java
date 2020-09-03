@@ -41,7 +41,7 @@ public class DBConnection {
         String user = databasProperties.getProperty("mysql_" + user_type + "_user");
         String password = databasProperties.getProperty("mysql_" + user_type + "_password");
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName("org.mariadb.jdbc.Driver");
             cnn = DriverManager.getConnection(
                     databasProperties.getProperty("mysql_url"), user, password);
             cnn.setAutoCommit(false);

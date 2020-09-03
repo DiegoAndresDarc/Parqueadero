@@ -65,22 +65,13 @@ public class MainServlet extends HttpServlet {
                 }
                 break;
             case "signup":
-                String table = (String) request.getSession().getAttribute("tabla");
-                HashMap<String, String> data = new HashMap();
-                if(table.equals("usuario")){
-                data.put("nombres", (String) request.getSession().getAttribute("nombres"));
-                data.put("apellidos", (String) request.getSession().getAttribute("apellidos"));
-                data.put("usuario", (String) request.getSession().getAttribute("usuario"));
-                data.put("password", (String) request.getSession().getAttribute("password"));
-                data.put("email", (String) request.getSession().getAttribute("email"));
-                data.put("telefono", (String) request.getSession().getAttribute("telefono"));
-                data.put("celular", (String) request.getSession().getAttribute("celular"));
-                data.put("identificacion", (String) request.getSession().getAttribute("identificacion"));
-                data.put("tipo_identificacion", (String) request.getSession().getAttribute("tipo_identificacion"));
-                }else if(table.equals("parqueadero")){
-                    
+                HashMap<String, String> data = gson.fromJson(body, HashMap.class);
+                String table = (String) data.get("tabla");
+                data.remove("tabla");
+                if (table.equals("usuario")) {
+                    this.insert(table, data);
+                } else if (table.equals("parqueadero")) {
                 }
-                this.insert(table,data);
                 break;
             case "recoverPassword":
                 break;
@@ -95,15 +86,16 @@ public class MainServlet extends HttpServlet {
         }
         out.print(new Gson().toJson(object));
     }
-    
-    private void insert(String table, HashMap<String,String> data){
+
+    private void insert(String table, HashMap<String, String> data) {
         BasicDao basicDao = new BasicDao("r");
         List<String> tables = new ArrayList();
         tables.add(table);
         basicDao.insert(tables, data);
-        
+        basicDao.close();
+
     }
-    
+
     private boolean checkSession(HttpSession session) {
 //        System.out.println(session.getAttribute("name"));
         return session.getAttribute("names") != null;

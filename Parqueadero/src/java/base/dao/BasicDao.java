@@ -91,37 +91,51 @@ public class BasicDao {
         return rowCount;
     }
 
-    public boolean insert(List<String> tables, Map<String, String> values) {
+    public boolean insert(List<String> tables, Map<String, String> values){
         Boolean result = false;
         try {
-            Map<String, String> insertValues = new HashMap();
-            Map<String, String> keyMap = null;
             String keyName = null;
             for (String table : tables) {
                 StringBuilder sb;
                 sb = new StringBuilder();
                 sb.append("INSERT INTO ").append(table).append(" (");
+                for (Map.Entry<String, String> entry : values.entrySet()) {
+                    Object key = entry.getKey();
+                    Object val = entry.getValue();
+                    sb.append(key);
+                    sb.append(",");
 
+                }
                 sb.deleteCharAt(sb.lastIndexOf(","));
                 sb.append(") VALUES (");
-                for (int i = 0; i < insertValues.size(); i++) {
+                for (int i = 0; i < values.size(); i++) {
                     sb.append("?,");
                 }
                 sb.deleteCharAt(sb.lastIndexOf(","));
                 sb.append(")");
 
                 //execute insert
-                ps = cnn.prepareStatement(sb.toString(), PreparedStatement.RETURN_GENERATED_KEYS);
+                ps = cnn.prepareStatement(sb.toString());
                 int psParams = 1;
-                // for (WebFormatDetail detail : format.getDetails()) {
+                for (Map.Entry<String, String> entry : values.entrySet()) {
+                    Object key = entry.getKey();
+                    Object val = entry.getValue();
+                    sb.append(key);
+                    sb.append(",");
+                    ps.setString(psParams++, (String) val);
+                }
 
-                //  ps.setString(psParams++, insertValues.get(detail.getField().getFieldName()));
             }
             result = ps.executeUpdate() > 0;
             cnn.commit();
 
         } catch (SQLException ex) {
             Logger.getLogger(BasicDao.class.getName()).log(Level.SEVERE, null, ex);
+            try {
+                cnn.rollback();
+            } catch (SQLException ex1) {
+                Logger.getLogger(BasicDao.class.getName()).log(Level.SEVERE, null, ex1);
+            }
         }
         return result;
     }
