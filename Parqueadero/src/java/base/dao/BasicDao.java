@@ -14,6 +14,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -91,41 +92,37 @@ public class BasicDao {
         return rowCount;
     }
 
-    public boolean insert(List<String> tables, Map<String, String> values){
+    public boolean insert(String table, Map<String, String> values) {
         Boolean result = false;
         try {
-            String keyName = null;
-            for (String table : tables) {
-                StringBuilder sb;
-                sb = new StringBuilder();
-                sb.append("INSERT INTO ").append(table).append(" (");
-                for (Map.Entry<String, String> entry : values.entrySet()) {
-                    Object key = entry.getKey();
-                    Object val = entry.getValue();
-                    sb.append(key);
-                    sb.append(",");
-
-                }
-                sb.deleteCharAt(sb.lastIndexOf(","));
-                sb.append(") VALUES (");
-                for (int i = 0; i < values.size(); i++) {
-                    sb.append("?,");
-                }
-                sb.deleteCharAt(sb.lastIndexOf(","));
-                sb.append(")");
-
-                //execute insert
-                ps = cnn.prepareStatement(sb.toString());
-                int psParams = 1;
-                for (Map.Entry<String, String> entry : values.entrySet()) {
-                    Object key = entry.getKey();
-                    Object val = entry.getValue();
-                    sb.append(key);
-                    sb.append(",");
-                    ps.setString(psParams++, (String) val);
-                }
+            StringBuilder sb = new StringBuilder();
+            sb.append("INSERT INTO ").append(table).append(" (");
+            for (Map.Entry<String, String> entry : values.entrySet()) {
+                Object key = entry.getKey();
+                Object val = entry.getValue();
+                sb.append(key);
+                sb.append(",");
 
             }
+            sb.deleteCharAt(sb.lastIndexOf(","));
+            sb.append(") VALUES (");
+            for (int i = 0; i < values.size(); i++) {
+                sb.append("?,");
+            }
+            sb.deleteCharAt(sb.lastIndexOf(","));
+            sb.append(")");
+
+            //execute insert
+            ps = cnn.prepareStatement(sb.toString());
+            int psParams = 1;
+            for (Map.Entry<String, String> entry : values.entrySet()) {
+                Object key = entry.getKey();
+                Object val = entry.getValue();
+                sb.append(key);
+                sb.append(",");
+                ps.setString(psParams++, (String) val);
+            }
+
             result = ps.executeUpdate() > 0;
             cnn.commit();
 
@@ -168,14 +165,26 @@ public class BasicDao {
         return result;
     }
 
-    public Map<String, String> search(List<String> tables, Map<String, String> params) {
+    public Map<String, String> search(String table, Map<String, String> params, ArrayList<String> fields) {
 
         Map<String, String> result = new HashMap();
-        /*ArrayList tables = new ArrayList();
-        List<String> values = new ArrayList<>();
-        
+        try {
+            ArrayList<String> values = new ArrayList();
             StringBuilder sbWhere = new StringBuilder();
             StringBuilder sb = new StringBuilder();
+            sb.append("SELECT");
+            StringBuilder sbFields = new StringBuilder();
+            if (fields != null) {
+                for (String field : fields) {
+                    sbFields.append(field);
+                    sbFields.append(",");
+                }
+                sbFields.deleteCharAt(sbFields.lastIndexOf(","));
+            } else {
+                sbFields.append("*");
+            }
+            sb.append(sbFields);
+            sb.append(" FROM ").append(table);
             for (String field : params.keySet()) {
                 if (sbWhere.length() > 0) {
                     sbWhere.append(" AND ");
@@ -185,58 +194,27 @@ public class BasicDao {
                 values.add(value);
             }
 
-            for (int index = 0;
-                    index < formats.size();
-                    index++) {
-                WebFormat format = formats.get(index);
-                if (format.getType() == FormatType.DATA.getInt()) {
-                    format.getDetails().forEach((detail) -> {
-                        String select = format.getTable().getName().concat(".").concat(detail.getField().getFieldName());
-                        if (sb.lastIndexOf(select) < 0) {
-                            sb.append(select).append(",");
-                            boolean inTables = tables.stream().noneMatch(t -> t.equals(format.getTable().getName()));
-                            if (tables.isEmpty() || inTables) {
-                                tables.add(format.getTable().getName());
-                            }
-                        }
-                    });
+            if (sbWhere.length() > 0) {
+                sb.append(" WHERE ");
+                sb.append(sbWhere);
+            }
+            ps = cnn.prepareStatement(sb.toString());
+            for (int i = 1; i <= values.size(); i++) {
+                ps.setString(i, values.get(i - 1));
+            }
+            rs = ps.executeQuery();
+            int colsCount = ps.getMetaData().getColumnCount();
+            while (rs.next()) {
+
+                for (int col = 1; col <= colsCount; col++) {
+                    result.put(rs.getMetaData().getColumnName(col),
+                            rs.getString(col));
+
                 }
             }
-
-            sb.deleteCharAt(sb.length() - 1);
-            sb.append(
-                    " FROM ");
-            tables.forEach(t
-                    -> {
-                sb.append(t);
-                sb.append(",");
-            }
-            );
-            sb.deleteCharAt(sb.length() - 1);
-            if (sb.length()
-                    > 0) {
-                sb.insert(0, "SELECT ");
-                if (sbWhere.length() > 0) {
-                    sb.append(" WHERE ");
-                    sb.append(sbWhere);
-                }
-                ps = cnn.prepareStatement(sb.toString());
-                for (int i = 1; i <= values.size(); i++) {
-                    ps.setString(i, values.get(i - 1));
-                }
-                rs = ps.executeQuery();
-                int colsCount = ps.getMetaData().getColumnCount();
-                while (rs.next()) {
-
-                    for (int col = 1; col <= colsCount; col++) {
-                        result.put(rs.getMetaData().getColumnName(col),
-                                rs.getString(col));
-
-                    }
-                }
-            }
-
-         */
+        } catch (SQLException ex) {
+            Logger.getLogger(BasicDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return result;
     }
 
@@ -347,8 +325,10 @@ public class BasicDao {
             }
             result = ps.executeUpdate() > 0;
             cnn.commit();
+
         } catch (SQLException ex) {
-            Logger.getLogger(BasicDao.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(BasicDao.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
         return result;
     }

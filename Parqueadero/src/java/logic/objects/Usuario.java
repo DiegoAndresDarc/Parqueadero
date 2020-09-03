@@ -6,7 +6,9 @@
 package logic.objects;
 
 import base.dao.BasicDao;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -14,21 +16,34 @@ import java.util.HashMap;
  */
 public class Usuario {
 
-    private String tipo_doc, nombres, apellidos, usuario, password, email,tipo_usuario;
-    private int telefono, celular, identificacion;
+    private String tipo_doc, nombres, apellidos, usuario, password, email, tipo_usuario;
+    private long telefono, celular, identificacion;
     private BasicDao basicDao;
-    private HashMap<String,String> data;
-    
-    public Usuario(HashMap<String,String> data){
+    private HashMap<String, String> data;
+    private ArrayList<Vehiculo> vehiculos;
+    private ArrayList<Parqueadero> parqueaderos;
+
+    public Usuario(HashMap<String, String> data) {
         this.data = data;
         fillData();
         basicDao = new BasicDao(tipo_usuario);
+        vehiculos = new ArrayList<>();
+        parqueaderos = new ArrayList<>();
     }
-    
-    public void fillData(){
-        
+
+    private void fillData() {
+        tipo_doc = data.get("tipo_doc");
+        nombres = data.get("nombres");
+        apellidos = data.get("apellidos");
+        usuario = data.get("usuario");
+        password = data.get("password");
+        email = data.get("email");
+        tipo_usuario = data.get("tipo_usuario");
+        telefono = Long.parseLong(data.get("telefono"));
+        celular = Long.parseLong(data.get("celular"));
+        identificacion = Long.parseLong(data.get("tipo_doc"));
     }
-    
+
     public String getTipo_doc() {
         return tipo_doc;
     }
@@ -77,7 +92,7 @@ public class Usuario {
         this.email = email;
     }
 
-    public int getTelefono() {
+    public long getTelefono() {
         return telefono;
     }
 
@@ -85,7 +100,7 @@ public class Usuario {
         this.telefono = telefono;
     }
 
-    public int getCelular() {
+    public long getCelular() {
         return celular;
     }
 
@@ -93,7 +108,7 @@ public class Usuario {
         this.celular = celular;
     }
 
-    public int getIdentificacion() {
+    public long getIdentificacion() {
         return identificacion;
     }
 
@@ -108,5 +123,5 @@ public class Usuario {
     public void setBasicDao(BasicDao basicDao) {
         this.basicDao = basicDao;
     }
-    
+
 }

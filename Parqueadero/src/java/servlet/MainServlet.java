@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import logic.objects.Manager;
 
 /**
  *
@@ -48,10 +49,14 @@ public class MainServlet extends HttpServlet {
         action = UrlUtil.getMethodName(request.getRequestURI());
         Object object = null;
         body = request.getReader().lines().reduce("", (accumulator, actual) -> accumulator + actual);
+        HashMap<String, String> data = gson.fromJson(body, HashMap.class);
+        Manager manager = Manager.getManager();
         switch (action) {
             case "login":
-                //devolver menu y tipo de usuario
-                object = true;
+                //devolver menu, usuario y tipo de usuario
+                if (manager.loginUser(data)) {
+                    object = true;
+                }
                 break;
             case "logout":
                 request.getSession().invalidate();
@@ -65,11 +70,12 @@ public class MainServlet extends HttpServlet {
                 }
                 break;
             case "signup":
-                HashMap<String, String> data = gson.fromJson(body, HashMap.class);
                 String table = (String) data.get("tabla");
                 data.remove("tabla");
                 if (table.equals("usuario")) {
-                    this.insert(table, data);
+                    if (manager.signUpUser(data)) {
+                        object = true;
+                    }
                 } else if (table.equals("parqueadero")) {
                 }
                 break;
@@ -86,19 +92,10 @@ public class MainServlet extends HttpServlet {
         }
         out.print(new Gson().toJson(object));
     }
-
-    private void insert(String table, HashMap<String, String> data) {
-        BasicDao basicDao = new BasicDao("r");
-        List<String> tables = new ArrayList();
-        tables.add(table);
-        basicDao.insert(tables, data);
-        basicDao.close();
-
-    }
-
+    
     private boolean checkSession(HttpSession session) {
 //        System.out.println(session.getAttribute("name"));
-        return session.getAttribute("names") != null;
+        return session.getAttribute("usuario") != null;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
