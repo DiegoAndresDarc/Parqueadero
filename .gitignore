@@ -1,6 +1,5 @@
 /Parqueadero/dist/
-*.class
-*.dpf
+/Parqueadero/build/
+/Parqueadero/nbproject/
+.*class
 glassfish-web.xml
-private.properties
-project.properties
