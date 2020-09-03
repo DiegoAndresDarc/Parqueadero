@@ -1,5 +1,5 @@
 /Parqueadero/dist/
 /Parqueadero/build/
 /Parqueadero/nbproject/
-.*class
 glassfish-web.xml
+*.class
