@@ -16,26 +16,33 @@ import java.util.Map;
  * @author Prog7
  */
 public class Manager {
+
     private static Manager manager;
-    private HashMap<String,Usuario> usuarios;
+    private HashMap<String, Usuario> usuarios;
     private BasicDao basicDao;
-    
-    private Manager(){
+
+    private Manager() {
         usuarios = new HashMap();
     }
-    
-    public static Manager getManager(){
-        if(manager == null){
+
+    public static Manager getManager() {
+        if (manager == null) {
             manager = new Manager();
         }
         return manager;
     }
-    
-    public boolean loginUser(HashMap<String,String> data){
+
+    public boolean loginUser(HashMap<String, String> data) {
+        boolean result = true;
         basicDao = new BasicDao("r");
-        return true;
+        Map<String, String> res = basicDao.search("usuario", data, null);
+        if (res.size() > 0) {
+            result = true;
+        }
+        return result;
     }
-    public boolean signUpUser(HashMap<String,String> data){
+
+    public boolean signUpUser(HashMap<String, String> data) {
         boolean result;
         basicDao = new BasicDao("r");
         result = basicDao.insert("usuario", data);
