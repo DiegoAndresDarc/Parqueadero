@@ -9,7 +9,7 @@
       <nav>
         <ul>
           <li>
-            <a>Administrar usuarios</a>
+            <a :id="adminUser" v-on:click="loadview(id)">Administrar usuarios</a>
           </li>
           <li>Administrar Parqueaderos</li>
           <li>Actualizar datos</li>
@@ -26,9 +26,22 @@ export default {
   data() {
     return {
       message: "Menu",
+      menu: [],
+      id: "0",
     };
   },
-  methods: {},
+  methods: {
+    loadview(id) {
+      console.log(id);
+      switch (id) {
+        case "adminUser":
+          this.$router.push("/signup");
+          break;
+        default:
+          break;
+      }
+    },
+  },
   created() {
     console.log("Menu.vue");
   },

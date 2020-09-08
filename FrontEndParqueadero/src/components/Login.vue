@@ -81,6 +81,7 @@
   </div>
 </template>
 <script>
+import * as crypto from 'crypto-js'; 
 export default {
   name: "login",
   components: {},
@@ -96,7 +97,7 @@ export default {
       console.log("metodo de login");
       var responseObject = {
         usuario: document.getElementById("usuario").value,
-        password: document.getElementById("password").value,
+        password: crypto.SHA512(document.getElementById("password").value).toString(),
       };
       console.log(responseObject);
       this.$axios

@@ -1,34 +1,43 @@
 <template>
   <div id="container">
-    <div class="content-container">
+    <div class="container-menu">
       <appmenu></appmenu>
+    </div>
+    <div class="container-content">
+      
     </div>
   </div>
 </template>
 <script>
 import Menu from "./Menu.vue";
+import Signup from "./Signup.vue";
 export default {
   name: "container",
   components: {
     appmenu: Menu,
+    appsign: Signup,
   },
   data() {
     return {
       message: "Container",
-      offset: 0,
-      offset2: 0,
     };
   },
-  methods: {
-    showMenu() {
-      this.offset = this.offset === 0 ? -260 : 0;
-      this.offset2 = this.offset2 === 0 ? 0 : -260;
-    },
-  },
+  methods: {},
   created() {
     console.log("Container.vue");
   },
 };
 </script>
 <style>
+.container-menu {
+  width: 250px;
+  position: absolute;
+  height: 100%;
+  border-right: 2px solid;
+}
+.container-content {
+  width: calc(100% - 250px);
+  margin-left: auto;
+  padding: 20px;
+}
 </style>

@@ -33,10 +33,13 @@ public class Manager {
     }
 
     public boolean loginUser(HashMap<String, String> data) {
-        boolean result = true;
+        boolean result = false;
         basicDao = new BasicDao("r");
         Map<String, String> res = basicDao.search("usuario", data, null);
         if (res.size() > 0) {
+            Usuario usuario = new Usuario((HashMap) res);
+            String key = usuario.getId();
+            usuarios.put(key, usuario);
             result = true;
         }
         return result;

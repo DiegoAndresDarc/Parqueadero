@@ -143,6 +143,7 @@
   </div>
 </template>
 <script>
+import * as crypto from 'crypto-js'; 
 export default {
   name: "signup",
   components: {},
@@ -166,11 +167,11 @@ export default {
       const txtidentificacion = document.getElementById("identificacion");
       var responseObject = {
         tabla: "usuario",
-        nombres: txtnombres.value,
-        apellidos: txtapellidos.value,
+        nombres: txtnombres.value.toUpperCase(),
+        apellidos: txtapellidos.value.toUpperCase(),
         usuario: txtusuario.value,
-        password: txtpassword.value,
-        email: txtemail.value,
+        password: crypto.SHA512(txtpassword.value).toString(),
+        email: txtemail.value.toUpperCase(),
         telefono: txttelefono.value,
         celular: txtcelular.value,
         identificacion: txtidentificacion.value,

@@ -25,7 +25,7 @@ import java.util.logging.Logger;
  * @author Brian Botina
  */
 public class BasicDao {
-
+    
     public Connection cnn;
     private ResultSet rs;
     private PreparedStatement ps;
@@ -40,7 +40,7 @@ public class BasicDao {
         //System.out.println("Conexiones abiertas:" + nconn);
 
     }
-
+    
     public void close() {
         if (DBConnection.checkConnection(cnn)) {
             DBConnection.closeConnection(cnn);
@@ -51,7 +51,7 @@ public class BasicDao {
             System.out.println("Inconsistencia en conexiones cerradas :" + nconn);
         }
     }
-
+    
     private int countItems(String tableName, Map<String, String> params) {
         int rowCount = 0;
         int nParam = 0;
@@ -83,7 +83,7 @@ public class BasicDao {
                 rowCount = rs.getInt(1);
             } else {
                 rowCount = 0;
-
+                
             }
         } catch (SQLException ex) {
             Logger.getLogger(BasicDao.class
@@ -91,7 +91,7 @@ public class BasicDao {
         }
         return rowCount;
     }
-
+    
     public boolean insert(String table, Map<String, String> values) {
         Boolean result = false;
         try {
@@ -102,7 +102,7 @@ public class BasicDao {
                 Object val = entry.getValue();
                 sb.append(key);
                 sb.append(",");
-
+                
             }
             sb.deleteCharAt(sb.lastIndexOf(","));
             sb.append(") VALUES (");
@@ -115,17 +115,13 @@ public class BasicDao {
             //execute insert
             ps = cnn.prepareStatement(sb.toString());
             int psParams = 1;
-            for (Map.Entry<String, String> entry : values.entrySet()) {
-                Object key = entry.getKey();
-                Object val = entry.getValue();
-                sb.append(key);
-                sb.append(",");
-                ps.setString(psParams++, (String) val);
+            for (String value : values.keySet()) {
+                ps.setString(psParams++, values.get(value));
             }
-
+            
             result = ps.executeUpdate() > 0;
             cnn.commit();
-
+            
         } catch (SQLException ex) {
             Logger.getLogger(BasicDao.class.getName()).log(Level.SEVERE, null, ex);
             try {
@@ -136,13 +132,13 @@ public class BasicDao {
         }
         return result;
     }
-
+    
     public boolean update(List<String> tables, Map<String, String> values) {
         Boolean result = false;
         try {
-
+            
             for (String table : tables) {
-
+                
                 sb = new StringBuilder();
                 sb.append("UPDATE ").append(table).append(" SET ");
                 //for (WebFormatDetail detail : format.getDetails()) {
@@ -156,32 +152,34 @@ public class BasicDao {
                 int psParams = 1;
             }
             result = ps.executeUpdate() > 0;
-
+            
             cnn.commit();
-
+            
         } catch (SQLException ex) {
             Logger.getLogger(BasicDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         return result;
     }
-
+    
     public Map<String, String> search(String table, Map<String, String> params, ArrayList<String> fields) {
-
+        
         Map<String, String> result = new HashMap();
         try {
             ArrayList<String> values = new ArrayList();
             StringBuilder sbWhere = new StringBuilder();
             StringBuilder sb = new StringBuilder();
-            sb.append("SELECT");
+            sb.append("SELECT ");
             StringBuilder sbFields = new StringBuilder();
             if (fields != null) {
                 for (String field : fields) {
+                    if (sbFields.length() > 0) {
+                    sbWhere.append(" , ");
+                }
                     sbFields.append(field);
-                    sbFields.append(",");
                 }
                 sbFields.deleteCharAt(sbFields.lastIndexOf(","));
             } else {
-                sbFields.append("*");
+                sbFields.append("* ");
             }
             sb.append(sbFields);
             sb.append(" FROM ").append(table);
@@ -193,7 +191,7 @@ public class BasicDao {
                 String value = params.get(field);
                 values.add(value);
             }
-
+            
             if (sbWhere.length() > 0) {
                 sb.append(" WHERE ");
                 sb.append(sbWhere);
@@ -205,11 +203,11 @@ public class BasicDao {
             rs = ps.executeQuery();
             int colsCount = ps.getMetaData().getColumnCount();
             while (rs.next()) {
-
+                
                 for (int col = 1; col <= colsCount; col++) {
                     result.put(rs.getMetaData().getColumnName(col),
                             rs.getString(col));
-
+                    
                 }
             }
         } catch (SQLException ex) {
@@ -217,7 +215,7 @@ public class BasicDao {
         }
         return result;
     }
-
+    
     public boolean delete(String tableName, String idName, int idValue) {
         ps = null;
         boolean execute = false;
@@ -228,7 +226,7 @@ public class BasicDao {
             ps.setString(1, String.valueOf(idValue));
             execute = ps.executeUpdate() != 0;
             cnn.commit();
-
+            
         } catch (SQLException ex) {
             Logger.getLogger(BasicDao.class
                     .getName()).log(Level.SEVERE, null, ex);
@@ -237,7 +235,7 @@ public class BasicDao {
         }
         return execute;
     }
-
+    
     public List<List<String>> consultWithQuery(String query, List<String> values) {
         List<List<String>> rowList = new ArrayList<>();
         List<String> row;
@@ -262,7 +260,7 @@ public class BasicDao {
                 }
             }
             rs.close();
-
+            
         } catch (SQLException ex) {
             Logger.getLogger(BasicDao.class
                     .getName()).log(Level.SEVERE, null, ex);
@@ -271,7 +269,7 @@ public class BasicDao {
         }
         return rowList;
     }
-
+    
     private String getOperator(int tiporango) {
         switch (tiporango) {
             case 2:
@@ -282,7 +280,7 @@ public class BasicDao {
                 return "=";
         }
     }
-
+    
     public boolean inserWithQuery(String query, List<String> values) {
         boolean result = false;
         try {
@@ -299,19 +297,19 @@ public class BasicDao {
         } catch (SQLException ex) {
             try {
                 cnn.rollback();
-
+                
             } catch (SQLException ex1) {
                 Logger.getLogger(BasicDao.class
                         .getName()).log(Level.SEVERE, null, ex1);
-
+                
             }
-
+            
         } finally {
             DBConnection.closePreparedStatement(ps);
         }
         return result;
     }
-
+    
     public boolean updateWithQuery(String query, List<String> values) {
         boolean result = false;
         try {
@@ -325,12 +323,12 @@ public class BasicDao {
             }
             result = ps.executeUpdate() > 0;
             cnn.commit();
-
+            
         } catch (SQLException ex) {
             Logger.getLogger(BasicDao.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
         return result;
     }
-
+    
 }

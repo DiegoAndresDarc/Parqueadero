@@ -16,8 +16,9 @@ import java.util.Map;
  */
 public class Usuario {
 
-    private String tipo_doc, nombres, apellidos, usuario, password, email, tipo_usuario;
+    private String id,tipo_doc, nombres, apellidos, usuario, password, email, tipo_usuario;
     private long telefono, celular, identificacion;
+    private short sancionado, al_dia;
     private BasicDao basicDao;
     private HashMap<String, String> data;
     private ArrayList<Vehiculo> vehiculos;
@@ -32,7 +33,8 @@ public class Usuario {
     }
 
     private void fillData() {
-        tipo_doc = data.get("tipo_doc");
+        id = data.get("id");
+        tipo_doc = data.get("tipo_identificacion");
         nombres = data.get("nombres");
         apellidos = data.get("apellidos");
         usuario = data.get("usuario");
@@ -41,7 +43,25 @@ public class Usuario {
         tipo_usuario = data.get("tipo_usuario");
         telefono = Long.parseLong(data.get("telefono"));
         celular = Long.parseLong(data.get("celular"));
-        identificacion = Long.parseLong(data.get("tipo_doc"));
+        identificacion = Long.parseLong(data.get("identificacion"));
+        sancionado = Short.parseShort(data.get("sancionado"));
+        al_dia = Short.parseShort(data.get("al_dia"));
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getTipo_usuario() {
+        return tipo_usuario;
+    }
+
+    public void setTipo_usuario(String tipo_usuario) {
+        this.tipo_usuario = tipo_usuario;
     }
 
     public String getTipo_doc() {

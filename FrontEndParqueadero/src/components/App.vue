@@ -19,16 +19,17 @@ export default {
         .get("MainServlet/checkSession")
         .then((response) => {
           this.LoggedIn = response.data != null ? true : false;
+          if (this.LoggedIn) {
+            this.$router.push("/Home");
+          } else {
+            this.$router.push("/login");
+          }
         })
         .catch((e) => {
           console.log(e);
           this.LoggedIn = false;
+          this.$router.push("/login");
         });
-      if (this.LoggedIn) {
-        this.$router.push("/Home");
-      } else {
-        this.$router.push("/login");
-      }
     },
     logout() {
       this.$$axios

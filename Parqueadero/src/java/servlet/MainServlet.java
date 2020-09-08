@@ -65,8 +65,6 @@ public class MainServlet extends HttpServlet {
             case "checkSession":
                 if (this.checkSession(request.getSession())) {
                     object = true;
-                } else {
-                    object = false;
                 }
                 break;
             case "signup":
