@@ -51,14 +51,16 @@ public class MainServlet extends HttpServlet {
         body = request.getReader().lines().reduce("", (accumulator, actual) -> accumulator + actual);
         HashMap<String, String> data = gson.fromJson(body, HashMap.class);
         Manager manager = Manager.getManager();
+        String id = request.getSession().getId();
         switch (action) {
             case "login":
                 //devolver menu, usuario y tipo de usuario
-                if (manager.loginUser(data)) {
-                    object = true;
+                if (manager.loginUser(data, id)) {
+                    object = manager.getUserdata(id);
                 }
                 break;
             case "logout":
+                manager.deleteUser(id);
                 request.getSession().invalidate();
                 object = true;
                 break;
@@ -80,6 +82,7 @@ public class MainServlet extends HttpServlet {
             case "recoverPassword":
                 break;
             case "getMenu":
+                object = manager.getMenu(id);
                 break;
             case "update":
                 break;
@@ -90,10 +93,10 @@ public class MainServlet extends HttpServlet {
         }
         out.print(new Gson().toJson(object));
     }
-    
+
     private boolean checkSession(HttpSession session) {
 //        System.out.println(session.getAttribute("name"));
-        return session.getAttribute("usuario") != null;
+        return session.getAttribute("nombres") != null;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

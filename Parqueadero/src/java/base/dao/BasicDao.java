@@ -25,7 +25,7 @@ import java.util.logging.Logger;
  * @author Brian Botina
  */
 public class BasicDao {
-    
+
     public Connection cnn;
     private ResultSet rs;
     private PreparedStatement ps;
@@ -40,7 +40,7 @@ public class BasicDao {
         //System.out.println("Conexiones abiertas:" + nconn);
 
     }
-    
+
     public void close() {
         if (DBConnection.checkConnection(cnn)) {
             DBConnection.closeConnection(cnn);
@@ -51,7 +51,7 @@ public class BasicDao {
             System.out.println("Inconsistencia en conexiones cerradas :" + nconn);
         }
     }
-    
+
     private int countItems(String tableName, Map<String, String> params) {
         int rowCount = 0;
         int nParam = 0;
@@ -83,15 +83,16 @@ public class BasicDao {
                 rowCount = rs.getInt(1);
             } else {
                 rowCount = 0;
-                
+
             }
         } catch (SQLException ex) {
-            Logger.getLogger(BasicDao.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(BasicDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DBConnection.closePreparedStatement(ps);
         }
         return rowCount;
     }
-    
+
     public boolean insert(String table, Map<String, String> values) {
         Boolean result = false;
         try {
@@ -102,7 +103,7 @@ public class BasicDao {
                 Object val = entry.getValue();
                 sb.append(key);
                 sb.append(",");
-                
+
             }
             sb.deleteCharAt(sb.lastIndexOf(","));
             sb.append(") VALUES (");
@@ -118,10 +119,10 @@ public class BasicDao {
             for (String value : values.keySet()) {
                 ps.setString(psParams++, values.get(value));
             }
-            
+
             result = ps.executeUpdate() > 0;
             cnn.commit();
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(BasicDao.class.getName()).log(Level.SEVERE, null, ex);
             try {
@@ -129,40 +130,48 @@ public class BasicDao {
             } catch (SQLException ex1) {
                 Logger.getLogger(BasicDao.class.getName()).log(Level.SEVERE, null, ex1);
             }
+        } finally {
+            DBConnection.closePreparedStatement(ps);
         }
         return result;
     }
-    
-    public boolean update(List<String> tables, Map<String, String> values) {
+
+    public boolean update(List<String> tables, Map<String, String> fields) {
         Boolean result = false;
         try {
-            
+
             for (String table : tables) {
-                
+                ArrayList<String> values = new ArrayList<>();
                 sb = new StringBuilder();
                 sb.append("UPDATE ").append(table).append(" SET ");
-                //for (WebFormatDetail detail : format.getDetails()) {
-                // sb.append(detail.getField().getFieldName()).append(" = ?,");
+                for (String field : fields.keySet()) {
+                    sb.append(field).append(" = ?,");
+                    values.add(fields.get(field));
 
-                //}
+                }
                 sb.deleteCharAt(sb.lastIndexOf(","));
                 //sb.append(" WHERE ").append(keyName).append(" = ?");
                 //execute insert
                 ps = cnn.prepareStatement(sb.toString());
                 int psParams = 1;
+                for (int i = 1; i <= values.size(); i++) {
+                    ps.setString(i, values.get(i - 1));
+                }
             }
             result = ps.executeUpdate() > 0;
-            
+
             cnn.commit();
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(BasicDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DBConnection.closePreparedStatement(ps);
         }
         return result;
     }
-    
+
     public Map<String, String> search(String table, Map<String, String> params, ArrayList<String> fields) {
-        
+
         Map<String, String> result = new HashMap();
         try {
             ArrayList<String> values = new ArrayList();
@@ -173,8 +182,8 @@ public class BasicDao {
             if (fields != null) {
                 for (String field : fields) {
                     if (sbFields.length() > 0) {
-                    sbWhere.append(" , ");
-                }
+                        sbWhere.append(" , ");
+                    }
                     sbFields.append(field);
                 }
                 sbFields.deleteCharAt(sbFields.lastIndexOf(","));
@@ -191,7 +200,7 @@ public class BasicDao {
                 String value = params.get(field);
                 values.add(value);
             }
-            
+
             if (sbWhere.length() > 0) {
                 sb.append(" WHERE ");
                 sb.append(sbWhere);
@@ -203,19 +212,79 @@ public class BasicDao {
             rs = ps.executeQuery();
             int colsCount = ps.getMetaData().getColumnCount();
             while (rs.next()) {
-                
+
                 for (int col = 1; col <= colsCount; col++) {
                     result.put(rs.getMetaData().getColumnName(col),
                             rs.getString(col));
-                    
+
                 }
             }
         } catch (SQLException ex) {
             Logger.getLogger(BasicDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DBConnection.closePreparedStatement(ps);
         }
         return result;
     }
-    
+
+    public List<Map<String, String>> consult(String table, Map<String, String> params, ArrayList<String> fields) {
+        ArrayList result = new ArrayList();
+
+        ArrayList<String> values = new ArrayList();
+        int regMulCount = 0;
+        try {
+            StringBuilder sbWhere = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
+            sb.append("SELECT ");
+            StringBuilder sbFields = new StringBuilder();
+            if (fields != null) {
+                for (String field : fields) {
+                    if (sbFields.length() > 0) {
+                        sbWhere.append(" , ");
+                    }
+                    sbFields.append(field);
+                }
+                sbFields.deleteCharAt(sbFields.lastIndexOf(","));
+            } else {
+                sbFields.append("* ");
+            }
+            sb.append(sbFields);
+            sb.append(" FROM ").append(table);
+            for (String field : params.keySet()) {
+                if (sbWhere.length() > 0) {
+                    sbWhere.append(" AND ");
+                }
+                sbWhere.append(field).append('=').append("?");
+                String value = params.get(field);
+                values.add(value);
+            }
+
+            if (sbWhere.length() > 0) {
+                sb.append(" WHERE ");
+                sb.append(sbWhere);
+            }
+            ps = cnn.prepareStatement(sb.toString());
+            for (int i = 1; i <= values.size(); i++) {
+                ps.setString(i, values.get(i - 1));
+            }
+            rs = ps.executeQuery();
+            int colsCount = ps.getMetaData().getColumnCount();
+            while (rs.next()) {
+                Map map = new HashMap();
+                for (int col = 1; col <= colsCount; col++) {
+                    map.put(rs.getMetaData().getColumnName(col),
+                            rs.getString(col));
+                }
+                result.add(map);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(BasicDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DBConnection.closePreparedStatement(ps);
+        }
+        return result;
+    }
+
     public boolean delete(String tableName, String idName, int idValue) {
         ps = null;
         boolean execute = false;
@@ -226,16 +295,15 @@ public class BasicDao {
             ps.setString(1, String.valueOf(idValue));
             execute = ps.executeUpdate() != 0;
             cnn.commit();
-            
+
         } catch (SQLException ex) {
-            Logger.getLogger(BasicDao.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(BasicDao.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             DBConnection.closePreparedStatement(ps);
         }
         return execute;
     }
-    
+
     public List<List<String>> consultWithQuery(String query, List<String> values) {
         List<List<String>> rowList = new ArrayList<>();
         List<String> row;
@@ -260,7 +328,7 @@ public class BasicDao {
                 }
             }
             rs.close();
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(BasicDao.class
                     .getName()).log(Level.SEVERE, null, ex);
@@ -269,7 +337,7 @@ public class BasicDao {
         }
         return rowList;
     }
-    
+
     private String getOperator(int tiporango) {
         switch (tiporango) {
             case 2:
@@ -280,7 +348,7 @@ public class BasicDao {
                 return "=";
         }
     }
-    
+
     public boolean inserWithQuery(String query, List<String> values) {
         boolean result = false;
         try {
@@ -297,19 +365,19 @@ public class BasicDao {
         } catch (SQLException ex) {
             try {
                 cnn.rollback();
-                
+
             } catch (SQLException ex1) {
                 Logger.getLogger(BasicDao.class
                         .getName()).log(Level.SEVERE, null, ex1);
-                
+
             }
-            
+
         } finally {
             DBConnection.closePreparedStatement(ps);
         }
         return result;
     }
-    
+
     public boolean updateWithQuery(String query, List<String> values) {
         boolean result = false;
         try {
@@ -323,12 +391,12 @@ public class BasicDao {
             }
             result = ps.executeUpdate() > 0;
             cnn.commit();
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(BasicDao.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
         return result;
     }
-    
+
 }

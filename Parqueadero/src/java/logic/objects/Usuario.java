@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public class Usuario {
 
-    private String id,tipo_doc, nombres, apellidos, usuario, password, email, tipo_usuario;
+    private String id, tipo_doc, nombres, apellidos, usuario, password, email, tipo_usuario;
     private long telefono, celular, identificacion;
     private short sancionado, al_dia;
     private BasicDao basicDao;
@@ -24,15 +24,12 @@ public class Usuario {
     private ArrayList<Vehiculo> vehiculos;
     private ArrayList<Parqueadero> parqueaderos;
 
-    public Usuario(HashMap<String, String> data) {
-        this.data = data;
-        fillData();
-        basicDao = new BasicDao(tipo_usuario);
+    public Usuario() {
         vehiculos = new ArrayList<>();
         parqueaderos = new ArrayList<>();
     }
 
-    private void fillData() {
+    public void fillData(HashMap<String, String> data) {
         id = data.get("id");
         tipo_doc = data.get("tipo_identificacion");
         nombres = data.get("nombres");
@@ -46,6 +43,7 @@ public class Usuario {
         identificacion = Long.parseLong(data.get("identificacion"));
         sancionado = Short.parseShort(data.get("sancionado"));
         al_dia = Short.parseShort(data.get("al_dia"));
+        basicDao = new BasicDao(tipo_usuario);
     }
 
     public String getId() {
@@ -140,8 +138,20 @@ public class Usuario {
         return basicDao;
     }
 
-    public void setBasicDao(BasicDao basicDao) {
-        this.basicDao = basicDao;
+    public void setBasicDao(String tipo_usuario) {
+        if (basicDao == null) {
+            basicDao = new BasicDao(tipo_usuario);
+        }
+    }
+
+    public Object getMenu() {
+        Map<String, String> params = new HashMap();
+        params.put("tipo_usuario", tipo_usuario);
+        ArrayList<String> fields = new ArrayList<>();
+        fields.add("id");
+        fields.add("nombre");
+        fields.add("id_padre");
+        return basicDao.consult("menu", params, fields);
     }
 
 }

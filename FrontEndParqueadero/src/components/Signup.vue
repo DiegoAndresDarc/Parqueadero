@@ -212,7 +212,6 @@ export default {
 };
 </script>
 <style>
-h1,
 h2 {
   font-weight: normal;
 }
@@ -225,5 +224,8 @@ a {
   box-shadow: none;
   max-width: 100%;
   width: 100%;
+}
+.label {
+  text-align: left;
 }
 </style>

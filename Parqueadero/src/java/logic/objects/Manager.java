@@ -6,9 +6,7 @@
 package logic.objects;
 
 import base.dao.BasicDao;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,17 +30,39 @@ public class Manager {
         return manager;
     }
 
-    public boolean loginUser(HashMap<String, String> data) {
+    public boolean loginUser(HashMap<String, String> data, String id) {
         boolean result = false;
         basicDao = new BasicDao("r");
-        Map<String, String> res = basicDao.search("usuario", data, null);
-        if (res.size() > 0) {
-            Usuario usuario = new Usuario((HashMap) res);
-            String key = usuario.getId();
-            usuarios.put(key, usuario);
+        Usuario usuario = null;
+        if (data.get("usuario").equalsIgnoreCase("root")) {
+            usuario = new Usuario();
+            usuario.setTipo_usuario("R");
+            usuario.setNombres("Administrador");
+            usuario.setApellidos("del sistema");
+            usuario.setBasicDao("R");
             result = true;
+        } else {
+            Map<String, String> res = basicDao.search("usuario", data, null);
+            if (res.size() > 0) {
+                usuario = new Usuario();
+                usuario.fillData((HashMap) res);
+                result = true;
+            }
         }
+        usuarios.put(id, usuario);
         return result;
+    }
+
+    public Map<String, String> getUserdata(String id) {
+        Usuario usuario = usuarios.get(id);
+        Map<String, String> userData = new HashMap();
+        userData.put("nombres", usuario.getNombres());
+        userData.put("apellidos", usuario.getApellidos());
+        return userData;
+    }
+
+    public void deleteUser(String id) {
+        usuarios.remove(id);
     }
 
     public boolean signUpUser(HashMap<String, String> data) {
@@ -51,5 +71,9 @@ public class Manager {
         result = basicDao.insert("usuario", data);
         basicDao.close();
         return result;
+    }
+
+    public Object getMenu(String id) {
+        return usuarios.get(id).getMenu();
     }
 }

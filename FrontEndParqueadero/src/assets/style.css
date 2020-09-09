@@ -17,8 +17,7 @@ body{
     box-shadow: none;
     border-radius: 3px !important;
     color: #000000 !important;
-    font-size: .875rem;
-    box-shadow: 0 10px 40px 0 rgba(18,106,211,.07), 0 2px 9px 0 rgba(18,106,211,.06);    
+    font-size: .875rem;    
 }
 .content-login{    
     height: 100%;

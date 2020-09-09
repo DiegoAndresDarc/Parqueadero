@@ -20,9 +20,12 @@
   </div>
 </template>
 <script>
+import Login from "./Login.vue";
 export default {
   name: "menu",
-  components: {},
+  components: {
+    login: Login,
+  },
   data() {
     return {
       message: "Menu",
@@ -31,6 +34,21 @@ export default {
     };
   },
   methods: {
+    getMenu() {
+      this.$axios
+        .get("MainServlet/getMenu")
+        .then((response) => {
+          console.log(response.data);
+          response.data.array.forEach(element => {
+            
+          });
+        })
+        .catch((e) => {
+          console.log(e);
+          this.error = true;
+          this.cleanMessages();
+        });
+    },
     loadview(id) {
       console.log(id);
       switch (id) {
@@ -43,6 +61,7 @@ export default {
     },
   },
   created() {
+    getMenu();
     console.log("Menu.vue");
   },
 };
