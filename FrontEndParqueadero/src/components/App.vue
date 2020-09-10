@@ -32,7 +32,7 @@ export default {
         });
     },
     logout() {
-      this.$$axios
+      this.$axios
         .get("MainServlet/logout")
         .then((response) => {
           this.LoggedIn = false;

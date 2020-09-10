@@ -3,7 +3,7 @@
     <div class="content-signup">
       <h1>Registro</h1>
       <div class="field">
-        <form @submit.prevent="signup()" autocomplete="off">
+        <form @submit.prevent.once="signup()" autocomplete="off">
           <div class="control">
             <label class="label">Tipo y número de documento</label>
           </div>
@@ -58,6 +58,7 @@
                 type="text"
                 placeholder="Usuario"
                 id="usuario"
+                autocomplete="off"
                 required
               />
             </div>
@@ -70,6 +71,7 @@
                 type="password"
                 placeholder="Contraseña"
                 id="password"
+                autocomplete="new-password"
                 required
               />
             </div>
@@ -143,7 +145,7 @@
   </div>
 </template>
 <script>
-import * as crypto from 'crypto-js'; 
+import * as crypto from "crypto-js";
 export default {
   name: "signup",
   components: {},

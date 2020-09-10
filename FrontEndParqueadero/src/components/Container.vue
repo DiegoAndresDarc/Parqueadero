@@ -4,7 +4,7 @@
       <appmenu></appmenu>
     </div>
     <div class="container-content">
-      
+      <router-view />
     </div>
   </div>
 </template>

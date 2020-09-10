@@ -148,9 +148,10 @@ public class Usuario {
         Map<String, String> params = new HashMap();
         params.put("tipo_usuario", tipo_usuario);
         ArrayList<String> fields = new ArrayList<>();
-        fields.add("id");
-        fields.add("nombre");
+        fields.add("id_menu");
         fields.add("id_padre");
+        fields.add("nombre");
+        fields.add("tiene_hijos");
         return basicDao.consult("menu", params, fields);
     }
 

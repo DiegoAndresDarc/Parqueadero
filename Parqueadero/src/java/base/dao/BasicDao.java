@@ -239,10 +239,7 @@ public class BasicDao {
             StringBuilder sbFields = new StringBuilder();
             if (fields != null) {
                 for (String field : fields) {
-                    if (sbFields.length() > 0) {
-                        sbWhere.append(" , ");
-                    }
-                    sbFields.append(field);
+                    sbFields.append(field).append(",");
                 }
                 sbFields.deleteCharAt(sbFields.lastIndexOf(","));
             } else {

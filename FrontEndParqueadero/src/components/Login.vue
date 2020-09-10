@@ -3,7 +3,7 @@
     <div class="content-login">
       <div class="box clogin">
         <div class="field">
-          <form @submit.prevent="loginUser()" autocomplete="off" name="form">
+          <form @submit.prevent.once="loginUser()" autocomplete="off" name="form">
             <h1 class="subtitle has-text-link is-size-3">Incio de Sesión</h1>
             <div class="field">
               <div class="control has-icons-left">
@@ -12,6 +12,7 @@
                   type="text"
                   placeholder="Usuario"
                   id="usuario"
+                  autocomplete="off"
                   required
                 />
                 <span class="icon is-small is-left">
@@ -26,6 +27,7 @@
                   type="password"
                   placeholder="Contraseña"
                   id="password"
+                  autocomplete="new-password"
                   required
                 />
                 <span class="icon is-small is-left">
@@ -81,7 +83,7 @@
   </div>
 </template>
 <script>
-import * as crypto from 'crypto-js'; 
+import * as crypto from "crypto-js";
 export default {
   name: "login",
   components: {},
@@ -97,7 +99,9 @@ export default {
       console.log("metodo de login");
       var responseObject = {
         usuario: document.getElementById("usuario").value,
-        password: crypto.SHA512(document.getElementById("password").value).toString(),
+        password: crypto
+          .SHA512(document.getElementById("password").value)
+          .toString(),
       };
       console.log(responseObject);
       this.$axios
@@ -120,6 +124,20 @@ export default {
           this.cleanMessages();
         });
     },
+    checkSession() {
+      this.$axios
+        .get("MainServlet/checkSession")
+        .then((response) => {
+          this.LoggedIn = response.data != null ? true : false;
+          if (this.LoggedIn) {
+            this.$router.push("/Home");
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+          this.LoggedIn = false;
+        });
+    },
     cleanMessages() {
       this.seg = 0;
       setInterval(() => {
@@ -132,6 +150,7 @@ export default {
     },
   },
   created() {
+    this.checkSession();
     console.log("Login.vue");
   },
 };

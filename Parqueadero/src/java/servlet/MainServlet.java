@@ -56,7 +56,10 @@ public class MainServlet extends HttpServlet {
             case "login":
                 //devolver menu, usuario y tipo de usuario
                 if (manager.loginUser(data, id)) {
-                    object = manager.getUserdata(id);
+                    Map<String, String> info = manager.getUserdata(id);
+                    request.getSession().setAttribute("nombres", info.get("nombres"));
+                    request.getSession().setAttribute("apellidos", info.get("apellidos"));
+                    object = info;
                 }
                 break;
             case "logout":
