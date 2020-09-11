@@ -1,9 +1,9 @@
 <template>
   <div class="recoverPassword">
-    <div class="content-recoverPsswd">
+    <div class="box clogin content-recoverPsswd">
       <div class="field">
         <form @submit.prevent="recoverPassword()" autocomplete="off">
-          <h1>Recuperar contraseña</h1>
+          <h1 class="subtitle is-size-3">Recuperar contraseña</h1>
           <div class="field">
             <label class="label">Digite el correo electrónico asociado a la cuenta</label>
             <div class="control">
@@ -28,7 +28,7 @@
           </div>
           <div class="field">
             <div class="control">
-              <button class="button is-link is-fullwidth is-medium">Recuperar contraseña</button>
+              <button class="button is-colorcustom">Recuperar contraseña</button>
             </div>
           </div>
         </form>
@@ -36,7 +36,7 @@
       <div class="field">
         <div class="control">
           <button
-            class="button is-fullwidth is-medium is-link is-light"
+            class="button is-colorcustom"
             v-on:click="cancelar"
           >Cancelar</button>
         </div>

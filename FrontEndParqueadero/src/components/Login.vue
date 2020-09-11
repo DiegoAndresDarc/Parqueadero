@@ -4,7 +4,7 @@
       <div class="box clogin">
         <div class="field">
           <form @submit.prevent.once="loginUser()" autocomplete="off" name="form">
-            <h1 class="subtitle has-text-link is-size-3">Incio de Sesión</h1>
+            <h1 class="subtitle is-size-3">Incio de Sesión</h1>
             <div class="field">
               <div class="control has-icons-left">
                 <input
@@ -57,7 +57,7 @@
             </div>
             <div class="field">
               <div class="control">
-                <button class="button is-link is-fullwidth is-medium">Iniciar Sesión</button>
+                <button class="button is-colorcustom">Iniciar Sesión</button>
               </div>
             </div>
           </form>
@@ -161,7 +161,8 @@ h2 {
   font-weight: normal;
 }
 a {
-  color: #42b983;
+  color: white !important;
+  text-decoration:underline;
 }
 .input {
   background-color: #fff;

@@ -15,8 +15,9 @@ body{
     margin-bottom: 20px;
     margin-top: 20px;
     box-shadow: none;
-    border-radius: 3px !important;
-    color: #000000 !important;
+    background: url(/images/opacity-30.png);
+    border-radius: 10px !important;
+    color: #000000;
     font-size: .875rem;    
 }
 .content-login{    
@@ -26,3 +27,41 @@ body{
     justify-content: center;
     align-items: center;
 } 
+.navbar{
+    background: rgba(0, 0, 0, 1);
+    opacity: 80%;
+    height: 100%;
+    width: 100%;
+}
+body{
+    background: url(/images/fondo2.png);
+    background-repeat:no-repeat;
+    background-size: 100% 100%;
+    width: 100%;
+    height: 100%;
+}
+.box.clogin.content-signup h1{
+    font-size: 30px;
+}
+.box.clogin.content-signup{
+    color: white;
+}
+.label{
+    color: white;
+}
+
+.button.is-colorcustom{
+    background: black;
+    border-color: transparent;
+    border-radius: 10px;
+    display: flex;
+    width: 100%;
+    font-size: 1.25rem;
+    color:white;
+}
+.button.is-colorcustom:hover{
+    background: rgb(99, 99, 99);
+}
+.subtitle{
+    color:white !important;
+}

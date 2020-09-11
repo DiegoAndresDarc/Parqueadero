@@ -1,6 +1,6 @@
 <template>
   <div class="signup">
-    <div class="content-signup">
+    <div class="box clogin content-signup">
       <h1>Registro</h1>
       <div class="field">
         <form @submit.prevent.once="signup()" autocomplete="off">
@@ -118,7 +118,7 @@
           </div>
           <div class="field">
             <div class="control">
-              <button class="button is-link is-fullwidth is-medium" type="submit">Registro</button>
+              <button class="button is-colorcustom" type="submit">Registro</button>
             </div>
           </div>
         </form>
@@ -136,7 +136,7 @@
       <div class="field">
         <div class="control">
           <button
-            class="button is-fullwidth is-medium is-link is-light"
+            class="button is-colorcustom"
             v-on:click="cancelar"
           >Cancelar</button>
         </div>
