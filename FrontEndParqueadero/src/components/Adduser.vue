@@ -21,7 +21,7 @@
                   class="input is-expanded"
                   type="number"
                   placeholder="numero de documento"
-                v-model="info.identificacion"
+                  v-model="info.identificacion"
                   required
                 />
               </div>
@@ -117,7 +117,7 @@
               />
             </div>
           </div>
-          <div class="field" v-if="user_type === 'R' || user_type === 'A'">
+          <div class="field">
             <div class="control">
               <label class="label">Tipo de usuario</label>
             </div>
@@ -125,7 +125,7 @@
               <div class="control">
                 <div class="select">
                   <select v-model="tipo_usr">
-                    <option v-if="user_type === 'R'">Administrador</option>
+                    <option v-if="root_admin === 'R'">Administrador</option>
                     <option>Cliente</option>
                     <option>Guardia de seguridad</option>
                   </select>
@@ -156,13 +156,19 @@
 <script>
 export default {
   name: "addUser",
+  props: {
+    root_admin: {
+      type: String,
+      default: "C",
+    },
+  },
   components: {},
   data() {
     return {
       error: false,
+      mssg:"Registro exitoso",
       tipo_doc: "CC",
       tipo_usr: "Cliente",
-      user_type: this.$route.params.user_type,
       info: {
         tabla: "",
         nombres: "",
@@ -203,6 +209,7 @@ export default {
     },
   },
   created() {
+    this.root_admin = this.$route.params.usuario;
     console.log("Adduser.vue");
   },
 };

@@ -87,7 +87,8 @@ public class MainServlet extends HttpServlet {
                 break;
             case "update":
                 break;
-            case "select":
+            case "getUsers":
+                object = manager.getUsers(id);
                 break;
             default:
                 break;

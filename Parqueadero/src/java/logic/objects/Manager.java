@@ -9,6 +9,7 @@ import base.dao.BasicDao;
 import base.persistence.connection.DBConnection;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -98,6 +99,29 @@ public class Manager {
         Object object = null;
         if (usuario != null) {
             object = usuario.getMenu();
+        }
+        return object;
+    }
+
+    public Object getUsers(String id) {
+        Usuario usuario = usuarios.get(id);
+        Object object = null;
+        if (usuario != null) {
+            ArrayList<String> tables = new ArrayList<>();
+            tables.add("usuario");
+            ArrayList<String> fields = new ArrayList<>();
+            fields.add("password");
+            fields.add("tipo_usuario");
+            fields.add("nombres");
+            fields.add("apellidos");
+            fields.add("tipo_identificacion");
+            fields.add("identificacion");
+            fields.add("celular");
+            fields.add("telefono");
+            fields.add("email");
+            fields.add("sancionado");
+            fields.add("al_dia");
+            object = usuario.getBasicDao().consult(tables, null, fields);
         }
         return object;
     }

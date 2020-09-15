@@ -227,7 +227,7 @@ public class BasicDao {
         return result;
     }
 
-    public List<Map<String, String>> consult(String table, Map<String, String> params, ArrayList<String> fields) {
+    public List<Map<String, String>> consult(ArrayList<String> table, Map<String, String> params, ArrayList<String> fields) {
         ArrayList result = new ArrayList();
 
         ArrayList<String> values = new ArrayList();
@@ -246,16 +246,20 @@ public class BasicDao {
                 sbFields.append("* ");
             }
             sb.append(sbFields);
-            sb.append(" FROM ").append(table);
-            for (String field : params.keySet()) {
-                if (sbWhere.length() > 0) {
-                    sbWhere.append(" AND ");
-                }
-                sbWhere.append(field).append('=').append("?");
-                String value = params.get(field);
-                values.add(value);
+            sb.append(" FROM ");
+            for (int i = 0; i < table.size(); i++) {
+                sb.append(table.get(i));
             }
-
+            if (params != null) {
+                for (String field : params.keySet()) {
+                    if (sbWhere.length() > 0) {
+                        sbWhere.append(" AND ");
+                    }
+                    sbWhere.append(field).append('=').append("?");
+                    String value = params.get(field);
+                    values.add(value);
+                }
+            }
             if (sbWhere.length() > 0) {
                 sb.append(" WHERE ");
                 sb.append(sbWhere);

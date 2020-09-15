@@ -29,19 +29,25 @@
   </div>
 </template>
 <script>
-import Login from "./Login.vue";
 export default {
   name: "menu",
-  components: {
-    login: Login,
+  props: {
+    nombres: {
+      type: String,
+      default: "",
+    },
+    apellidos: {
+      type: String,
+      default: "",
+    },
+    usuario: {
+      type: String,
+      default: "",
+    },
   },
+  components: {},
   data() {
     return {
-      userData: {
-        nombres: "",
-        apellidos: "",
-        usuario: "R",
-      },
       message: "Menu de navegación",
       menu: [],
       submenu: [],
@@ -49,11 +55,8 @@ export default {
     };
   },
   methods: {
-    loginInfo(response) {
-      //this.message += response.nombres + " " + response.apellidos;
-      this.userData = JSON.parse(JSON.stringify(response));
-    },
     loadMenu() {
+      this.message += " " + this.nombres + " " + this.apellidos;
       this.menu = [];
       this.$axios
         .get("MainServlet/getMenu")
@@ -72,11 +75,12 @@ export default {
       });
     },
     loadview(item) {
-      const routerpath = "/" + item.nombre.replace(" ", "-");
+      const routername = item.nombre.replace(" ", "-");
+      const routerpath = "/" + routername;
       if (this.$route.path !== routerpath) {
         this.$router.push({
-          path: routerpath+"/"+this.userData.usuario,
-          params: { user_type: this.userData.usuario },
+          name: routername,
+          params: { usuario: this.usuario },
         });
       }
     },
@@ -93,7 +97,9 @@ export default {
     },
   },
   created() {
-    this.$bus.$on("userData", this.loginInfo);
+    this.usuario = this.$route.params.usuario;
+    this.nombres = this.$route.params.nombres;
+    this.apellidos = this.$route.params.apellidos;
     this.loadMenu();
     console.log("Menu.vue");
   },

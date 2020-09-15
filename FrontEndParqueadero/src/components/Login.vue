@@ -115,8 +115,15 @@ export default {
         .then((response) => {
           if (response) {
             var loginInfo = response.data;
-            this.$bus.$emit("userData", loginInfo);
-            this.$router.push("/Home");
+            this.$router.push({
+              name: 'Home',
+              params: {
+                nombres: loginInfo.nombres,
+                apellidos: loginInfo.apellidos,
+                usuario: loginInfo.usuario,
+                user_type: loginInfo.usuario,
+              },
+            });
           } else {
             this.invalidData = true;
             this.cleanMessages();
@@ -150,11 +157,9 @@ h2 {
   font-weight: normal;
 }
 a {
-  color: white !important;
   text-decoration: underline;
 }
 .input {
-  background-color: #fff;
   border-color: none;
   box-shadow: none;
   max-width: 100%;

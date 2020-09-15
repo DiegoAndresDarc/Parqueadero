@@ -152,7 +152,9 @@ public class Usuario {
         fields.add("id_padre");
         fields.add("nombre");
         fields.add("tiene_hijos");
-        return basicDao.consult("menu", params, fields);
+        ArrayList<String> tables = new ArrayList<>();
+        tables.add("menu");
+        return basicDao.consult(tables, params, fields);
     }
 
 }
