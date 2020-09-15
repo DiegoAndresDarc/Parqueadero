@@ -1,5 +1,8 @@
 <template>
   <div class="recoverPassword">
+    <div class="head">
+      <nav class="navbar"></nav>
+    </div>
     <div class="box clogin content-recoverPsswd">
       <div class="field">
         <form @submit.prevent="recoverPassword()" autocomplete="off">
@@ -35,12 +38,12 @@
       </div>
       <div class="field">
         <div class="control">
-          <button
-            class="button is-colorcustom"
-            v-on:click="cancelar"
-          >Cancelar</button>
+          <button class="button is-colorcustom" v-on:click="cancelar">Cancelar</button>
         </div>
       </div>
+    </div>
+    <div class="foot">
+      <nav class="navbar"></nav>
     </div>
   </div>
 </template>

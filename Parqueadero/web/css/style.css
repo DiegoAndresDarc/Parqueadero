@@ -2,7 +2,6 @@
     padding-right: 0em;
 }
 body{
-    background: url(images/fondo2.png);
     background-repeat:no-repeat;
     background-size: 100% 100%;
     width: 100%;
@@ -44,7 +43,6 @@ body{
     color: white;
 }
 .label{
-    color: white;
 }
 
 .button.is-colorcustom{
@@ -60,5 +58,14 @@ body{
     background: rgb(99, 99, 99);
 }
 .subtitle{
-    color:white !important;
+}
+#login, #signup, #recoverPassword{
+    background: url(/images/fondo2.png);
+}
+#menu-aside a {
+    color: black;
+    font-weight: bold;
+}
+#menu-aside a.router-link-exact-active {
+    color: green;
 }

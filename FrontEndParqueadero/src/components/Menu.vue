@@ -1,11 +1,11 @@
 <template>
-  <div id="menu" class="navuser">
+  <div id="menuview" class="navuser">
     <div class="field">
       <div class="control">
         <h1>{{message}}</h1>
       </div>
     </div>
-    <aside class="menu">
+    <aside class="menu-aside">
       <ul class="menu-list">
         <li v-for="item in menu" v-bind:key="item.id_menu">
           <a
@@ -37,6 +37,11 @@ export default {
   },
   data() {
     return {
+      userData: {
+        nombres: "",
+        apellidos: "",
+        usuario: "R",
+      },
       message: "Menu de navegación",
       menu: [],
       submenu: [],
@@ -44,22 +49,9 @@ export default {
     };
   },
   methods: {
-    checkSession() {
-      this.$axios
-        .get("MainServlet/checkSession")
-        .then((response) => {
-          this.LoggedIn = response.data != null ? true : false;
-          if (this.LoggedIn) {
-            this.loadMenu();
-          } else {
-            this.$router.push("/login");
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-          this.LoggedIn = false;
-          this.$router.push("/login");
-        });
+    loginInfo(response) {
+      //this.message += response.nombres + " " + response.apellidos;
+      this.userData = JSON.parse(JSON.stringify(response));
     },
     loadMenu() {
       this.menu = [];
@@ -73,7 +65,6 @@ export default {
           this.error = true;
           //this.cleanMessages();
         });
-      console.log(this.menu);
     },
     loadSubmenu(id) {
       return this.menu.filter(function (item) {
@@ -81,15 +72,19 @@ export default {
       });
     },
     loadview(item) {
-      this.$router.push("/" + item.nombre.replace(" ", "-"));
-      console.log(item.nombre.replace(" ", "-"));
-      //this.$router.push("/signup");
+      const routerpath = "/" + item.nombre.replace(" ", "-");
+      if (this.$route.path !== routerpath) {
+        this.$router.push({
+          path: routerpath+"/"+this.userData.usuario,
+          params: { user_type: this.userData.usuario },
+        });
+      }
     },
     logout() {
       this.$axios
         .get("MainServlet/logout")
         .then((response) => {
-          this.LoggedIn = false;
+          this.$emit("app:LoggedIn", false);
           this.$router.push("/");
         })
         .catch((e) => {
@@ -98,10 +93,18 @@ export default {
     },
   },
   created() {
-    this.checkSession();
+    this.$bus.$on("userData", this.loginInfo);
+    this.loadMenu();
     console.log("Menu.vue");
   },
 };
 </script>
 <style>
+#menu-aside a {
+  color: black;
+  font-weight: bold;
+}
+#menu-aside a.router-link-exact-active {
+  color: green;
+}
 </style>

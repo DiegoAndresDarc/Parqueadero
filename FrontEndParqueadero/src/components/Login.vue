@@ -1,5 +1,8 @@
 <template>
   <div class="login">
+    <div class="head">
+      <nav class="navbar"></nav>
+    </div>
     <div class="content-login">
       <div class="box clogin">
         <div class="field">
@@ -12,6 +15,7 @@
                   type="text"
                   placeholder="Usuario"
                   id="usuario"
+                  v-model="info.usuario"
                   autocomplete="off"
                   required
                 />
@@ -27,6 +31,7 @@
                   type="password"
                   placeholder="Contraseña"
                   id="password"
+                  v-model="info.password"
                   autocomplete="new-password"
                   required
                 />
@@ -80,6 +85,9 @@
         </div>
       </div>
     </div>
+    <div class="foot">
+      <nav class="navbar"></nav>
+    </div>
   </div>
 </template>
 <script>
@@ -92,26 +100,22 @@ export default {
       error: false,
       LoggedIn: false,
       invalidData: false,
+      loginInfo: {},
+      info: {
+        usuario: "",
+        password: "",
+      },
     };
   },
   methods: {
     loginUser() {
-      console.log("metodo de login");
-      var responseObject = {
-        usuario: document.getElementById("usuario").value,
-        password: crypto
-          .SHA512(document.getElementById("password").value)
-          .toString(),
-      };
-      console.log(responseObject);
+      this.info.password = crypto.SHA512(this.info.password).toString();
       this.$axios
-        .post("MainServlet/login", responseObject)
+        .post("MainServlet/login", this.info)
         .then((response) => {
           if (response) {
-            var loginInfo = {
-              response: response.data,
-            };
-            this.$emit("login:loginInfo", loginInfo);
+            var loginInfo = response.data;
+            this.$bus.$emit("userData", loginInfo);
             this.$router.push("/Home");
           } else {
             this.invalidData = true;
@@ -122,20 +126,6 @@ export default {
           console.log(e);
           this.error = true;
           this.cleanMessages();
-        });
-    },
-    checkSession() {
-      this.$axios
-        .get("MainServlet/checkSession")
-        .then((response) => {
-          this.LoggedIn = response.data != null ? true : false;
-          if (this.LoggedIn) {
-            this.$router.push("/Home");
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-          this.LoggedIn = false;
         });
     },
     cleanMessages() {
@@ -150,7 +140,6 @@ export default {
     },
   },
   created() {
-    this.checkSession();
     console.log("Login.vue");
   },
 };
@@ -162,7 +151,7 @@ h2 {
 }
 a {
   color: white !important;
-  text-decoration:underline;
+  text-decoration: underline;
 }
 .input {
   background-color: #fff;

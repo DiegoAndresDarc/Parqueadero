@@ -58,7 +58,6 @@ public class MainServlet extends HttpServlet {
                 if (manager.loginUser(data, id)) {
                     Map<String, String> info = manager.getUserdata(id);
                     request.getSession().setAttribute("nombres", info.get("nombres"));
-                    request.getSession().setAttribute("apellidos", info.get("apellidos"));
                     object = info;
                 }
                 break;
@@ -75,11 +74,10 @@ public class MainServlet extends HttpServlet {
             case "signup":
                 String table = (String) data.get("tabla");
                 data.remove("tabla");
-                if (table.equals("usuario")) {
-                    if (manager.signUpUser(data)) {
-                        object = true;
-                    }
-                } else if (table.equals("parqueadero")) {
+                if (table.equals("usuario") && !this.checkSession(request.getSession())) {
+                    object = manager.signUpUser(data);
+                } else {
+                    object = manager.insert(data, id, table);
                 }
                 break;
             case "recoverPassword":

@@ -68,11 +68,16 @@ public class Manager {
         Map<String, String> userData = new HashMap();
         userData.put("nombres", usuario.getNombres());
         userData.put("apellidos", usuario.getApellidos());
+        userData.put("usuario", usuario.getTipo_usuario());
         return userData;
     }
 
     public void deleteUser(String id) {
-        usuarios.remove(id);
+        Usuario usuario = usuarios.get(id);
+        if (usuario != null) {
+            usuario.getBasicDao().close();
+            usuarios.remove(id);
+        }
     }
 
     public boolean signUpUser(HashMap<String, String> data) {
@@ -81,6 +86,11 @@ public class Manager {
         result = basicDao.insert("usuario", data);
         basicDao.close();
         return result;
+    }
+
+    public boolean insert(HashMap<String, String> data, String id, String table) {
+        Usuario usuario = usuarios.get(id);
+        return usuario.getBasicDao().insert(table, data);
     }
 
     public Object getMenu(String id) {

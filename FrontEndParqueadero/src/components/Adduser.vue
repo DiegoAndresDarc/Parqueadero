@@ -1,33 +1,30 @@
 <template>
-  <div class="signup">
-    <div class="head">
-      <nav class="navbar"></nav>
-    </div>
-    <div class="box clogin content-signup">
-      <h1>Registro</h1>
+  <div class="adduser">
+    <div class="content-adduser">
       <div class="field">
-        <form @submit.prevent.once="signup()" autocomplete="off">
-          <div class="control">
-            <label class="label">Tipo y número de documento</label>
-          </div>
-          <div class="field has-addons">
+        <form @submit.prevent.once="addUser" autocomplete="off">
+          <div class="field">
             <div class="control">
-              <div class="select">
-                <select v-model="tipo_doc">
-                  <option>CC</option>
-                  <option>CE</option>
-                </select>
-              </div>
+              <label class="label">Tipo y número de documento</label>
             </div>
-            <div class="control">
-              <input
-                class="input is-expanded"
-                type="number"
-                placeholder="numero de documento"
-                id="identificacion"
+            <div class="field has-addons">
+              <div class="control">
+                <div class="select">
+                  <select v-model="tipo_doc">
+                    <option>CC</option>
+                    <option>CE</option>
+                  </select>
+                </div>
+              </div>
+              <div class="control">
+                <input
+                  class="input is-expanded"
+                  type="number"
+                  placeholder="numero de documento"
                 v-model="info.identificacion"
-                required
-              />
+                  required
+                />
+              </div>
             </div>
           </div>
           <div class="field">
@@ -37,7 +34,6 @@
                 class="input is-medium"
                 type="text"
                 placeholder="Nombres"
-                id="nombres"
                 v-model="info.nombres"
                 required
               />
@@ -50,7 +46,6 @@
                 class="input is-medium"
                 type="text"
                 placeholder="Apellidos"
-                id="apellidos"
                 v-model="info.apellidos"
                 required
               />
@@ -63,7 +58,6 @@
                 class="input is-medium"
                 type="text"
                 placeholder="Usuario"
-                id="usuario"
                 v-model="info.usuario"
                 autocomplete="off"
                 required
@@ -77,9 +71,8 @@
                 class="input is-medium"
                 type="password"
                 placeholder="Contraseña"
-                id="password"
-                autocomplete="new-password"
                 v-model="info.password"
+                autocomplete="new-password"
                 required
               />
             </div>
@@ -91,7 +84,6 @@
                 class="input is-medium"
                 type="email"
                 placeholder="Correo electrónico"
-                id="email"
                 v-model="info.email"
                 required
               />
@@ -106,7 +98,6 @@
                 pattern="[0-9]{7}"
                 title="Un número de telefono fijo tiene una longitud de 7 digitos con números entre 0 y 9"
                 placeholder="telefono fijo"
-                id="telefono"
                 v-model="info.telefono"
                 required
               />
@@ -121,15 +112,30 @@
                 pattern="[3]{1}[0-9]{9}"
                 title="Un número de celular en Colombia inicia con el número 3 y tiene una longitud de 10 digitos con números entre 0 y 9"
                 placeholder="celular"
-                id="celular"
                 v-model="info.celular"
                 required
               />
             </div>
           </div>
+          <div class="field" v-if="user_type === 'R' || user_type === 'A'">
+            <div class="control">
+              <label class="label">Tipo de usuario</label>
+            </div>
+            <div class="field">
+              <div class="control">
+                <div class="select">
+                  <select v-model="tipo_usr">
+                    <option v-if="user_type === 'R'">Administrador</option>
+                    <option>Cliente</option>
+                    <option>Guardia de seguridad</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="field">
             <div class="control">
-              <button class="button is-colorcustom">Registro</button>
+              <button class="button is-link is-fullwidth">Agregar usuario</button>
             </div>
           </div>
         </form>
@@ -144,28 +150,19 @@
           </transition>
         </div>
       </div>
-      <div class="field">
-        <div class="control">
-          <button class="button is-colorcustom" v-on:click="cancelar">Cancelar</button>
-        </div>
-      </div>
-    </div>
-    <div class="foot">
-      <nav class="navbar"></nav>
     </div>
   </div>
 </template>
 <script>
-import * as crypto from "crypto-js";
 export default {
-  name: "signup",
+  name: "addUser",
   components: {},
   data() {
     return {
-      mssg: "Registro exitoso",
       error: false,
       tipo_doc: "CC",
-      tipo_usr: "C",
+      tipo_usr: "Cliente",
+      user_type: this.$route.params.user_type,
       info: {
         tabla: "",
         nombres: "",
@@ -182,14 +179,14 @@ export default {
     };
   },
   methods: {
-    signup() {
+    addUser() {
       this.info.tabla = "usuario";
       this.info.nombres = this.info.nombres.toUpperCase();
       this.info.apellidos = this.info.nombres.toUpperCase();
-      this.info.password =  crypto.SHA512(this.info.password).toString();
+      this.info.password = crypto.SHA512(this.info.password).toString();
       this.info.email = this.info.email.toUpperCase();
       this.info.tipo_usuario = this.tipo_usr;
-      this.info.tipo_identificacion = this.tipo_doc; 
+      this.info.tipo_identificacion = this.tipo_doc;
       console.log(this.info);
       this.$axios
         .post("MainServlet/signup", this.info)
@@ -204,41 +201,11 @@ export default {
           this.cleanMessages();
         });
     },
-    cancelar(event) {
-      //Limpiar la pantalla
-      this.$router.push("/login");
-    },
-    cleanMessages() {
-      this.seg = 0;
-      setInterval(() => {
-        this.seg += 1;
-        if (this.seg === 3) {
-          this.error = false;
-          this.invalidData = false;
-        }
-      }, 2000);
-    },
   },
   created() {
-    console.log("Sigup.vue");
+    console.log("Adduser.vue");
   },
 };
 </script>
 <style>
-h2 {
-  font-weight: normal;
-}
-a {
-  color: #42b983;
-}
-.input {
-  background-color: #fff;
-  border-color: none;
-  box-shadow: none;
-  max-width: 100%;
-  width: 100%;
-}
-.label {
-  text-align: left;
-}
 </style>

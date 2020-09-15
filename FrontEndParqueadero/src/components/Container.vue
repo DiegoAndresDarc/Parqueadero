@@ -10,12 +10,10 @@
 </template>
 <script>
 import Menu from "./Menu.vue";
-import Signup from "./Signup.vue";
 export default {
   name: "container",
   components: {
     appmenu: Menu,
-    appsign: Signup,
   },
   data() {
     return {
