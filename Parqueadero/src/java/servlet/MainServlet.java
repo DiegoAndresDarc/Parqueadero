@@ -86,10 +86,13 @@ public class MainServlet extends HttpServlet {
                 object = manager.getMenu(id);
                 break;
             case "update":
+                object = manager.update(id, data);
                 break;
             case "getUsers":
                 object = manager.getUsers(id);
                 break;
+            case "delete":
+                object = manager.delete(id,data);
             default:
                 break;
         }

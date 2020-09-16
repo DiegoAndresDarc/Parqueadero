@@ -135,4 +135,33 @@ public class Manager {
             Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    public Object update(String id, HashMap<String, String> data) {
+        String table = (String) data.get("tabla");
+        data.remove("tabla");
+        Usuario usuario = usuarios.get(id);
+        Object object = null;
+        if (usuario != null) {
+            ArrayList<String> tables = new ArrayList<>();
+            tables.add(table);
+            object = usuario.getBasicDao().update(tables, data);
+        }
+        return object;
+    }
+
+    public Object delete(String id, HashMap<String, String> data) {
+        String table = (String) data.get("tabla");
+        data.remove("tabla");
+        Usuario usuario = usuarios.get(id);
+        Object object = null;
+        if (usuario != null) {
+            String key = "", value = "";
+            for (Map.Entry<String, String> entry : data.entrySet()) {
+                key = entry.getKey();
+                value = entry.getValue();
+            }
+            object = usuario.getBasicDao().delete(table, key, Integer.parseInt(value));
+        }
+        return object;
+    }
 }
