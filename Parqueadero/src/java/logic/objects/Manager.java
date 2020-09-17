@@ -47,8 +47,8 @@ public class Manager {
         if (data.get("usuario").equals(databasProperties.get("mysql_r_user"))) {
             usuario = new Usuario();
             usuario.setTipo_usuario("R");
-            usuario.setNombres("Administrador");
-            usuario.setApellidos("del sistema");
+            usuario.setNombres("ADMINISTRADOR");
+            usuario.setApellidos("DEL SISTEMA");
             usuario.setBasicDao("r");
             result = true;
         } else {
@@ -103,29 +103,6 @@ public class Manager {
         return object;
     }
 
-    public Object getUsers(String id) {
-        Usuario usuario = usuarios.get(id);
-        Object object = null;
-        if (usuario != null) {
-            ArrayList<String> tables = new ArrayList<>();
-            tables.add("usuario");
-            ArrayList<String> fields = new ArrayList<>();
-            fields.add("password");
-            fields.add("tipo_usuario");
-            fields.add("nombres");
-            fields.add("apellidos");
-            fields.add("tipo_identificacion");
-            fields.add("identificacion");
-            fields.add("celular");
-            fields.add("telefono");
-            fields.add("email");
-            fields.add("sancionado");
-            fields.add("al_dia");
-            object = usuario.getBasicDao().consult(tables, null, fields);
-        }
-        return object;
-    }
-
     protected void setGeneralProperties() {
         try {
             ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
@@ -144,7 +121,10 @@ public class Manager {
         if (usuario != null) {
             ArrayList<String> tables = new ArrayList<>();
             tables.add(table);
-            object = usuario.getBasicDao().update(tables, data);
+            String keyName = "id";
+            int keyValue = Integer.parseInt(data.get("id"));
+            data.remove("id");
+            object = usuario.getBasicDao().update(tables, data, keyName, keyValue);
         }
         return object;
     }
@@ -165,19 +145,32 @@ public class Manager {
         return object;
     }
 
-    public Object getCoprops(String id) {
-        Usuario usuario = usuarios.get(id);
+    public Object getInformation(String id, HashMap<String, String> data) {
         Object object = null;
-        if (usuario != null) {
-            ArrayList<String> tables = new ArrayList<>();
-            tables.add("copropiedad");
-            ArrayList<String> fields = new ArrayList<>();
-            fields.add("nombre");
-            fields.add("direccion");
-            fields.add("habilitada");
-            fields.add("id");
-            object = usuario.getBasicDao().consult(tables, null, fields);
+        ArrayList<String> tables = new ArrayList<>();
+        HashMap<String, String> params = null;
+        String table = data.get("tabla");
+        data.remove("tabla");
+        tables.add(table);
+        if (data.containsKey("signup")) {
+            basicDao = new BasicDao("r");
+            object = basicDao.consult(tables, params, null);
+            basicDao.close();
+        } else {
+            Usuario usuario = usuarios.get(id);
+            if (usuario != null) {
+                if (data.size() > 0) {
+                    params = new HashMap();
+                    for (Map.Entry<String, String> entry : data.entrySet()) {
+                        String key = entry.getKey();
+                        String value = entry.getValue();
+                        params.put(key, value);
+                    }
+                }
+                object = usuario.getBasicDao().consult(tables, params, null);
+            }
         }
         return object;
     }
+
 }

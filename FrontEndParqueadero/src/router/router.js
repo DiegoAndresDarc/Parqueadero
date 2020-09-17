@@ -34,41 +34,57 @@ export default new Router({
       path: '/Home/:user_type',
       name: 'Home',
       component: Container,
-      props: true,
+      props: {
+        nombres: "",
+        apellidos: "",
+        usuario: "",
+      },
       children: [{
           path: '/Agregar-copropiedad',
           name: 'Agregar-copropiedad',
-          props: true,
+          props: {
+            root_admin: false
+          },
           component: AddCoprop,
         },
         {
           path: '/Modificar-copropiedad',
           name: 'Modificar-copropiedad',
-          props: true,
+          props: {
+            root_admin: false
+          },
           component: ModCoprop
         },
         {
           path: '/Eliminar-copropiedad',
           name: 'Eliminar-copropiedad',
-          props: true,
+          props: {
+            root_admin: false
+          },
           component: DelCoprop
         },
         {
           path: '/Agregar-usuario',
           name: 'Agregar-usuario',
-          props: true,
+          props: {
+            root_admin: false
+          },
           component: Adduser
         },
         {
           path: '/Modificar-usuario',
           name: 'Modificar-usuario',
-          props: true,
+          props: {
+            root_admin: false
+          },
           component: Moduser
         },
         {
           path: '/Eliminar-usuario',
           name: 'Eliminar-usuario',
-          props: true,
+          props: {
+            root_admin: false
+          },
           component: Deluser
         },
       ]

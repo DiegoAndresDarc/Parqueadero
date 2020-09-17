@@ -20,8 +20,25 @@ export default {
       message: "Container",
     };
   },
-  methods: {},
+  methods: {
+    checkSession() {
+      this.$axios
+        .get("MainServlet/checkSession")
+        .then((response) => {
+          this.LoggedIn = response.data != null ? true : false;
+          if (!this.LoggedIn) {
+            this.$emit("app:LoggedIn", false);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+          this.LoggedIn = false;
+          this.$emit("app:LoggedIn", false);
+        });
+    },
+  },
   created() {
+    this.checkSession();
     console.log("Container.vue");
   },
 };

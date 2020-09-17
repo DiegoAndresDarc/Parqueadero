@@ -45,8 +45,11 @@ export default {
   methods: {
     loadCoprops() {
       this.coprops = [];
+      var requestObject = {
+        tabla: "copropiedad",
+      };
       this.$axios
-        .get("MainServlet/getCoprops")
+        .post("MainServlet/getInformation", requestObject)
         .then((response) => {
           this.coprops = response.data;
           console.log(this.coprops);

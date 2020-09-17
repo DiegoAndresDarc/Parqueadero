@@ -34,12 +34,6 @@
 <script>
 export default {
   name: "Deluser",
-  props: {
-    root_admin: {
-      type: String,
-      default: "C",
-    },
-  },
   data() {
     return {
       mssg: "Usuario eliminado con éxito",
@@ -48,13 +42,17 @@ export default {
       usuarioSeleccionado: {},
       seleccionado: false,
       error: false,
+      root_admin: "",
     };
   },
   methods: {
     loadUsers() {
       this.usuarios = [];
+      var requestObject = {
+        tabla: "usuario",
+      };
       this.$axios
-        .get("MainServlet/getUsers")
+        .post("MainServlet/getInformation", requestObject)
         .then((response) => {
           this.usuarios = response.data;
           console.log(this.usuarios);
@@ -69,7 +67,7 @@ export default {
       console.log(this.usuarioSeleccionado);
       var requestObject = {
         tabla: "usuario",
-        identificacion: this.usuarioSeleccionado.identificacion,
+        id: this.usuarioSeleccionado.id,
       };
       this.$axios
         .post("MainServlet/delete", requestObject)

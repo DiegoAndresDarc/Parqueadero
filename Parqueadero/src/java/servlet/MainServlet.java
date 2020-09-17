@@ -88,11 +88,8 @@ public class MainServlet extends HttpServlet {
             case "update":
                 object = manager.update(id, data);
                 break;
-            case "getUsers":
-                object = manager.getUsers(id);
-                break;
-            case "getCoprops":
-                object = manager.getCoprops(id);
+            case "getInformation":
+                object = manager.getInformation(id,data);
                 break;
             case "delete":
                 object = manager.delete(id,data);

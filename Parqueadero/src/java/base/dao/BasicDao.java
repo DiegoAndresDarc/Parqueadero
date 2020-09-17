@@ -136,7 +136,7 @@ public class BasicDao {
         return result;
     }
 
-    public boolean update(List<String> tables, Map<String, String> fields) {
+    public boolean update(List<String> tables, Map<String, String> fields, String keyName, int keyValue) {
         Boolean result = false;
         try {
 
@@ -150,13 +150,15 @@ public class BasicDao {
 
                 }
                 sb.deleteCharAt(sb.lastIndexOf(","));
-                //sb.append(" WHERE ").append(keyName).append(" = ?");
+                sb.append(" WHERE ").append(keyName).append(" = ?");
                 //execute insert
                 ps = cnn.prepareStatement(sb.toString());
                 int psParams = 1;
-                for (int i = 1; i <= values.size(); i++) {
+                int i = 1;
+                for (i = 1; i <= values.size(); i++) {
                     ps.setString(i, values.get(i - 1));
                 }
+                ps.setInt(i, keyValue);
             }
             result = ps.executeUpdate() > 0;
 

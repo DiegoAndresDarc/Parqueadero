@@ -31,32 +31,21 @@
 <script>
 export default {
   name: "menu",
-  props: {
-    nombres: {
-      type: String,
-      default: "",
-    },
-    apellidos: {
-      type: String,
-      default: "",
-    },
-    usuario: {
-      type: String,
-      default: "",
-    },
-  },
   components: {},
   data() {
     return {
-      message: "Menu de navegación",
+      message: "",
       menu: [],
       submenu: [],
       LoggedIn: false,
+      nombres: "",
+      apellidos: "",
+      usuario: "",
     };
   },
   methods: {
     loadMenu() {
-      this.message += " " + this.nombres + " " + this.apellidos;
+      this.message = this.nombres + " " + this.apellidos;
       this.menu = [];
       this.$axios
         .get("MainServlet/getMenu")

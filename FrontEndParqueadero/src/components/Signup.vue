@@ -128,6 +128,21 @@
             </div>
           </div>
           <div class="field">
+            <label class="label">Seleccione la copropiedad a la cual pertenece</label>
+            <div class="control">
+              <div class="select">
+                <select v-model="copropSeleccionada">
+                  <option>{{selectCoprop}}</option>
+                  <option
+                    v-for="coprop in coprops"
+                    :value="coprop"
+                    v-bind:key="coprop.id"
+                  >{{coprop.nombre}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="field">
             <div class="control">
               <button class="button is-colorcustom">Registro</button>
             </div>
@@ -178,18 +193,41 @@ export default {
         identificacion: "",
         tipo_identificacion: "",
         tipo_usuario: "",
+        id_copropiedad:"",
       },
+      coprops: [],
+      copropSeleccionada: {},
+      selectCoprop: "Seleccione una copropiedad...",
     };
   },
   methods: {
+    loadCoprops() {
+      this.copropSeleccionada = {};
+      this.coprops = [];
+      var requestObject = {
+        tabla: "copropiedad",
+        signup: "",
+      };
+      this.$axios
+        .post("MainServlet/getInformation", requestObject)
+        .then((response) => {
+          this.coprops = response.data;
+          console.log(this.coprops);
+        })
+        .catch((e) => {
+          console.log(e);
+          this.error = true;
+        });
+    },
     signup() {
       this.info.tabla = "usuario";
       this.info.nombres = this.info.nombres.toUpperCase();
-      this.info.apellidos = this.info.nombres.toUpperCase();
-      this.info.password =  crypto.SHA512(this.info.password).toString();
+      this.info.apellidos = this.info.apellidos.toUpperCase();
+      this.info.password = crypto.SHA512(this.info.password).toString();
       this.info.email = this.info.email.toUpperCase();
       this.info.tipo_usuario = this.tipo_usr;
-      this.info.tipo_identificacion = this.tipo_doc; 
+      this.info.tipo_identificacion = this.tipo_doc;
+      this.info.id_copropiedad = this.copropSeleccionada.id;
       console.log(this.info);
       this.$axios
         .post("MainServlet/signup", this.info)
@@ -220,6 +258,7 @@ export default {
     },
   },
   created() {
+    this.loadCoprops();
     console.log("Sigup.vue");
   },
 };

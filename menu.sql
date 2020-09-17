@@ -11,39 +11,43 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Volcando datos para la tabla parqueadero.menu: ~31 rows (aproximadamente)
+-- Volcando datos para la tabla parqueadero.menu: ~33 rows (aproximadamente)
 DELETE FROM `menu`;
 /*!40000 ALTER TABLE `menu` DISABLE KEYS */;
-INSERT INTO `menu` (`id_menu`, `nombre`, `tipo_usuario`, `id_padre`, `tiene_hijos`) VALUES
-	(1, 'Administrar copropiedad', 'R', NULL, 1),
-	(2, 'Agregar copropiedad', 'R', 1, 0),
-	(3, 'Modificar copropiedad', 'R', 1, 0),
-	(6, 'Eliminar copropiedad', 'R', 1, 0),
-	(7, 'Administrar usuarios', 'R', NULL, 1),
-	(8, 'Agregar usuario', 'R', 7, 0),
-	(9, 'Modificar usuario', 'R', 7, 0),
-	(10, 'Eliminar usuario', 'R', 7, 0),
-	(11, 'Administrar copropiedad', 'A', NULL, 1),
-	(12, 'Configurar parametros', 'A', 11, 0),
-	(13, 'Modificar parametros', 'A', 11, 0),
-	(14, 'Administrar parqueaderos', 'A', NULL, 1),
-	(15, 'Agregar parqueadero', 'A', 14, 0),
-	(16, 'Modificar parqueadero', 'A', 14, 0),
-	(17, 'Eliminar parqueadero', 'A', 14, 0),
-	(18, 'Administrar usuarios', 'A', NULL, 1),
-	(19, 'Agregar usuario', 'A', 18, 0),
-	(20, 'Modificar usuario', 'A', 18, 0),
-	(21, 'Modificar datos principales', 'A', 20, 0),
-	(22, 'Modificar parqueaderos', 'A', 20, 0),
-	(23, 'Dar un parqueadero', 'A', 22, 0),
-	(24, 'Quitar un parqueadero', 'A', 22, 0),
-	(25, 'Eliminar usuario', 'A', 18, 0),
-	(26, 'Administrar datos', 'C', NULL, 1),
-	(27, 'Modificar datos principales', 'C', 26, 0),
-	(28, 'Modificar contraseña', 'C', 26, 0),
-	(29, 'Visualizar datos de mis parqueaderos', 'C', NULL, 0),
-	(30, 'Entrada de vehiculo', 'G', NULL, 0),
-	(31, 'Salida de vehiculo', 'G', NULL, 0);
+INSERT INTO `menu` (`id_menu`, `id_padre`, `nombre`, `tipo_usuario`, `tiene_hijos`) VALUES
+	(1, NULL, 'Administrar copropiedad', 'R', 1),
+	(2, 1, 'Agregar copropiedad', 'R', 0),
+	(3, 1, 'Modificar copropiedad', 'R', 0),
+	(6, 1, 'Eliminar copropiedad', 'R', 0),
+	(7, NULL, 'Administrar usuarios', 'R', 1),
+	(8, 7, 'Agregar usuario', 'R', 0),
+	(9, 7, 'Modificar usuario', 'R', 0),
+	(10, 7, 'Eliminar usuario', 'R', 0),
+	(11, NULL, 'Administrar copropiedad', 'A', 1),
+	(12, 11, 'Configurar parametros', 'A', 0),
+	(13, 11, 'Modificar parametros', 'A', 0),
+	(14, NULL, 'Administrar parqueaderos', 'A', 1),
+	(15, 14, 'Agregar parqueadero', 'A', 0),
+	(16, 14, 'Modificar parqueadero', 'A', 0),
+	(17, 14, 'Eliminar parqueadero', 'A', 0),
+	(18, NULL, 'Administrar usuarios', 'A', 1),
+	(19, 18, 'Agregar usuario', 'A', 0),
+	(20, 18, 'Modificar usuario', 'A', 1),
+	(21, 20, 'Modificar datos principales', 'A', 0),
+	(22, 20, 'Modificar parqueaderos', 'A', 1),
+	(23, 22, 'Dar un parqueadero', 'A', 0),
+	(24, 22, 'Quitar un parqueadero', 'A', 0),
+	(25, 18, 'Eliminar usuario', 'A', 0),
+	(26, NULL, 'Administrar datos', 'C', 1),
+	(27, 26, 'Modificar datos principales', 'C', 0),
+	(28, 26, 'Modificar contraseña', 'C', 0),
+	(29, NULL, 'Visualizar datos de mis parqueaderos', 'C', 0),
+	(30, NULL, 'Entrada de vehiculo', 'G', 0),
+	(31, NULL, 'Salida de vehiculo', 'G', 0),
+	(33, NULL, 'Administrar apartamentos', 'A', 1),
+	(34, 33, 'Agregar apartamento', 'A', 0),
+	(35, 33, 'Modificar apartamento', 'A', 0),
+	(36, 33, 'Eliminar apartamento', 'A', 0);
 /*!40000 ALTER TABLE `menu` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

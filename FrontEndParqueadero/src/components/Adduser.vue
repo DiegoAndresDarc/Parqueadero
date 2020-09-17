@@ -157,19 +157,14 @@
 import * as crypto from "crypto-js";
 export default {
   name: "addUser",
-  props: {
-    root_admin: {
-      type: String,
-      default: "C",
-    },
-  },
   components: {},
   data() {
     return {
       error: false,
-      mssg:"Registro exitoso",
+      mssg: "Registro exitoso",
       tipo_doc: "CC",
       tipo_usr: "Cliente",
+      root_admin: "",
       info: {
         tabla: "",
         nombres: "",
@@ -189,7 +184,7 @@ export default {
     addUser() {
       this.info.tabla = "usuario";
       this.info.nombres = this.info.nombres.toUpperCase();
-      this.info.apellidos = this.info.nombres.toUpperCase();
+      this.info.apellidos = this.info.apellidos.toUpperCase();
       this.info.password = crypto.SHA512(this.info.password).toString();
       this.info.email = this.info.email.toUpperCase();
       this.info.tipo_usuario = this.tipo_usr.charAt(0);
@@ -205,6 +200,7 @@ export default {
           this.error = true;
           this.cleanMessages();
         });
+      this.info = {};
     },
   },
   created() {
