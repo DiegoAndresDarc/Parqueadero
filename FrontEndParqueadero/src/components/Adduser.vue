@@ -154,6 +154,7 @@
   </div>
 </template>
 <script>
+import * as crypto from "crypto-js";
 export default {
   name: "addUser",
   props: {
@@ -191,15 +192,13 @@ export default {
       this.info.apellidos = this.info.nombres.toUpperCase();
       this.info.password = crypto.SHA512(this.info.password).toString();
       this.info.email = this.info.email.toUpperCase();
-      this.info.tipo_usuario = this.tipo_usr;
+      this.info.tipo_usuario = this.tipo_usr.charAt(0);
       this.info.tipo_identificacion = this.tipo_doc;
       console.log(this.info);
       this.$axios
         .post("MainServlet/signup", this.info)
         .then((response) => {
           alert(this.mssg);
-          this.$router.push("/login");
-          console.log("registro");
         })
         .catch((e) => {
           console.log(e);

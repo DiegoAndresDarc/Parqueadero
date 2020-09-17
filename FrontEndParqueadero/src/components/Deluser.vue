@@ -13,7 +13,7 @@
                     <option
                       v-for="usuario in usuarios"
                       :value="usuario"
-                      v-bind:key="usuario.id"
+                      v-bind:key="usuario.identificacion"
                     >{{usuario.nombres}} {{usuario.apellidos}}</option>
                   </select>
                 </div>
@@ -67,9 +67,12 @@ export default {
     delUser() {
       this.seleccionado = true;
       console.log(this.usuarioSeleccionado);
-      this.usuarioSeleccionado.table = "usuario";
+      var requestObject = {
+        tabla: "usuario",
+        identificacion: this.usuarioSeleccionado.identificacion,
+      };
       this.$axios
-        .post("MainServlet/delete", this.usuarioSeleccionado)
+        .post("MainServlet/delete", requestObject)
         .then((response) => {
           alert(this.mssg);
           this.loadUsers();

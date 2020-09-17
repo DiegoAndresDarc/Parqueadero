@@ -7,8 +7,10 @@ import Container from '../components/Container.vue'
 import RecoverPassword from '../components/RecoverPassword.vue'
 import AddCoprop from '../components/AddCoprop.vue'
 import ModCoprop from '../components/ModCoprop.vue'
+import DelCoprop from '../components/DelCoprop.vue'
 import Adduser from '../components/Adduser.vue'
 import Moduser from '../components/Moduser.vue'
+import Deluser from '../components/Deluser.vue'
 
 Vue.use(Router);
 
@@ -49,7 +51,7 @@ export default new Router({
           path: '/Eliminar-copropiedad',
           name: 'Eliminar-copropiedad',
           props: true,
-          component: ModCoprop
+          component: DelCoprop
         },
         {
           path: '/Agregar-usuario',
@@ -67,7 +69,7 @@ export default new Router({
           path: '/Eliminar-usuario',
           name: 'Eliminar-usuario',
           props: true,
-          component: Moduser
+          component: Deluser
         },
       ]
     },

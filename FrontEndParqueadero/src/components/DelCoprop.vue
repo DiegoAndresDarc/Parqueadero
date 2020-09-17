@@ -1,11 +1,11 @@
 <template>
-  <div class="modcoprop">
-    <div class="content-modcoprop">
+  <div class="delcoprop">
+    <div class="content-delcoprop">
       <div class="field">
         <div class="control">
-          <form @submit.prevent.once="selCoprop" autocomplete="off">
+          <form @submit.prevent.once="delCoprop" autocomplete="off">
             <div class="field">
-              <label class="label">Seleccione la copropiedad a modificar</label>
+              <label class="label">Seleccione la copropiedad a eliminar</label>
               <div class="control">
                 <div class="select">
                   <select v-model="copropSeleccionada">
@@ -21,24 +21,7 @@
             </div>
             <div class="field">
               <div class="control">
-                <button class="button is-link is-fullwidth">Modificar</button>
-              </div>
-            </div>
-          </form>
-        </div>
-      </div>
-      <div class="field" v-show="seleccionado">
-        <div class="control">
-          <form @submit.prevent.once="modCoprop" name="form">
-            <div class="field" v-for="(item,index) in copropSeleccionada" v-bind:key="index">
-              <label class="label">index</label>
-              <div class="control">
-                <input type="text" class="input" :value="item" />
-              </div>
-            </div>
-            <div class="field">
-              <div class="control">
-                <button class="button is-link is-fullwidth">Modificar</button>
+                <button class="button is-link is-fullwidth">Eliminar</button>
               </div>
             </div>
           </form>
@@ -50,14 +33,13 @@
 
 <script>
 export default {
-  name: "ModCoprop",
+  name: "DelCoprop",
   data() {
     return {
-      mssg: "Copropiedad/Apartamento modificado con exito",
+      mssg: "Copropiedad eliminada con exito",
       coprops: [],
       copropSeleccionada: {},
       selectCoprop: "Seleccione una copropiedad...",
-      seleccionado: false,
     };
   },
   methods: {
@@ -78,11 +60,15 @@ export default {
       this.seleccionado = true;
       console.log(this.copropSeleccionada);
     },
-    modCoprop() {
+    delCoprop() {
+      this.seleccionado = true;
       console.log(this.copropSeleccionada);
-      this.copropSeleccionada.table = "copropiedad";
+      var requestObject = {
+        tabla: "copropiedad",
+        id: this.copropSeleccionada.id,
+      };
       this.$axios
-        .post("MainServlet/update", this.copropSeleccionada)
+        .post("MainServlet/delete", requestObject)
         .then((response) => {
           alert(this.mssg);
           this.loadCoprops();
@@ -95,9 +81,10 @@ export default {
   },
   created() {
     this.loadCoprops();
-    console.log("ModCoprop.vue");
+    console.log("DelCoprop.vue");
   },
 };
 </script>
+
 <style>
 </style>

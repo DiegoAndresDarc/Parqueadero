@@ -164,4 +164,20 @@ public class Manager {
         }
         return object;
     }
+
+    public Object getCoprops(String id) {
+        Usuario usuario = usuarios.get(id);
+        Object object = null;
+        if (usuario != null) {
+            ArrayList<String> tables = new ArrayList<>();
+            tables.add("copropiedad");
+            ArrayList<String> fields = new ArrayList<>();
+            fields.add("nombre");
+            fields.add("direccion");
+            fields.add("habilitada");
+            fields.add("id");
+            object = usuario.getBasicDao().consult(tables, null, fields);
+        }
+        return object;
+    }
 }

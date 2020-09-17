@@ -13,7 +13,7 @@
                     <option
                       v-for="usuario in usuarios"
                       :value="usuario"
-                      v-bind:key="usuario.id"
+                      v-bind:key="usuario.identificacion"
                     >{{usuario.nombres}} {{usuario.apellidos}}</option>
                   </select>
                 </div>
@@ -26,7 +26,7 @@
             </div>
           </form>
         </div>
-        <div class="field-set" v-show="seleccionado">
+        <div class="field" v-show="seleccionado">
           <div class="control">
             <form class="form" @submit.prevent.once="modUser">
               <div v-for="(item,index) in usuarioSeleccionado" v-bind:key="index">
@@ -83,6 +83,7 @@
                     <input
                       :type="index == 'password'?'password': index == 'email'?'email':'text'"
                       :value="item"
+                      class="input"
                     />
                   </div>
                 </div>
@@ -99,8 +100,8 @@
     </div>
   </div>
 </template>
-
 <script>
+import * as crypto from "crypto-js";
 export default {
   name: "Moduser",
   props: {

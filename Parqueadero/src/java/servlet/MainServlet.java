@@ -91,6 +91,9 @@ public class MainServlet extends HttpServlet {
             case "getUsers":
                 object = manager.getUsers(id);
                 break;
+            case "getCoprops":
+                object = manager.getCoprops(id);
+                break;
             case "delete":
                 object = manager.delete(id,data);
             default:
