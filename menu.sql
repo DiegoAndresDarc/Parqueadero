@@ -11,7 +11,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Volcando datos para la tabla parqueadero.menu: ~33 rows (aproximadamente)
+-- Volcando datos para la tabla parqueadero.menu: ~38 rows (aproximadamente)
 DELETE FROM `menu`;
 /*!40000 ALTER TABLE `menu` DISABLE KEYS */;
 INSERT INTO `menu` (`id_menu`, `id_padre`, `nombre`, `tipo_usuario`, `tiene_hijos`) VALUES
@@ -47,7 +47,12 @@ INSERT INTO `menu` (`id_menu`, `id_padre`, `nombre`, `tipo_usuario`, `tiene_hijo
 	(33, NULL, 'Administrar apartamentos', 'A', 1),
 	(34, 33, 'Agregar apartamento', 'A', 0),
 	(35, 33, 'Modificar apartamento', 'A', 0),
-	(36, 33, 'Eliminar apartamento', 'A', 0);
+	(36, 33, 'Eliminar apartamento', 'A', 0),
+	(37, NULL, 'Administrar visitante', 'G', 1),
+	(38, 37, 'Entrada de visitante', 'G', 0),
+	(39, 37, 'Salida de visitante', 'G', 0),
+	(40, NULL, 'Iniciar turno', 'G', 0),
+	(41, NULL, 'Finalizar turno', 'G', 0);
 /*!40000 ALTER TABLE `menu` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

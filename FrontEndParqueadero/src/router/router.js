@@ -1,17 +1,18 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import App from '../components/App.vue'
-import Login from '../components/Login.vue'
-import Signup from '../components/Signup.vue'
-import Container from '../components/Container.vue'
-import RecoverPassword from '../components/RecoverPassword.vue'
-import AddCoprop from '../components/AddCoprop.vue'
-import ModCoprop from '../components/ModCoprop.vue'
-import DelCoprop from '../components/DelCoprop.vue'
-import Adduser from '../components/Adduser.vue'
-import Moduser from '../components/Moduser.vue'
-import Deluser from '../components/Deluser.vue'
-
+import App from '../components/globals/App.vue'
+import Login from '../components/globals/Login.vue'
+import Signup from '../components/globals/Signup.vue'
+import Container from '../components/globals/Container.vue'
+import RecoverPassword from '../components/globals/RecoverPassword.vue'
+import AddCoprop from '../components/root/AddCoprop.vue'
+import ModCoprop from '../components/root/ModCoprop.vue'
+import DelCoprop from '../components/root/DelCoprop.vue'
+import Adduser from '../components/globals/Adduser.vue'
+import Moduser from '../components/globals/Moduser.vue'
+import Deluser from '../components/globals/Deluser.vue'
+import ConfParams from '../components/admin/ConfParams.vue'
+import ModParams from '../components/admin/ModParams.vue'
 Vue.use(Router);
 
 export default new Router({
@@ -87,6 +88,16 @@ export default new Router({
           },
           component: Deluser
         },
+        {
+          path: '/Configurar-parametros',
+          name: 'Configurar-parametros',
+          component: ConfParams
+        },
+        {
+          path: '/Modificar-parametros',
+          name: 'Modificar-parametros',
+          component: ModParams
+        }
       ]
     },
     {
