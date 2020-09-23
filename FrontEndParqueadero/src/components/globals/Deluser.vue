@@ -82,8 +82,11 @@ export default {
         });
     },
   },
+  beforeCreate(){
+      this.$bus.$emit("checkSession", "");
+  },
   created() {
-    this.root_admin = this.$route.params.usuario;
+    this.root_admin = localStorage.usuario;
     this.loadUsers();
     console.log("Moduser.vue");
   },

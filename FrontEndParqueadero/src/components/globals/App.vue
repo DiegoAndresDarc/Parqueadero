@@ -21,7 +21,7 @@ export default {
           this.LoggedIn = response.data != null ? true : false;
           if (!this.LoggedIn) {
             if (this.$route.path !== "/login") {
-              this.$router.push("/login");
+              this.$router.replace("/login");
             }
           }
         })
@@ -29,13 +29,29 @@ export default {
           console.log(e);
           this.LoggedIn = false;
           if (this.$route.path !== "/login") {
-            this.$router.push("/login");
+            this.$router.replace("/login");
           }
         });
+    },
+    logout() {
+      this.$axios
+        .get("MainServlet/logout")
+        .then((response) => {
+          this.$router.replace("/login");
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      this.LoggedIn = false;
+      localStorage.removeItem(usuario);
+      localStorage.removeItem(nombres);
+      localStorage.removeItem(apellidos);
     },
   },
   created() {
     this.checkSession();
+    this.$bus.$on("checkSession", this.checkSession);
+    this.$bus.$on("logout", this.logout);
     console.log("App.vue");
   },
 };

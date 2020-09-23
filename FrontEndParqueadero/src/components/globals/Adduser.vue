@@ -203,8 +203,11 @@ export default {
       this.info = {};
     },
   },
+  beforeCreate(){
+      this.$bus.$emit("checkSession", "");
+  },
   created() {
-    this.root_admin = this.$route.params.usuario;
+    this.root_admin = localStorage.usuario;
     console.log("Adduser.vue");
   },
 };

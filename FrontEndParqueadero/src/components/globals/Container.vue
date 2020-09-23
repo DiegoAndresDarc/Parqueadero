@@ -21,31 +21,18 @@ export default {
     };
   },
   methods: {
-    checkSession() {
-      this.$axios
-        .get("MainServlet/checkSession")
-        .then((response) => {
-          this.LoggedIn = response.data != null ? true : false;
-          if (!this.LoggedIn) {
-            this.$emit("app:LoggedIn", false);
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-          this.LoggedIn = false;
-          this.$emit("app:LoggedIn", false);
-        });
-    },
+  },
+  beforeCreate(){
+      this.$bus.$emit("checkSession", "");
   },
   created() {
-    this.checkSession();
     console.log("Container.vue");
   },
 };
 </script>
 <style>
 .container-menu {
-  width: 250px;
+  width: 270px;
   position: absolute;
   height: 100%;
   border-right: 2px solid;

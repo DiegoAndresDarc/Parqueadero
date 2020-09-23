@@ -2,7 +2,7 @@
   <div id="menuview" class="navuser">
     <div class="field">
       <div class="control">
-        <h1>{{message}}</h1>
+        <h1>{{ message }}</h1>
       </div>
     </div>
     <aside class="menu-aside">
@@ -11,18 +11,44 @@
           <a
             :id="item.id_menu"
             v-if="!item.id_padre"
-            v-on:click="!item.tiene_hijos==='0'?loadview(item):item.id_padre=item.id_padre"
-          >{{item.nombre}}</a>
+            v-on:click="
+              item.tiene_hijos === '0'
+                ? loadview(item)
+                : (item.id_menu = item.id_menu)
+            "
+          >
+            {{ item.nombre }}
+            <span class="icon icon-menu i-menu">
+              <i
+                :class="
+                  item.tiene_hijos === '0'
+                    ? 'mdi mdi-chevron-double-left'
+                    : 'mdi mdi-chevron-double-down'
+                "
+              ></i>
+            </span>
+          </a>
           <transition type="slide">
-            <ul class="submenu-list child">
-              <li v-for="subitem in loadSubmenu(item.id_menu)" v-bind:key="subitem.id_menu">
-                <a :id="subitem.id_menu" v-on:click="loadview(subitem)">{{subitem.nombre}}</a>
+            <ul class="submenu-list child" v-if="item.tiene_hijos === '1'">
+              <li
+                v-for="subitem in loadSubmenu(item.id_menu)"
+                v-bind:key="subitem.id_menu"
+              >
+                <a :id="subitem.id_menu" v-on:click="loadview(subitem)"
+                  >{{ subitem.nombre }}
+                  <span class="icon icon-menu i-menu">
+                    <i class="mdi mdi-point"></i> </span
+                ></a>
               </li>
             </ul>
           </transition>
         </li>
         <li>
-          <a v-on:click="logout">Salir</a>
+          <a v-on:click="logout"
+            >Salir
+            <span class="icon icon-menu i-menu">
+              <i class="mdi mdi-exit-to-app"></i> </span
+          ></a>
         </li>
       </ul>
     </aside>
@@ -41,6 +67,7 @@ export default {
       nombres: "",
       apellidos: "",
       usuario: "",
+      mostrar: false,
     };
   },
   methods: {
@@ -72,34 +99,103 @@ export default {
           params: { usuario: this.usuario },
         });
       }
+      mostrar = false;
     },
     logout() {
-      this.$axios
-        .get("MainServlet/logout")
-        .then((response) => {
-          this.$emit("app:LoggedIn", false);
-          this.$router.push("/");
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+      this.$bus.$emit("logout", "");
     },
   },
+  beforeCreate() {
+    this.$bus.$emit("checkSession", "");
+  },
   created() {
-    this.usuario = this.$route.params.usuario;
-    this.nombres = this.$route.params.nombres;
-    this.apellidos = this.$route.params.apellidos;
+      this.usuario = localStorage.usuario;
+      this.nombres = localStorage.nombres;
+      this.apellidos = localStorage.apellidos;
     this.loadMenu();
     console.log("Menu.vue");
   },
 };
 </script>
 <style>
-#menu-aside a {
+.navuser h1 {
+  font-weight: bold;
+  color: black;
+}
+.navuser {
+  background: salmon;
+}
+.menu-aside {
+  z-index: 1000;
+  max-width: 1000px;
+  width: 100%;
+  margin: 10px auto;
+}
+
+.menu-list {
+  list-style: none;
+}
+.menu-list li {
+  display: inline-block;
+  position: relative;
+}
+
+.menu-list li:hover .child {
+  display: block;
+}
+.menu-list li a {
   color: black;
   font-weight: bold;
+  display: block;
+  text-decoration: none;
+  padding: 10px;
 }
-#menu-aside a.router-link-exact-active {
-  color: green;
+
+.child {
+  display: none;
+}
+
+.child li {
+  display: block;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(0, 0, 0, 1);
+}
+
+.child li a {
+  display: block;
+  text-decoration: none;
+  padding: 10px;
+}
+
+@media screen and (max-width: 800px) {
+  .menu-aside {
+    width: 80%;
+    height: calc(100% - 80px);
+    position: fixed;
+    left: 0;
+    margin: 0;
+    overflow: scroll;
+  }
+
+  .menu-list li:hover .child {
+    display: none;
+  }
+  .menu-list li {
+    display: block;
+    border-bottom: 1px solid rgba(0, 0, 0, 1);
+  }
+
+  .menu-list li a {
+    display: block;
+  }
+
+  .child {
+    width: 100%;
+    position: relative;
+  }
+
+  .child li a {
+    margin-left: 20px;
+  }
 }
 </style>

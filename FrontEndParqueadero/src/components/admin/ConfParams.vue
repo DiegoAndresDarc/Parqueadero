@@ -33,6 +33,9 @@ export default {
   methods: {
     confParams() {},
   },
+  beforeCreate(){
+      this.$bus.$emit("checkSession", "");
+  },
   created() {
     console.log("ConfParams.vue");
   },

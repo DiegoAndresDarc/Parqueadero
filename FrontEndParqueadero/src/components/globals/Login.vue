@@ -6,7 +6,11 @@
     <div class="content-login">
       <div class="box clogin">
         <div class="field">
-          <form @submit.prevent.once="loginUser()" autocomplete="off" name="form">
+          <form
+            @submit.prevent.once="loginUser()"
+            autocomplete="off"
+            name="form"
+          >
             <h1 class="subtitle is-size-3">Incio de Sesión</h1>
             <div class="field">
               <div class="control has-icons-left">
@@ -43,20 +47,20 @@
             <div class="field">
               <div class="control">
                 <transition name="slide">
-                  <p
-                    v-if="invalidData"
-                    class="help is-danger is-medium"
-                  >Usuario o contraseña incorrectos</p>
+                  <p v-if="invalidData" class="help is-danger is-medium">
+                    Usuario o contraseña incorrectos
+                  </p>
                 </transition>
               </div>
             </div>
             <div class="field">
               <div class="control">
                 <transition name="slide">
-                  <p
-                    v-if="error"
-                    class="help is-danger is-medium"
-                  >Hubo un error en la comunicación con el servidor. Si persiste, por favor pongase en contacto con el administrador de la página</p>
+                  <p v-if="error" class="help is-danger is-medium">
+                    Hubo un error en la comunicación con el servidor. Si
+                    persiste, por favor pongase en contacto con el administrador
+                    de la página
+                  </p>
                 </transition>
               </div>
             </div>
@@ -79,7 +83,9 @@
           <div class="control">
             <p>
               ¿Olvidaste la contraseña?
-              <router-link to="/recoverPassword">Recuperar contraseña</router-link>
+              <router-link to="/recoverPassword"
+                >Recuperar contraseña</router-link
+              >
             </p>
           </div>
         </div>
@@ -115,15 +121,10 @@ export default {
         .then((response) => {
           if (response) {
             var loginInfo = response.data;
-            this.$router.push({
-              name: 'Home',
-              params: {
-                nombres: loginInfo.nombres,
-                apellidos: loginInfo.apellidos,
-                usuario: loginInfo.usuario,
-                user_type: loginInfo.usuario,
-              },
-            });
+            this.$router.replace({ name: "Home" });
+            localStorage.nombres = loginInfo.nombres;
+            localStorage.apellidos = loginInfo.apellidos;
+            localStorage.usuario = loginInfo.usuario;
           } else {
             this.invalidData = true;
             this.cleanMessages();
