@@ -172,6 +172,7 @@
 </template>
 <script>
 import * as crypto from "crypto-js";
+import jsonInfo from "../../assets/info.json";
 export default {
   name: "signup",
   components: {},
@@ -230,7 +231,7 @@ export default {
       this.info.id_copropiedad = this.copropSeleccionada.id;
       console.log(this.info);
       this.$axios
-        .post("MainServlet/signup", this.info)
+        .post("http://localhost/parqueadero/globals/signup.php", this.info)
         .then((response) => {
           alert(this.mssg);
           this.$router.push("/login");

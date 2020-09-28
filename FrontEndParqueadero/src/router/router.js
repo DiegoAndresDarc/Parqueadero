@@ -17,6 +17,7 @@ Vue.use(Router);
 
 export default new Router({
   base: process.env.BASE_URL,
+  mode: 'history',
   routes: [{
       path: '/',
       component: App
@@ -32,7 +33,7 @@ export default new Router({
       component: Signup
     },
     {
-      path: '/Home/',
+      path: '/home',
       name: 'Home',
       component: Container,
       children: [{

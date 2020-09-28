@@ -30,7 +30,9 @@
             </div>
             <div class="field">
               <div class="control">
-                <button class="button is-link is-fullwidth">Agregar Copropiedad/Conjunto residencial</button>
+                <button class="button is-link is-fullwidth">
+                  Agregar Copropiedad/Conjunto residencial
+                </button>
               </div>
             </div>
           </form>
@@ -40,6 +42,7 @@
   </div>
 </template>
 <script>
+import jsonInfo from "../../assets/info.json";
 export default {
   name: "AddCoprop",
   components: {},
@@ -56,13 +59,20 @@ export default {
   },
   methods: {
     agregarCoprop() {
+      const config = {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      };
+      var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/signup.php";
       this.info.tabla = "copropiedad";
       this.info.nombre = this.info.nombre.toUpperCase();
       this.info.direccion = this.info.direccion.toUpperCase();
       this.info.habilitada = "1";
       this.$axios
-        .post("MainServlet/signup", this.info)
+        .post(url, this.info)
         .then((response) => {
+          console.log(response);
           alert(this.message);
         })
         .catch((e) => {

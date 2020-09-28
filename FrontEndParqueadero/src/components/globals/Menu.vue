@@ -14,7 +14,9 @@
             v-on:click="
               item.tiene_hijos === '0'
                 ? loadview(item)
-                : (item.id_menu = item.id_menu)
+                : item.mostrar === '0'
+                ? (item.mostrar = '1')
+                : (item.mostrar = '0')
             "
           >
             {{ item.nombre }}
@@ -29,7 +31,7 @@
             </span>
           </a>
           <transition type="slide">
-            <ul class="submenu-list child" v-if="item.tiene_hijos === '1'">
+            <ul class="submenu-list child" v-if="item.mostrar === '1'">
               <li
                 v-for="subitem in loadSubmenu(item.id_menu)"
                 v-bind:key="subitem.id_menu"
@@ -55,6 +57,7 @@
   </div>
 </template>
 <script>
+import jsonInfo from "../../assets/info.json";
 export default {
   name: "menu",
   components: {},
@@ -73,10 +76,15 @@ export default {
   methods: {
     loadMenu() {
       this.message = this.nombres + " " + this.apellidos;
+      var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/menu.php";
       this.menu = [];
+      var param = {
+        tipo_usuario: this.usuario,
+      };
       this.$axios
-        .get("MainServlet/getMenu")
+        .get(url, { params: param })
         .then((response) => {
+          console.log(response);
           this.menu = response.data;
         })
         .catch((e) => {
@@ -109,9 +117,9 @@ export default {
     this.$bus.$emit("checkSession", "");
   },
   created() {
-      this.usuario = localStorage.usuario;
-      this.nombres = localStorage.nombres;
-      this.apellidos = localStorage.apellidos;
+    this.usuario = this.$session.get("user");
+    this.nombres = this.$session.get("name");
+    this.apellidos = this.$session.get("lastname");
     this.loadMenu();
     console.log("Menu.vue");
   },
@@ -139,7 +147,6 @@ export default {
   display: inline-block;
   position: relative;
 }
-
 .menu-list li:hover .child {
   display: block;
 }

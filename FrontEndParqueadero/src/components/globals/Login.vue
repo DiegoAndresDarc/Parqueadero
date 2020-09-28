@@ -98,6 +98,7 @@
 </template>
 <script>
 import * as crypto from "crypto-js";
+import jsonInfo from "../../assets/info.json";
 export default {
   name: "login",
   components: {},
@@ -115,17 +116,22 @@ export default {
   },
   methods: {
     loginUser() {
+      var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/login.php";
       this.info.password = crypto.SHA512(this.info.password).toString();
       this.$axios
-        .post("http://localhost/parqueadero/globals/login.php", this.info)
+        .get(url, {
+          params: this.info,
+        })
         .then((response) => {
           console.log(response);
-          if (response.data.length) {
+          if (response.status === 200 && "nombres" in response.data) {
             var loginInfo = response.data;
+            this.$session.start();
+            this.$session.set("name", response.data.nombres);
+            this.$session.set("lastname", response.data.apellidos);
+            this.$session.set("user", response.data.tipo_usuario);
+            //Vue.http.headers.common["Authorization"] = "Bearer " + response.data.nombres;
             this.$router.replace({ name: "Home" });
-            localStorage.nombres = loginInfo.nombres;
-            localStorage.apellidos = loginInfo.apellidos;
-            localStorage.usuario = loginInfo.usuario;
           } else {
             this.invalidData = true;
             this.cleanMessages();

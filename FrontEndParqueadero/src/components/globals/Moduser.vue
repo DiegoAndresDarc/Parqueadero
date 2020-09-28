@@ -187,7 +187,7 @@ export default {
         tabla: "usuario",
       };
       this.$axios
-        .post("MainServlet/getInformation", requestObject)
+        .get("MainServlet/getInformation", requestObject)
         .then((response) => {
           this.usuarios = response.data;
           console.log(this.usuarios);

@@ -15,37 +15,20 @@ export default {
   },
   methods: {
     checkSession() {
-      this.$axios
-        .get("MainServlet/checkSession")
-        .then((response) => {
-          this.LoggedIn = response.data != null ? true : false;
-          if (!this.LoggedIn) {
-            if (this.$route.path !== "/login") {
-              this.$router.replace("/login");
-            }
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-          this.LoggedIn = false;
-          if (this.$route.path !== "/login") {
-            this.$router.replace("/login");
-          }
-        });
+      if (!this.$session.exists()) {
+        if (this.$route.path !== "/login") {
+          this.$router.replace("/login");
+        }
+      } else {
+        if (this.$route.path !== "/home") {
+          this.$router.replace("/home");
+        }
+      }
     },
     logout() {
-      this.$axios
-        .get("MainServlet/logout")
-        .then((response) => {
-          this.$router.replace("/login");
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+      this.$session.destroy();
       this.LoggedIn = false;
-      localStorage.removeItem(usuario);
-      localStorage.removeItem(nombres);
-      localStorage.removeItem(apellidos);
+      this.$router.replace("/login");
     },
   },
   created() {
