@@ -62,10 +62,3 @@ body{
 #login, #signup, #recoverPassword{
     background: url(/images/fondo2.png);
 }
-#menu-aside a {
-    color: black;
-    font-weight: bold;
-}
-#menu-aside a.router-link-exact-active {
-    color: green;
-}

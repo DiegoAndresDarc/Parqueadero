@@ -117,9 +117,10 @@ export default {
     loginUser() {
       this.info.password = crypto.SHA512(this.info.password).toString();
       this.$axios
-        .post("MainServlet/login", this.info)
+        .post("http://localhost/parqueadero/globals/login.php", this.info)
         .then((response) => {
-          if (response) {
+          console.log(response);
+          if (response.data.length) {
             var loginInfo = response.data;
             this.$router.replace({ name: "Home" });
             localStorage.nombres = loginInfo.nombres;

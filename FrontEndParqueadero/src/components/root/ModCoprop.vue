@@ -126,7 +126,7 @@ export default {
       this.copropSeleccionada.nombre = this.copropSeleccionada.nombre.toUpperCase();
       this.copropSeleccionada.direccion = this.copropSeleccionada.direccion.toUpperCase();
       this.copropSeleccionada.habilitada = this.habilitada === "Si" ? "1" : "0";
-      this.copropSeleccionada.administrador = this.usuarioSeleccionado.id;
+      this.copropSeleccionada.id_administrador = this.usuarioSeleccionado.id;
       this.$axios
         .post("MainServlet/update", this.copropSeleccionada)
         .then((response) => {

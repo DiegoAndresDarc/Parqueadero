@@ -2,7 +2,8 @@ import Vue from 'vue'
 import router from './router/router'
 import App from './components/globals/App.vue'
 import axios from 'axios'
-
+//axios.defaults.headers.common['Access-Control-Allow-Origin']='*';
+//axios.defaults.headers.common['Content-Type']='application/json';
 Vue.prototype.$axios = axios;
 const EventBus = new Vue()
 Object.defineProperties(Vue.prototype, {
