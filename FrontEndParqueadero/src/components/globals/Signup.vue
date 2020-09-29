@@ -127,17 +127,40 @@
               />
             </div>
           </div>
-          <div class="field">
-            <label class="label">Seleccione la copropiedad a la cual pertenece</label>
+          <div class="field" v-if="coprops.length">
+            <label class="label"
+              >Seleccione la copropiedad a la cual pertenece</label
+            >
             <div class="control">
               <div class="select">
                 <select v-model="copropSeleccionada">
-                  <option>{{selectCoprop}}</option>
+                  <option>{{ selectCoprop }}</option>
                   <option
                     v-for="coprop in coprops"
                     :value="coprop"
                     v-bind:key="coprop.id"
-                  >{{coprop.nombre}}</option>
+                  >
+                    {{ coprop.nombre }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="field" v-if="apartamentos.length">
+            <label class="label"
+              >Seleccione el apartamento al cual pertenece</label
+            >
+            <div class="control">
+              <div class="select">
+                <select v-model="apartSeleccionado">
+                  <option>{{ selectApart }}</option>
+                  <option
+                    v-for="apartamento in apartamentos"
+                    :value="apartamento"
+                    v-bind:key="apartamento.id"
+                  >
+                    {{ apartamento.nombre }}
+                  </option>
                 </select>
               </div>
             </div>
@@ -152,16 +175,18 @@
       <div class="field">
         <div class="control">
           <transition name="slide">
-            <p
-              v-if="error"
-              class="help is-danger is-medium"
-            >Hubo un error en la comunicación con el servidor. Si persiste, por favor pongase en contacto con el administrador de la página</p>
+            <p v-if="error" class="help is-danger is-medium">
+              Hubo un error en la comunicación con el servidor. Si persiste, por
+              favor pongase en contacto con el administrador de la página
+            </p>
           </transition>
         </div>
       </div>
       <div class="field">
         <div class="control">
-          <button class="button is-colorcustom" v-on:click="cancelar">Cancelar</button>
+          <button class="button is-colorcustom" v-on:click="cancelar">
+            Cancelar
+          </button>
         </div>
       </div>
     </div>
@@ -194,26 +219,48 @@ export default {
         identificacion: "",
         tipo_identificacion: "",
         tipo_usuario: "",
-        id_copropiedad:"",
+        id_copropiedad: "",
       },
       coprops: [],
       copropSeleccionada: {},
       selectCoprop: "Seleccione una copropiedad...",
+      apartamentos: [],
+      apartSeleccionado: {},
+      selectApart: "Seleccione un apartamento...",
     };
   },
   methods: {
     loadCoprops() {
+      var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/select.php";
       this.copropSeleccionada = {};
       this.coprops = [];
       var requestObject = {
         tabla: "copropiedad",
-        signup: "",
       };
       this.$axios
-        .post("MainServlet/getInformation", requestObject)
+        .get(url, { params: requestObject })
         .then((response) => {
           this.coprops = response.data;
-          console.log(this.coprops);
+        })
+        .catch((e) => {
+          console.log(e);
+          this.error = true;
+        });
+    },
+    loadApart() {
+      var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/select.php";
+      this.copropSeleccionada = {};
+      this.coprops = [];
+      this.apartamentos = [];
+      this.apartSeleccionado = {};
+      var requestObject = {
+        tabla: "apartamento",
+        id_copropiedad: this.copropSeleccionada.id,
+      };
+      this.$axios
+        .get(url, { params: requestObject })
+        .then((response) => {
+          this.coprops = response.data;
         })
         .catch((e) => {
           console.log(e);
@@ -221,6 +268,7 @@ export default {
         });
     },
     signup() {
+      var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/insert.php";
       this.info.tabla = "usuario";
       this.info.nombres = this.info.nombres.toUpperCase();
       this.info.apellidos = this.info.apellidos.toUpperCase();
@@ -229,19 +277,20 @@ export default {
       this.info.tipo_usuario = this.tipo_usr;
       this.info.tipo_identificacion = this.tipo_doc;
       this.info.id_copropiedad = this.copropSeleccionada.id;
+      this.info.id_apartamento = this.apartSeleccionado.id;
       console.log(this.info);
       this.$axios
-        .post("http://localhost/parqueadero/globals/signup.php", this.info)
+        .post(url, this.info)
         .then((response) => {
-          alert(this.mssg);
+          if (response.data == true) alert(this.mssg);
           this.$router.push("/login");
-          console.log("registro");
         })
         .catch((e) => {
           console.log(e);
           this.error = true;
           this.cleanMessages();
         });
+      this.info = {};
     },
     cancelar(event) {
       //Limpiar la pantalla

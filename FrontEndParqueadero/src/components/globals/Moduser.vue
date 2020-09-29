@@ -9,12 +9,14 @@
               <div class="control">
                 <div class="select">
                   <select v-model="usuarioSeleccionado">
-                    <option>{{selusuario}}</option>
+                    <option>{{ selusuario }}</option>
                     <option
                       v-for="usuario in usuarios"
                       :value="usuario"
                       v-bind:key="usuario.identificacion"
-                    >{{usuario.nombres}} {{usuario.apellidos}}</option>
+                    >
+                      {{ usuario.nombres }} {{ usuario.apellidos }}
+                    </option>
                   </select>
                 </div>
               </div>
@@ -151,6 +153,25 @@
                 </div>
               </div>
             </div>
+            <div class="field" v-if="apartamentos.length">
+              <label class="label"
+                >Seleccione el apartamento al cual pertenece</label
+              >
+              <div class="control">
+                <div class="select">
+                  <select v-model="apartSeleccionado">
+                    <option>{{ selectApart }}</option>
+                    <option
+                      v-for="apto in apartamentos"
+                      :value="apto"
+                      v-bind:key="apto.id"
+                    >
+                      {{ apto.bloque }} | {{apto.apartamento}}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
             <div class="field">
               <div class="control">
                 <button class="button is-link is-fullwidth">Aceptar</button>
@@ -164,6 +185,7 @@
 </template>
 <script>
 import * as crypto from "crypto-js";
+import jsonInfo from "../../assets/info.json";
 export default {
   name: "Moduser",
   data() {
@@ -176,21 +198,48 @@ export default {
       tipo_usr: "Cliente",
       tipo_doc: "CC",
       root_admin: "",
+      id_copropiedad: "",
+      apartamentos: [],
+      apartSeleccionado: {},
+      selectApart: "Seleccione un apartamento...",
     };
   },
   methods: {
+    loadApartments() {
+      var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/select.php";
+      this.id_copropiedad = this.$session.get("id_coprop");
+      this.apartamentos = [];
+      this.apartSeleccionado = {};
+      var requestObject = {
+        tabla: "apartamento",
+        id_copropiedad: this.id_copropiedad,
+      };
+      this.$axios
+        .get(url, { params: requestObject })
+        .then((response) => {
+          this.apartamentos = response.data;
+        })
+        .catch((e) => {
+          console.log(e);
+          this.error = true;
+        });
+    },
     loadUsers() {
+      var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/select.php";
       this.seleccionado = false;
       this.usuarioSeleccionado = {};
       this.usuarios = [];
       var requestObject = {
         tabla: "usuario",
       };
+      if (this.root_admin == "A") {
+        this.id_copropiedad = this.$session.get("id_coprop");
+        requestObject.id_copropiedad = this.id_copropiedad;
+      }
       this.$axios
-        .get("MainServlet/getInformation", requestObject)
+        .get(url, { params: requestObject })
         .then((response) => {
           this.usuarios = response.data;
-          console.log(this.usuarios);
         })
         .catch((e) => {
           console.log(e);
@@ -199,8 +248,11 @@ export default {
     },
     selUser() {
       this.seleccionado = true;
+      this.loadApartments();
+      this.usuarioSeleccionado.password = crypto.dec
     },
     modUser() {
+      var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/update.php";
       console.log(this.usuarioSeleccionado);
       this.usuarioSeleccionado.tabla = "usuario";
       this.usuarioSeleccionado.nombres = this.usuarioSeleccionado.nombres.toUpperCase();
@@ -212,10 +264,13 @@ export default {
       this.usuarioSeleccionado.tipo_usuario = this.usuarioSeleccionado.tipo_usuario.charAt(
         0
       );
+      if (this.apartSeleccionado.length) {
+        this.usuarioSeleccionado.id_apartamento = this.apartSeleccionado.id_copropiedad;
+      }
       this.$axios
-        .post("MainServlet/update", this.usuarioSeleccionado)
+        .post(url, this.usuarioSeleccionado)
         .then((response) => {
-          alert(this.mssg);
+          if (response.data == true) alert(this.mssg);
           this.loadUsers();
         })
         .catch((e) => {
@@ -225,11 +280,11 @@ export default {
       this.seleccionado = false;
     },
   },
-  beforeCreate(){
-      this.$bus.$emit("checkSession", "");
+  beforeCreate() {
+    this.$bus.$emit("checkSession", "");
   },
   created() {
-    this.root_admin = localStorage.usuario;
+    this.root_admin = this.$session.get("user");
     this.loadUsers();
     console.log("Moduser.vue");
   },

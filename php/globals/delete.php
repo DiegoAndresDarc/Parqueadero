@@ -11,12 +11,9 @@ $data = json_decode($info);
 foreach ($data as $clave => $valor) {
     if ($clave == 'tabla') {
         $tabla = $valor;
-    } else if ($clave == 'id') {
-        $condicion[$clave] = $valor;
     } else {
-        if (!empty($valor))
-            $datos[$clave] = is_numeric($valor) ? $valor : "'" . $valor . "'";
+        $condicion[$clave] = $valor;
     }
 }
-$response = $connection->update($tabla, $datos, $condicion);
+$response = $connection->delete($tabla, $condicion);
 echo json_encode($response);

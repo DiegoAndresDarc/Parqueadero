@@ -13,6 +13,9 @@ import Moduser from '../components/globals/Moduser.vue'
 import Deluser from '../components/globals/Deluser.vue'
 import ConfParams from '../components/admin/ConfParams.vue'
 import ModParams from '../components/admin/ModParams.vue'
+import Addapartment from '../components/admin/Addapartment.vue'
+import Modapartment from '../components/admin/Modapartment.vue'
+import Delapartment from '../components/admin/Delapartment.vue'
 Vue.use(Router);
 
 export default new Router({
@@ -75,6 +78,21 @@ export default new Router({
           path: '/Modificar-parametros',
           name: 'Modificar-parametros',
           component: ModParams
+        },
+        {
+          path: '/Agregar-apartamento',
+          name: 'Agregar-apartamento',
+          component: Addapartment
+        },
+        {
+          path: '/Modificar-apartamento',
+          name: 'Modificar-apartamento',
+          component: Modapartment
+        },
+        {
+          path: '/Eliminar-apartamento',
+          name: 'Eliminar-apartamento',
+          component: Delapartment
         }
       ]
     },

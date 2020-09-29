@@ -84,13 +84,10 @@ export default {
       this.$axios
         .get(url, { params: param })
         .then((response) => {
-          console.log(response);
           this.menu = response.data;
         })
         .catch((e) => {
           console.log(e);
-          this.error = true;
-          //this.cleanMessages();
         });
     },
     loadSubmenu(id) {
@@ -112,6 +109,21 @@ export default {
     logout() {
       this.$bus.$emit("logout", "");
     },
+    loadCoprop() {
+      var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/select.php";
+      var requestObject = {
+        tabla: "copropiedad",
+        id_administrador: this.$session.get("id"),
+      };
+      this.$axios
+        .get(url, { params: requestObject })
+        .then((response) => {
+          this.$session.set("id_coprop", response.data[0].id);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
   },
   beforeCreate() {
     this.$bus.$emit("checkSession", "");
@@ -121,6 +133,7 @@ export default {
     this.nombres = this.$session.get("name");
     this.apellidos = this.$session.get("lastname");
     this.loadMenu();
+    if (this.usuario == "A") this.loadCoprop();
     console.log("Menu.vue");
   },
 };

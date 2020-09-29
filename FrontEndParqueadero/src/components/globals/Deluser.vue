@@ -9,12 +9,14 @@
               <div class="control">
                 <div class="select">
                   <select v-model="usuarioSeleccionado">
-                    <option>{{selusuario}}</option>
+                    <option>{{ selusuario }}</option>
                     <option
                       v-for="usuario in usuarios"
                       :value="usuario"
                       v-bind:key="usuario.identificacion"
-                    >{{usuario.nombres}} {{usuario.apellidos}}</option>
+                    >
+                      {{ usuario.nombres }} {{ usuario.apellidos }}
+                    </option>
                   </select>
                 </div>
               </div>
@@ -30,8 +32,8 @@
     </div>
   </div>
 </template>
-
 <script>
+import jsonInfo from "../../assets/info.json";
 export default {
   name: "Deluser",
   data() {
@@ -40,22 +42,20 @@ export default {
       selusuario: "Seleccione un usuario...",
       usuarios: [],
       usuarioSeleccionado: {},
-      seleccionado: false,
       error: false,
-      root_admin: "",
     };
   },
   methods: {
     loadUsers() {
+      var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/select.php";
       this.usuarios = [];
       var requestObject = {
         tabla: "usuario",
       };
       this.$axios
-        .post("MainServlet/getInformation", requestObject)
+        .get(url, { params: requestObject })
         .then((response) => {
           this.usuarios = response.data;
-          console.log(this.usuarios);
         })
         .catch((e) => {
           console.log(e);
@@ -63,18 +63,16 @@ export default {
         });
     },
     delUser() {
-      this.seleccionado = true;
-      console.log(this.usuarioSeleccionado);
+      var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/delete.php";
       var requestObject = {
         tabla: "usuario",
         id: this.usuarioSeleccionado.id,
       };
       this.$axios
-        .post("MainServlet/delete", requestObject)
+        .post(url, requestObject)
         .then((response) => {
-          alert(this.mssg);
+          if (response.data == true) alert(this.mssg);
           this.loadUsers();
-          console.log(this.usuarios);
         })
         .catch((e) => {
           console.log(e);
@@ -82,11 +80,10 @@ export default {
         });
     },
   },
-  beforeCreate(){
-      this.$bus.$emit("checkSession", "");
+  beforeCreate() {
+    this.$bus.$emit("checkSession", "");
   },
   created() {
-    this.root_admin = localStorage.usuario;
     this.loadUsers();
     console.log("Moduser.vue");
   },

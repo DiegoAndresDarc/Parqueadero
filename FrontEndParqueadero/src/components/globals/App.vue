@@ -19,10 +19,6 @@ export default {
         if (this.$route.path !== "/login") {
           this.$router.replace("/login");
         }
-      } else {
-        if (this.$route.path !== "/home") {
-          this.$router.replace("/home");
-        }
       }
     },
     logout() {

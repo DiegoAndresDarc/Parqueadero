@@ -54,7 +54,7 @@ class Connection
     //UPDATE
     public function update($tabla, $datos, $condicion)
     {
-        $query = "UPDATE FROM $tabla SET ";
+        $query = "UPDATE $tabla SET ";
         foreach ($datos as $clave => $valor) {
             $query .= $clave . " = " . $valor . ",";
         }

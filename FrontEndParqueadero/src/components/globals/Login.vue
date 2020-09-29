@@ -123,13 +123,12 @@ export default {
           params: this.info,
         })
         .then((response) => {
-          console.log(response);
-          if (response.status === 200 && "nombres" in response.data) {
-            var loginInfo = response.data;
+          if (response.status === 200 && response.data.length) {
             this.$session.start();
-            this.$session.set("name", response.data.nombres);
-            this.$session.set("lastname", response.data.apellidos);
-            this.$session.set("user", response.data.tipo_usuario);
+            this.$session.set("id", response.data[0].id);
+            this.$session.set("name", response.data[0].nombres);
+            this.$session.set("lastname", response.data[0].apellidos);
+            this.$session.set("user", response.data[0].tipo_usuario);
             //Vue.http.headers.common["Authorization"] = "Bearer " + response.data.nombres;
             this.$router.replace({ name: "Home" });
           } else {

@@ -69,7 +69,6 @@ export default {
       this.$axios
         .post(url, this.info)
         .then((response) => {
-          console.log(response);
           if (response.data == true) alert(this.message);
         })
         .catch((e) => {
@@ -77,6 +76,9 @@ export default {
         });
       this.info = {};
     },
+  },
+  beforeCreate() {
+    this.$bus.$emit("checkSession", "");
   },
   created() {
     console.log("AddCoprop.vue");

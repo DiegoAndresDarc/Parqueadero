@@ -133,9 +133,30 @@
               </div>
             </div>
           </div>
+          <div class="field" v-if="apartamentos.length">
+            <label class="label"
+              >Seleccione el apartamento al cual pertenece</label
+            >
+            <div class="control">
+              <div class="select">
+                <select v-model="apartSeleccionado">
+                  <option>{{ selectApart }}</option>
+                  <option
+                    v-for="apto in apartamentos"
+                    :value="apto"
+                    v-bind:key="apto.id"
+                  >
+                    {{ apto.bloque }} | {{apto.apartamento}}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
           <div class="field">
             <div class="control">
-              <button class="button is-link is-fullwidth">Agregar usuario</button>
+              <button class="button is-link is-fullwidth">
+                Agregar usuario
+              </button>
             </div>
           </div>
         </form>
@@ -143,10 +164,10 @@
       <div class="field">
         <div class="control">
           <transition name="slide">
-            <p
-              v-if="error"
-              class="help is-danger is-medium"
-            >Hubo un error en la comunicación con el servidor. Si persiste, por favor pongase en contacto con el administrador de la página</p>
+            <p v-if="error" class="help is-danger is-medium">
+              Hubo un error en la comunicación con el servidor. Si persiste, por
+              favor pongase en contacto con el administrador de la página
+            </p>
           </transition>
         </div>
       </div>
@@ -155,6 +176,7 @@
 </template>
 <script>
 import * as crypto from "crypto-js";
+import jsonInfo from "../../assets/info.json";
 export default {
   name: "addUser",
   components: {},
@@ -178,10 +200,34 @@ export default {
         tipo_identificacion: "",
         tipo_usuario: "",
       },
+      id_copropiedad: "",
+      apartamentos: [],
+      apartSeleccionado: {},
+      selectApart: "Seleccione un apartamento...",
     };
   },
   methods: {
+    loadApartments() {
+      var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/select.php";
+      this.id_copropiedad = this.$session.get("id_coprop");
+      this.apartamentos = [];
+      this.apartSeleccionado = {};
+      var requestObject = {
+        tabla: "apartamento",
+        id_copropiedad: this.id_copropiedad,
+      };
+      this.$axios
+        .get(url, { params: requestObject })
+        .then((response) => {
+          this.apartamentos = response.data;
+        })
+        .catch((e) => {
+          console.log(e);
+          this.error = true;
+        });
+    },
     addUser() {
+      var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/insert.php";
       this.info.tabla = "usuario";
       this.info.nombres = this.info.nombres.toUpperCase();
       this.info.apellidos = this.info.apellidos.toUpperCase();
@@ -189,25 +235,33 @@ export default {
       this.info.email = this.info.email.toUpperCase();
       this.info.tipo_usuario = this.tipo_usr.charAt(0);
       this.info.tipo_identificacion = this.tipo_doc;
+      if (this.root_admin == "A") {
+        this.info.id_copropiedad = this.id_copropiedad;
+      }
+      if (this.apartSeleccionado.length) {
+        this.info.id_apartamento = this.apartSeleccionado.id_copropiedad;
+      }
       console.log(this.info);
       this.$axios
-        .post("MainServlet/signup", this.info)
+        .post(url, this.info)
         .then((response) => {
-          alert(this.mssg);
+          if (response.data == true) alert(this.mssg);
+          this.info = {};
+         this.apartSeleccionado = {};
         })
         .catch((e) => {
           console.log(e);
           this.error = true;
           this.cleanMessages();
         });
-      this.info = {};
     },
   },
-  beforeCreate(){
-      this.$bus.$emit("checkSession", "");
+  beforeCreate() {
+    this.$bus.$emit("checkSession", "");
   },
   created() {
-    this.root_admin = localStorage.usuario;
+    this.root_admin = this.$session.get("user");
+    this.loadApartments();
     console.log("Adduser.vue");
   },
 };

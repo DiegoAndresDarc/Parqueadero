@@ -9,12 +9,14 @@
               <div class="control">
                 <div class="select">
                   <select v-model="copropSeleccionada">
-                    <option>{{selectCoprop}}</option>
+                    <option>{{ selectCoprop }}</option>
                     <option
                       v-for="coprop in coprops"
                       :value="coprop"
                       v-bind:key="coprop.id"
-                    >{{coprop.nombre}}</option>
+                    >
+                      {{ coprop.nombre }}
+                    </option>
                   </select>
                 </div>
               </div>
@@ -30,8 +32,8 @@
     </div>
   </div>
 </template>
-
 <script>
+import jsonInfo from "../../assets/info.json";
 export default {
   name: "DelCoprop",
   data() {
@@ -44,15 +46,15 @@ export default {
   },
   methods: {
     loadCoprops() {
+      var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/select.php";
       this.coprops = [];
       var requestObject = {
         tabla: "copropiedad",
       };
       this.$axios
-        .post("MainServlet/getInformation", requestObject)
+        .get(url, { params: requestObject })
         .then((response) => {
           this.coprops = response.data;
-          console.log(this.coprops);
         })
         .catch((e) => {
           console.log(e);
@@ -64,6 +66,7 @@ export default {
       console.log(this.copropSeleccionada);
     },
     delCoprop() {
+      var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/delete.php";
       this.seleccionado = true;
       console.log(this.copropSeleccionada);
       var requestObject = {
@@ -71,7 +74,7 @@ export default {
         id: this.copropSeleccionada.id,
       };
       this.$axios
-        .post("MainServlet/delete", requestObject)
+        .post(url, requestObject)
         .then((response) => {
           alert(this.mssg);
           this.loadCoprops();
@@ -81,6 +84,9 @@ export default {
           this.error = true;
         });
     },
+  },
+  beforeCreate() {
+    this.$bus.$emit("checkSession", "");
   },
   created() {
     this.loadCoprops();

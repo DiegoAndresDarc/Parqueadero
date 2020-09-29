@@ -23,11 +23,10 @@
             <input
               class="input"
               type="number"
-              placeholder="Ejes máximos permitidoa"
+              placeholder="Ejes máximos permitidos"
               id="ejes_maximos"
               v-model="info.ejes_maximos"
               min="0"
-              step="any"
               required
             />
           </div>
@@ -98,6 +97,22 @@
         </div>
         <div class="field">
           <label class="label"
+            >Cantidad de parqueaderos de bicicletas para residentes</label
+          >
+          <div class="control">
+            <input
+              class="input"
+              type="number"
+              placeholder="Cantidad de parqueaderos de bicicletas para residentes"
+              id="n_parqueaderos_bicicleta"
+              v-model="info.n_parqueaderos_bicicleta"
+              min="0"
+              required
+            />
+          </div>
+        </div>
+        <div class="field">
+          <label class="label"
             >Cantidad de parqueaderos de carros para visitantes</label
           >
           <div class="control">
@@ -122,7 +137,23 @@
               type="number"
               placeholder="Cantidad de parqueaderos de motos para visitantes"
               id="n_parqueaderos_motos_vis"
-              v-model="info.n_parqueaderos_motos_vis"
+              v-model="info.n_parqueaderos_moto_vis"
+              min="0"
+              required
+            />
+          </div>
+        </div>
+        <div class="field">
+          <label class="label"
+            >Cantidad de parqueaderos de bicicletas para visitantes</label
+          >
+          <div class="control">
+            <input
+              class="input"
+              type="number"
+              placeholder="Cantidad de parqueaderos de bicicletas para visitantes"
+              id="n_parqueaderos_bicicleta"
+              v-model="info.n_parqueaderos_bicicleta_vis"
               min="0"
               required
             />
@@ -145,7 +176,9 @@
           </div>
         </div>
         <div class="field">
-          <label class="label">Valor del pago para el periodo seleccionado</label>
+          <label class="label"
+            >Valor del pago para el periodo seleccionado</label
+          >
           <div class="control">
             <input
               class="input"
@@ -160,7 +193,9 @@
           </div>
         </div>
         <div class="field">
-          <label class="label">Tiempo de gracia antes de iniciar a cobrar a los visitantes</label>
+          <label class="label"
+            >Tiempo de gracia antes de iniciar a cobrar a los visitantes</label
+          >
           <div class="control">
             <input
               class="input"
@@ -188,11 +223,13 @@
           </div>
         </div>
         <div class="field">
-          <label class="label">Texto de responsabilidad por parte de la Copropiedad</label>
+          <label class="label"
+            >Texto de responsabilidad por parte de la Copropiedad</label
+          >
           <div class="control">
             <textarea
               class="textarea"
-              placeholder="Encabezado para los recibos generados"
+              placeholder="Texto de responsabilidad por parte de la Copropiedad"
               id="texto_responsabilidad"
               v-model="info.texto_responsabilidad"
               maxlength="512"
@@ -205,7 +242,7 @@
           <div class="control">
             <textarea
               class="textarea"
-              placeholder="Encabezado para los recibos generados"
+              placeholder="Pie de página de los recibos de pago"
               id="pie_pagina_recibo"
               v-model="info.pie_pagina_recibo"
               maxlength="512"
@@ -213,31 +250,35 @@
             />
           </div>
         </div>
-          <div class="field">
-            <div class="control">
-              <button class="button is-link">Configurar</button>
-            </div>
+        <div class="field">
+          <div class="control">
+            <button class="button is-link">Configurar</button>
           </div>
+        </div>
       </form>
     </div>
   </div>
 </template>
 
 <script>
+import jsonInfo from "../../assets/info.json";
 export default {
   name: "ConfParams",
   data() {
     return {
       mssg: "Copropiedad/Conjunto residencial configurado con éxito",
       info: {
+        id_copropiedad: "",
         peso_maximo: "",
         ejes_maximos: "",
         dia_arqueo: "",
         dia_alertas: "",
         n_parqueaderos_carro: "",
         n_parqueaderos_moto: "",
+        n_parqueaderos_bicicleta: "",
         n_parqueaderos_carro_vis: "",
         n_parqueaderos_moto_vis: "",
+        n_parqueaderos_bicicleta_vis: "",
         tipo_pago_visitante: "MINUTO",
         valor_pago_visitante: "",
         tiempo_gracia: "",
@@ -249,23 +290,21 @@ export default {
   },
   methods: {
     confParams() {
-      
+      var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/insert.php";
+      this.info.id_copropiedad = this.$session.get("id_coprop");
       this.info.tabla = "configuraciones";
       this.info.encabezado_recibo = this.info.encabezado_recibo.toUpperCase();
       this.info.texto_responsabilidad = this.info.texto_responsabilidad.toUpperCase();
       this.info.pie_pagina_recibo = this.info.pie_pagina_recibo.toUpperCase();
       console.log(this.info);
       this.$axios
-        .post("MainServlet/addConf", this.info)
+        .post(url, this.info)
         .then((response) => {
-          alert(this.mssg);
-          this.$router.push("/login");
-          console.log("registro");
+          if (response.data == true) alert(this.mssg);
+          this.info = {};
         })
         .catch((e) => {
           console.log(e);
-          this.error = true;
-          this.cleanMessages();
         });
     },
   },
