@@ -5,9 +5,9 @@ $connection = new Connection();
 $response = array();
 $datos = array();
 $tabla = "";
-$info = file_get_contents( 'php://input' );
-$info = json_decode($info);
-foreach ($info as $clave => $valor) {
+$info = file_get_contents('php://input');
+$data = json_decode($info);
+foreach ($data as $clave => $valor) {
     if ($clave == 'tabla') {
         $tabla = $valor;
     } else {

@@ -21,14 +21,13 @@ class Connection
             $query .= $clave . ',';
             $values .= $valor . ',';
         }
-        $pos = strpos($query, ",");
+        $pos = strripos($query, ",");
         $query = substr($query, 0, $pos);
         $query .= ') ';
-        $pos = strpos($values, ",");
+        $pos = strripos($values, ",");
         $values = substr($values, 0, $pos);
         $values .= ') ';
         $query .= $values;
-        echo($query);
         $result = $this->conexion->query($query) or die($this->conexion->error);
         if ($result)
             return true;
@@ -55,7 +54,19 @@ class Connection
     //UPDATE
     public function update($tabla, $datos, $condicion)
     {
-        $result = $this->conexion->query("UPDATE FROM $tabla SET $datos WHERE $condicion") or die($this->conexion->error);
+        $query = "UPDATE FROM $tabla SET ";
+        foreach ($datos as $clave => $valor) {
+            $query .= $clave . " = " . $valor . ",";
+        }
+        $pos = strripos($query, ",");
+        $query = substr($query, 0, $pos);
+        $query .= " WHERE ";
+        foreach ($condicion as $clave => $valor) {
+            $query .= $clave . " = " . $valor . " AND ";
+        }
+        $pos = strripos($query, " AND ");
+        $query = substr($query, 0, $pos);
+        $result = $this->conexion->query($query) or die($this->conexion->error);
         if ($result)
             return true;
         return false;
@@ -63,13 +74,20 @@ class Connection
     //DELETE
     public function delete($tabla, $condicion)
     {
-        $result = $this->conexion->query("DELETE FROM $tabla WHERE $condicion") or die($this->conexion->error);
+        $query = "DELETE FROM $tabla WHERE ";
+        foreach ($condicion as $clave => $valor) {
+            $query .= $clave . " = " . $valor . " AND ";
+        }
+        $pos = strripos($query, " AND ");
+        $query = substr($query, 0, $pos);
+        $result = $this->conexion->query($query) or die($this->conexion->error);
         if ($result)
             return true;
         return false;
     }
 
-    public function getpassword(){
+    public function getpassword()
+    {
         return $this->clave;
     }
 }

@@ -5,6 +5,7 @@
         <div class="control">
           <form @submit.prevent.once="agregarCoprop" autocomplete="off">
             <div class="field">
+              <label class="label">Nombre</label>
               <div class="control">
                 <input
                   class="input is-medium"
@@ -17,6 +18,7 @@
               </div>
             </div>
             <div class="field">
+              <label class="label">Dirección</label>
               <div class="control">
                 <input
                   class="input is-medium"
@@ -59,12 +61,7 @@ export default {
   },
   methods: {
     agregarCoprop() {
-      const config = {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      };
-      var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/signup.php";
+      var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/insert.php";
       this.info.tabla = "copropiedad";
       this.info.nombre = this.info.nombre.toUpperCase();
       this.info.direccion = this.info.direccion.toUpperCase();
@@ -73,11 +70,12 @@ export default {
         .post(url, this.info)
         .then((response) => {
           console.log(response);
-          alert(this.message);
+          if (response.data == true) alert(this.message);
         })
         .catch((e) => {
           console.log(e);
         });
+      this.info = {};
     },
   },
   created() {
@@ -85,5 +83,8 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped>
+.label {
+  color: black;
+}
 </style>
