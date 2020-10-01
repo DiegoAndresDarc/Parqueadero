@@ -39,6 +39,7 @@ export default {
       selapto: "Seleccione un apartamento...",
       apartamentos: [],
       apartamentoSeleccionado: {},
+      id_copropiedad:""
     };
   },
   methods: {

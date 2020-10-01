@@ -16,6 +16,9 @@ import ModParams from '../components/admin/ModParams.vue'
 import Addapartment from '../components/admin/Addapartment.vue'
 import Modapartment from '../components/admin/Modapartment.vue'
 import Delapartment from '../components/admin/Delapartment.vue'
+import Addparking from '../components/admin/Addparking.vue'
+import Modparking from '../components/admin/Modparking.vue'
+import Delparking from '../components/admin/Delparking.vue'
 Vue.use(Router);
 
 export default new Router({
@@ -93,6 +96,21 @@ export default new Router({
           path: '/Eliminar-apartamento',
           name: 'Eliminar-apartamento',
           component: Delapartment
+        },
+        {
+          path: '/Agregar-parqueadero',
+          name: 'Agregar-parqueadero',
+          component: Addparking
+        },
+        {
+          path: '/Modificar-parqueadero',
+          name: 'Modificar-parqueadero',
+          component: Modparking
+        },
+        {
+          path: '/Eliminar-parqueadero',
+          name: 'Eliminar-parqueadero',
+          component: Delparking
         }
       ]
     },

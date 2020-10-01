@@ -253,7 +253,6 @@ export default {
     },
     modUser() {
       var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/update.php";
-      console.log(this.usuarioSeleccionado);
       this.usuarioSeleccionado.tabla = "usuario";
       this.usuarioSeleccionado.nombres = this.usuarioSeleccionado.nombres.toUpperCase();
       this.usuarioSeleccionado.apellidos = this.usuarioSeleccionado.nombres.toUpperCase();
