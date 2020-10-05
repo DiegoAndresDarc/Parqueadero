@@ -1,6 +1,5 @@
 <?php
-
-require "connection.php";
+require "../connection.php";
 $connection = new Connection();
 $response = array();
 $datos = array();
