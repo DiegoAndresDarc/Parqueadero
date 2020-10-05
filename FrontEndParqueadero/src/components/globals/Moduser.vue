@@ -255,7 +255,7 @@ export default {
       var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/update.php";
       this.usuarioSeleccionado.tabla = "usuario";
       this.usuarioSeleccionado.nombres = this.usuarioSeleccionado.nombres.toUpperCase();
-      this.usuarioSeleccionado.apellidos = this.usuarioSeleccionado.nombres.toUpperCase();
+      this.usuarioSeleccionado.apellidos = this.usuarioSeleccionado.apellidos.toUpperCase();
       this.usuarioSeleccionado.password = crypto
         .SHA512(this.usuarioSeleccionado.password)
         .toString();

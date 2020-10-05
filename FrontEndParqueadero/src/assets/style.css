@@ -4,17 +4,15 @@
 .clogin{
     width: 450px;    
     box-shadow: none;
-    border: 1px solid #dcdada;
     margin: auto;    
+    border-radius: 10px !important;
 }
 .box {
     max-width: 1367px;
     margin-bottom: 20px;
     margin-top: 20px;
     box-shadow: none;
-    background: url(/images/opacity-30.png);
     border-radius: 10px !important;
-    color: #000000;
     font-size: .875rem;    
 }
 .content-login{    
@@ -23,6 +21,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 10px !important;
 } 
 .navbar{
     background: rgba(0, 0, 0, 1);
@@ -31,8 +30,6 @@
     width: 100%;
 }
 body{
-    background-repeat:no-repeat;
-    background-size: 100% 100%;
     width: 100%;
     height: 100%;
 }
@@ -43,7 +40,7 @@ body{
     color: white;
 }
 .label{
-    color: white;
+    color: black;
 }
 
 .button.is-colorcustom{
@@ -59,8 +56,5 @@ body{
     background: rgb(99, 99, 99);
 }
 .subtitle{
-    color:white !important;
-}
-#login, #signup, #recoverPassword{
-    background: url(/images/fondo2.png);
+    color:black !important;
 }

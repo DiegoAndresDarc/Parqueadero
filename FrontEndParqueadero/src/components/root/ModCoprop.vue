@@ -131,11 +131,9 @@ export default {
     selCoprop() {
       this.seleccionado = true;
       this.loadUsers();
-      console.log(this.copropSeleccionada);
     },
     modCoprop() {
       var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/update.php";
-      console.log(this.copropSeleccionada);
       this.copropSeleccionada.tabla = "copropiedad";
       this.copropSeleccionada.nombre = this.copropSeleccionada.nombre.toUpperCase();
       this.copropSeleccionada.direccion = this.copropSeleccionada.direccion.toUpperCase();

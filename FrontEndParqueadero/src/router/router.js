@@ -19,6 +19,11 @@ import Delapartment from '../components/admin/Delapartment.vue'
 import Addparking from '../components/admin/Addparking.vue'
 import Modparking from '../components/admin/Modparking.vue'
 import Delparking from '../components/admin/Delparking.vue'
+import Setparking from '../components/admin/Setparking.vue'
+import Removeparking from '../components/admin/Removeparking.vue'
+import ModPrincipalData from '../components/client/ModPrincipalData.vue'
+import ModPassword from '../components/client/ModPassword.vue'
+import ViewInfoMyParkings from '../components/client/ViewInfoMyParkings.vue'
 Vue.use(Router);
 
 export default new Router({
@@ -111,6 +116,31 @@ export default new Router({
           path: '/Eliminar-parqueadero',
           name: 'Eliminar-parqueadero',
           component: Delparking
+        },,
+        {
+          path: '/Dar-un-parqueadero',
+          name: 'Dar-un-parqueadero',
+          component: Setparking
+        },,
+        {
+          path: '/Quitar-un-parqueadero',
+          name: 'Quitar-un-parqueadero',
+          component: Removeparking
+        },
+        {
+          path: '/Modificar-datos-principales',
+          name: 'Modificar-datos-principales',
+          component: ModPrincipalData
+        },
+        {
+          path: '/Modificar-contraseña',
+          name: 'Modificar-contraseña',
+          component: ModPassword
+        },
+        {
+          path: '/Visualizar-datos-de-mis-parqueaderos',
+          name: 'Visualizar-datos-de-mis-parqueaderos',
+          component: ViewInfoMyParkings
         }
       ]
     },

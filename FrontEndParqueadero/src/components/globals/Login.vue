@@ -66,7 +66,7 @@
             </div>
             <div class="field">
               <div class="control">
-                <button class="button is-colorcustom">Iniciar Sesión</button>
+                <button class="button is-link is-fullwidth">Iniciar Sesión</button>
               </div>
             </div>
           </form>

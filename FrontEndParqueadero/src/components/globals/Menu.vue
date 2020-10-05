@@ -12,18 +12,16 @@
             :id="item.id_menu"
             v-if="!item.id_padre"
             v-on:click="
-              item.tiene_hijos === '0'
+              item.tiene_hijos == 0
                 ? loadview(item)
-                : item.mostrar === '0'
-                ? (item.mostrar = '1')
-                : (item.mostrar = '0')
+                : (item.mostrar = item.mostrar)
             "
           >
             {{ item.nombre }}
             <span class="icon icon-menu i-menu">
               <i
                 :class="
-                  item.tiene_hijos === '0'
+                  item.tiene_hijos == 0
                     ? 'mdi mdi-chevron-double-left'
                     : 'mdi mdi-chevron-double-down'
                 "
@@ -31,7 +29,7 @@
             </span>
           </a>
           <transition type="slide">
-            <ul class="submenu-list child" v-if="item.mostrar === '1'">
+            <ul class="submenu-list child" v-if="item.mostrar">
               <li
                 v-for="subitem in loadSubmenu(item.id_menu)"
                 v-bind:key="subitem.id_menu"
@@ -70,7 +68,6 @@ export default {
       nombres: "",
       apellidos: "",
       usuario: "",
-      mostrar: false,
     };
   },
   methods: {
@@ -85,6 +82,9 @@ export default {
         .get(url, { params: param })
         .then((response) => {
           this.menu = response.data;
+          this.menu.forEach((item) => {
+            item.mostrar = true;
+          });
         })
         .catch((e) => {
           console.log(e);
@@ -96,7 +96,7 @@ export default {
       });
     },
     loadview(item) {
-      const routername = item.nombre.replace(" ", "-");
+      const routername = item.nombre.replaceAll(" ", "-");
       const routerpath = "/" + routername;
       if (this.$route.path !== routerpath) {
         this.$router.push({
@@ -104,7 +104,6 @@ export default {
           params: { usuario: this.usuario },
         });
       }
-      mostrar = false;
     },
     logout() {
       this.$bus.$emit("logout", "");

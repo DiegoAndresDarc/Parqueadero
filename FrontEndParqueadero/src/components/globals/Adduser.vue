@@ -2,7 +2,7 @@
   <div class="adduser">
     <div class="content-adduser">
       <div class="field">
-        <form @submit.prevent.once="addUser" autocomplete="off">
+        <form @submit.prevent="addUser" autocomplete="off">
           <div class="field">
             <div class="control">
               <label class="label">Tipo y número de documento</label>
@@ -146,7 +146,7 @@
                     :value="apto"
                     v-bind:key="apto.id"
                   >
-                    {{ apto.bloque }} | {{apto.apartamento}}
+                    {{ apto.bloque }} | {{ apto.apartamento }}
                   </option>
                 </select>
               </div>
@@ -247,7 +247,7 @@ export default {
         .then((response) => {
           if (response.data == true) alert(this.mssg);
           this.info = {};
-         this.apartSeleccionado = {};
+          this.apartSeleccionado = {};
         })
         .catch((e) => {
           console.log(e);
@@ -266,5 +266,8 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped>
+.label {
+  color: black;
+}
 </style>

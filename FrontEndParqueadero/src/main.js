@@ -2,12 +2,10 @@ import Vue from 'vue'
 import router from './router/router'
 import App from './components/globals/App.vue'
 import axios from 'axios'
-//axios.defaults.headers.common['Access-Control-Allow-Origin']='*';
-//axios.defaults.headers.common['Content-Type']='application/json';
 import VueSession from 'vue-session'
 
 var options = {
-  persist: true
+  persist: false
 }
 Vue.use(VueSession, options)
 Vue.prototype.$axios = axios;

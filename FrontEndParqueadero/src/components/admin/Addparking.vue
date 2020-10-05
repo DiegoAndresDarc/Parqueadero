@@ -1,7 +1,7 @@
 <template>
   <div class="parking">
     <div class="content">
-      <form @submit.prevent.once="addParking" autocomplete="off">
+      <form @submit.prevent ="addParking" autocomplete="off">
         <div class="field is-horizontal">
           <div class="field-label is-normal">
             <label class="label">Código único de identificación</label>

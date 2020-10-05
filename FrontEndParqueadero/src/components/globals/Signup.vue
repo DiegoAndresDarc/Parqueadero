@@ -7,27 +7,30 @@
       <h1>Registro</h1>
       <div class="field">
         <form @submit.prevent.once="signup()" autocomplete="off">
-          <div class="control">
-            <label class="label">Tipo y número de documento</label>
-          </div>
-          <div class="field has-addons">
-            <div class="control">
-              <div class="select">
-                <select v-model="tipo_doc">
-                  <option>CC</option>
-                  <option>CE</option>
-                </select>
-              </div>
+          <div class="field">
+            <div class="field-label">
+              <label class="label">Tipo y número de documento</label>
             </div>
-            <div class="control">
-              <input
-                class="input is-expanded"
-                type="number"
-                placeholder="numero de documento"
-                id="identificacion"
-                v-model="info.identificacion"
-                required
-              />
+            <div class="field-body has has-addons is-narrow is-fullwidth">
+              <div class="control">
+                <div class="select">
+                  <select v-model="tipo_doc">
+                    <option>CC</option>
+                    <option>CE</option>
+                    <option>NIT</option>
+                  </select>
+                </div>
+              </div>
+              <div class="control">
+                <input
+                  class="input is-expanded"
+                  type="number"
+                  placeholder="numero de documento"
+                  id="identificacion"
+                  v-model="info.identificacion"
+                  required
+                />
+              </div>
             </div>
           </div>
           <div class="field">
@@ -167,7 +170,7 @@
           </div>
           <div class="field">
             <div class="control">
-              <button class="button is-colorcustom">Registro</button>
+              <button class="button is-link is-fullwidth">Registro</button>
             </div>
           </div>
         </form>
@@ -184,7 +187,7 @@
       </div>
       <div class="field">
         <div class="control">
-          <button class="button is-colorcustom" v-on:click="cancelar">
+          <button class="button is-link is-fullwidth" v-on:click="cancelar">
             Cancelar
           </button>
         </div>
