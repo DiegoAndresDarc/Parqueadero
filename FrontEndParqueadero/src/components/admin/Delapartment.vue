@@ -2,20 +2,26 @@
   <div class="del-apto">
     <div class="content">
       <form @submit.prevent.once="delApartment" autocomplete="off">
-        <div class="field">
-          <label class="label">Seleccione el apartamento a eliminar</label>
-          <div class="control">
-            <div class="select">
-              <select v-model="apartamentoSeleccionado">
-                <option>{{ selapto }}</option>
-                <option
-                  v-for="apto in apartamentos"
-                  :value="apto"
-                  v-bind:key="apto.id"
-                >
-                  {{ apto.bloque }} | {{ apto.apartamento }}
-                </option>
-              </select>
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label">Seleccione el apartamento a eliminar</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <div class="control">
+                <div class="select is-fullwidth">
+                  <select v-model="apartamentoSeleccionado">
+                    <option>{{ selapto }}</option>
+                    <option
+                      v-for="apto in apartamentos"
+                      :value="apto"
+                      v-bind:key="apto.id"
+                    >
+                      {{ apto.bloque }} | {{ apto.apartamento }}
+                    </option>
+                  </select>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -39,7 +45,7 @@ export default {
       selapto: "Seleccione un apartamento...",
       apartamentos: [],
       apartamentoSeleccionado: {},
-      id_copropiedad:""
+      id_copropiedad: "",
     };
   },
   methods: {

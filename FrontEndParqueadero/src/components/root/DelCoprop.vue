@@ -4,20 +4,28 @@
       <div class="field">
         <div class="control">
           <form @submit.prevent.once="delCoprop" autocomplete="off">
-            <div class="field">
-              <label class="label">Seleccione la copropiedad a eliminar</label>
-              <div class="control">
-                <div class="select">
-                  <select v-model="copropSeleccionada">
-                    <option>{{ selectCoprop }}</option>
-                    <option
-                      v-for="coprop in coprops"
-                      :value="coprop"
-                      v-bind:key="coprop.id"
-                    >
-                      {{ coprop.nombre }}
-                    </option>
-                  </select>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label"
+                  >Seleccione la copropiedad a eliminar</label
+                >
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <div class="select is-fullwidth">
+                      <select v-model="copropSeleccionada">
+                        <option>{{ selectCoprop }}</option>
+                        <option
+                          v-for="coprop in coprops"
+                          :value="coprop"
+                          v-bind:key="coprop.id"
+                        >
+                          {{ coprop.nombre }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

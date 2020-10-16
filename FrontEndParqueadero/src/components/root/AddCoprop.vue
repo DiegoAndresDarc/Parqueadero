@@ -4,30 +4,42 @@
       <div class="field">
         <div class="control">
           <form @submit.prevent.once="agregarCoprop" autocomplete="off">
-            <div class="field">
-              <label class="label">Nombre</label>
-              <div class="control">
-                <input
-                  class="input is-medium"
-                  type="text"
-                  placeholder="Nombre"
-                  id="name"
-                  v-model="info.nombre"
-                  required
-                />
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label">Nombre</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input
+                      class="input"
+                      type="text"
+                      placeholder="Nombre"
+                      id="name"
+                      v-model="info.nombre"
+                      required
+                    />
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="field">
-              <label class="label">Dirección</label>
-              <div class="control">
-                <input
-                  class="input is-medium"
-                  type="text"
-                  placeholder="Dirección"
-                  id="address"
-                  v-model="info.direccion"
-                  required
-                />
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label">Dirección</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input
+                      class="input"
+                      type="text"
+                      placeholder="Dirección"
+                      id="address"
+                      v-model="info.direccion"
+                      required
+                    />
+                  </div>
+                </div>
               </div>
             </div>
             <div class="field">

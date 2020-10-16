@@ -4,20 +4,28 @@
       <div class="field">
         <div class="control">
           <form @submit.prevent.once="selCoprop" autocomplete="off">
-            <div class="field">
-              <label class="label">Seleccione la copropiedad a modificar</label>
-              <div class="control">
-                <div class="select">
-                  <select v-model="copropSeleccionada">
-                    <option>{{ selectCoprop }}</option>
-                    <option
-                      v-for="coprop in coprops"
-                      :value="coprop"
-                      v-bind:key="coprop.id"
-                    >
-                      {{ coprop.nombre }}
-                    </option>
-                  </select>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label"
+                  >Seleccione la copropiedad a modificar</label
+                >
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <div class="select is-fullwidth">
+                      <select v-model="copropSeleccionada">
+                        <option>{{ selectCoprop }}</option>
+                        <option
+                          v-for="coprop in coprops"
+                          :value="coprop"
+                          v-bind:key="coprop.id"
+                        >
+                          {{ coprop.nombre }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -32,51 +40,75 @@
       <div class="field" v-show="seleccionado">
         <div class="control">
           <form @submit.prevent.once="modCoprop" name="form">
-            <div class="field">
-              <label class="label">Nombre</label>
-              <div class="control">
-                <input
-                  type="text"
-                  class="input"
-                  v-model="copropSeleccionada.nombre"
-                />
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label">Nombre</label>
               </div>
-            </div>
-            <div class="field">
-              <label class="label">Direccion</label>
-              <div class="control">
-                <input
-                  type="text"
-                  class="input"
-                  v-model="copropSeleccionada.direccion"
-                />
-              </div>
-            </div>
-            <div class="field">
-              <label class="label">Habilitada</label>
-              <div class="control">
-                <div class="select">
-                  <select v-model="habilitada">
-                    <option>Si</option>
-                    <option>No</option>
-                  </select>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input
+                      type="text"
+                      class="input"
+                      v-model="copropSeleccionada.nombre"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
-            <div class="field" v-if="habilitada === 'Si'">
-              <label class="label">Seleccione el usuario administrador</label>
-              <div class="control">
-                <div class="select">
-                  <select v-model="usuarioSeleccionado">
-                    <option>{{ selusuario }}</option>
-                    <option
-                      v-for="usuario in usuarios"
-                      :value="usuario"
-                      v-bind:key="usuario.identificacion"
-                    >
-                      {{ usuario.nombres }} {{ usuario.apellidos }}
-                    </option>
-                  </select>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label">Direccion</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input
+                      type="text"
+                      class="input"
+                      v-model="copropSeleccionada.direccion"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label">Habilitada</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <div class="select is-fullwidth">
+                      <select v-model="habilitada">
+                        <option>Si</option>
+                        <option>No</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field is-horizontal" v-if="habilitada === 'Si'">
+              <div class="field-label is-normal">
+                <label class="label">Seleccione el usuario administrador</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <div class="select is-fullwidth">
+                      <select v-model="usuarioSeleccionado">
+                        <option>{{ selusuario }}</option>
+                        <option
+                          v-for="usuario in usuarios"
+                          :value="usuario"
+                          v-bind:key="usuario.identificacion"
+                        >
+                          {{ usuario.nombres }} {{ usuario.apellidos }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

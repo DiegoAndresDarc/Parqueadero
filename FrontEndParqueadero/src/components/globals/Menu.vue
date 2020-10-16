@@ -5,53 +5,57 @@
         <h1>{{ message }}</h1>
       </div>
     </div>
-    <aside class="menu-aside">
-      <ul class="menu-list">
-        <li v-for="item in menu" v-bind:key="item.id_menu">
-          <a
-            :id="item.id_menu"
-            v-if="!item.id_padre"
-            v-on:click="
-              item.tiene_hijos == 0
-                ? loadview(item)
-                : (item.mostrar = item.mostrar)
-            "
-          >
-            {{ item.nombre }}
-            <span class="icon icon-menu i-menu">
-              <i
-                :class="
+    <div class="field">
+      <div class="control">
+        <aside class="menu-aside">
+          <ul class="menu-list">
+            <li v-for="item in menu" v-bind:key="item.id_menu">
+              <a
+                :id="item.id_menu"
+                v-if="!item.id_padre"
+                v-on:click="
                   item.tiene_hijos == 0
-                    ? 'mdi mdi-chevron-double-left'
-                    : 'mdi mdi-chevron-double-down'
+                    ? loadview(item)
+                    : (item.mostrar = item.mostrar)
                 "
-              ></i>
-            </span>
-          </a>
-          <transition type="slide">
-            <ul class="submenu-list child" v-if="item.mostrar">
-              <li
-                v-for="subitem in loadSubmenu(item.id_menu)"
-                v-bind:key="subitem.id_menu"
               >
-                <a :id="subitem.id_menu" v-on:click="loadview(subitem)"
-                  >{{ subitem.nombre }}
-                  <span class="icon icon-menu i-menu">
-                    <i class="mdi mdi-point"></i> </span
-                ></a>
-              </li>
-            </ul>
-          </transition>
-        </li>
-        <li>
-          <a v-on:click="logout"
-            >Salir
-            <span class="icon icon-menu i-menu">
-              <i class="mdi mdi-exit-to-app"></i> </span
-          ></a>
-        </li>
-      </ul>
-    </aside>
+                {{ item.nombre }}
+                <span class="icon icon-menu i-menu">
+                  <i
+                    :class="
+                      item.tiene_hijos == 0
+                        ? 'mdi mdi-chevron-double-left'
+                        : 'mdi mdi-chevron-double-down'
+                    "
+                  ></i>
+                </span>
+              </a>
+              <transition type="slide">
+                <ul class="submenu-list child" v-if="item.mostrar">
+                  <li
+                    v-for="subitem in loadSubmenu(item.id_menu)"
+                    v-bind:key="subitem.id_menu"
+                  >
+                    <a :id="subitem.id_menu" v-on:click="loadview(subitem)"
+                      >{{ subitem.nombre }}
+                      <span class="icon icon-menu i-menu">
+                        <i class="mdi mdi-point"></i> </span
+                    ></a>
+                  </li>
+                </ul>
+              </transition>
+            </li>
+            <li>
+              <a v-on:click="logout"
+                >Salir
+                <span class="icon icon-menu i-menu">
+                  <i class="mdi mdi-exit-to-app"></i> </span
+              ></a>
+            </li>
+          </ul>
+        </aside>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -138,83 +142,4 @@ export default {
 };
 </script>
 <style>
-.navuser h1 {
-  font-weight: bold;
-  color: black;
-}
-.navuser {
-  background: salmon;
-}
-.menu-aside {
-  z-index: 1000;
-  max-width: 1000px;
-  width: 100%;
-  margin: 10px auto;
-}
-
-.menu-list {
-  list-style: none;
-}
-.menu-list li {
-  display: inline-block;
-  position: relative;
-}
-.menu-list li:hover .child {
-  display: block;
-}
-.menu-list li a {
-  color: black;
-  font-weight: bold;
-  display: block;
-  text-decoration: none;
-  padding: 10px;
-}
-
-.child {
-  display: none;
-}
-
-.child li {
-  display: block;
-  overflow: hidden;
-  border-bottom: 1px solid rgba(0, 0, 0, 1);
-}
-
-.child li a {
-  display: block;
-  text-decoration: none;
-  padding: 10px;
-}
-
-@media screen and (max-width: 800px) {
-  .menu-aside {
-    width: 80%;
-    height: calc(100% - 80px);
-    position: fixed;
-    left: 0;
-    margin: 0;
-    overflow: scroll;
-  }
-
-  .menu-list li:hover .child {
-    display: none;
-  }
-  .menu-list li {
-    display: block;
-    border-bottom: 1px solid rgba(0, 0, 0, 1);
-  }
-
-  .menu-list li a {
-    display: block;
-  }
-
-  .child {
-    width: 100%;
-    position: relative;
-  }
-
-  .child li a {
-    margin-left: 20px;
-  }
-}
 </style>

@@ -21,9 +21,18 @@ import Modparking from '../components/admin/Modparking.vue'
 import Delparking from '../components/admin/Delparking.vue'
 import Setparking from '../components/admin/Setparking.vue'
 import Removeparking from '../components/admin/Removeparking.vue'
+import AddVehicle from '../components/admin/AddVehicle.vue'
+import ModVehicle from '../components/admin/ModVehicle.vue'
+import DelVehicle from '../components/admin/DelVehicle.vue'
 import ModPrincipalData from '../components/client/ModPrincipalData.vue'
 import ModPassword from '../components/client/ModPassword.vue'
 import ViewInfoMyParkings from '../components/client/ViewInfoMyParkings.vue'
+import GoinVehicle from '../components/guard/GoinVehicle.vue'
+import GooutVehicle from '../components/guard/GooutVehicle.vue'
+import GoinVisit from '../components/guard/GoinVisit.vue'
+import GooutVisit from '../components/guard/GooutVisit.vue'
+import StartTurn from '../components/guard/StartTurn.vue'
+import EndTurn from '../components/guard/EndTurn.vue'
 Vue.use(Router);
 
 export default new Router({
@@ -116,16 +125,31 @@ export default new Router({
           path: '/Eliminar-parqueadero',
           name: 'Eliminar-parqueadero',
           component: Delparking
-        },,
+        },
         {
           path: '/Dar-un-parqueadero',
           name: 'Dar-un-parqueadero',
           component: Setparking
-        },,
+        },
         {
           path: '/Quitar-un-parqueadero',
           name: 'Quitar-un-parqueadero',
           component: Removeparking
+        },
+        {
+          path: '/Agregar-vehiculo',
+          name: 'Agregar-vehiculo',
+          component: AddVehicle
+        },
+        {
+          path: '/Modificar-vehiculo',
+          name: 'Modificar-vehiculo',
+          component: ModVehicle
+        },
+        {
+          path: '/Eliminar-vehiculo',
+          name: 'Eliminar-vehiculo',
+          component: DelVehicle
         },
         {
           path: '/Modificar-datos-principales',
@@ -141,6 +165,36 @@ export default new Router({
           path: '/Visualizar-datos-de-mis-parqueaderos',
           name: 'Visualizar-datos-de-mis-parqueaderos',
           component: ViewInfoMyParkings
+        },
+        {
+          path: '/Entrada-de-vehiculo',
+          name: 'Entrada-de-vehiculo',
+          component: GoinVehicle
+        },
+        {
+          path: '/Salida-de-vehiculo',
+          name: 'Salida-de-vehiculo',
+          component: GooutVehicle
+        },
+        {
+          path: '/Entrada-de-visitante',
+          name: 'Entrada-de-visitante',
+          component: GoinVisit
+        },
+        {
+          path: '/Salida-de-visitante',
+          name: 'Salida-de-visitante',
+          component: GooutVisit
+        },
+        {
+          path: '/Iniciar-turno',
+          name: 'Iniciar-turno',
+          component: StartTurn
+        },
+        {
+          path: '/Finalizar-turno',
+          name: 'Finalizar-turno',
+          component: EndTurn
         }
       ]
     },

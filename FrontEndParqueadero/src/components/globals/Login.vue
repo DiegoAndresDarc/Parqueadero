@@ -1,8 +1,5 @@
 <template>
   <div class="login">
-    <div class="head">
-      <nav class="navbar"></nav>
-    </div>
     <div class="content-login">
       <div class="box clogin">
         <div class="field">
@@ -66,18 +63,12 @@
             </div>
             <div class="field">
               <div class="control">
-                <button class="button is-link is-fullwidth">Iniciar Sesión</button>
+                <button class="button is-link is-fullwidth">
+                  Iniciar Sesión
+                </button>
               </div>
             </div>
           </form>
-        </div>
-        <div class="field">
-          <div class="control">
-            <p>
-              ¿No tienes una cuenta?
-              <router-link to="/signup">Crear cuenta</router-link>
-            </p>
-          </div>
         </div>
         <div class="field">
           <div class="control">
@@ -90,9 +81,6 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="foot">
-      <nav class="navbar"></nav>
     </div>
   </div>
 </template>

@@ -36,11 +36,11 @@ export default {
   position: absolute;
   height: 100%;
   border-right: 2px solid;
-  background: salmon;
 }
 .container-content {
   width: calc(100% - 250px);
   margin-left: auto;
   padding: 20px;
+  border-left: 2px;
 }
 </style>

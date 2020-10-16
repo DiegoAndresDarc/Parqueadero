@@ -2,33 +2,47 @@
   <div class="addaptm">
     <div class="content-aptm">
       <form @submit.prevent.once="addApartm" autocomplete="off" name="form">
-        <div class="field">
-          <label class="label">Bloque/Interior al cual pertenece</label>
-          <div class="control">
-            <input
-              class="input is-medium"
-              type="text"
-              placeholder="Bloque/Interior al cual pertenece"
-              v-model="info.bloque"
-              required
-            />
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label">Bloque/Interior al cual pertenece</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <div class="control">
+                <input
+                  class="input"
+                  type="text"
+                  placeholder="Bloque/Interior al cual pertenece"
+                  v-model="info.bloque"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label">Número/nombre del apartamento</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <div class="control">
+                <input
+                  class="input"
+                  type="text"
+                  placeholder="Número/nombre del apartamento"
+                  v-model="info.apartamento"
+                  required
+                />
+              </div>
+            </div>
           </div>
         </div>
         <div class="field">
-          <label class="label">Número/nombre del apartamento</label>
           <div class="control">
-            <input
-              class="input is-medium"
-              type="text"
-              placeholder="Número/nombre del apartamento"
-              v-model="info.apartamento"
-              required
-            />
-          </div>
-        </div>
-        <div class="field">
-          <div class="control">
-            <button class="button is-colorcustom">Añadir Apartamento</button>
+            <button class="button is-fullwidth is-link">
+              Añadir Apartamento
+            </button>
           </div>
         </div>
       </form>

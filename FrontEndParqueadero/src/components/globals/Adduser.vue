@@ -1,129 +1,171 @@
 <template>
   <div class="adduser">
-    <div class="content-adduser">
-      <div class="field">
-        <form @submit.prevent="addUser" autocomplete="off">
-          <div class="field">
-            <div class="control">
-              <label class="label">Tipo y número de documento</label>
-            </div>
-            <div class="field has-addons">
-              <div class="control">
-                <div class="select">
-                  <select v-model="tipo_doc">
-                    <option>CC</option>
-                    <option>CE</option>
-                  </select>
-                </div>
+    <div class="content">
+      <form @submit.prevent="addUser" autocomplete="off">
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label">Tipo y número de documento</label>
+          </div>
+          <div class="field-body">
+            <div class="control is-narrow">
+              <div class="select">
+                <select v-model="tipo_doc">
+                  <option>CC</option>
+                  <option>CE</option>
+                </select>
               </div>
+            </div>
+            <div class="field">
+              <input
+                class="input is-expanded is-fullwidth"
+                type="number"
+                placeholder="numero de documento"
+                v-model="info.identificacion"
+                required
+              />
+            </div>
+          </div>
+        </div>
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label">Nombres Completos</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
               <div class="control">
                 <input
-                  class="input is-expanded"
-                  type="number"
-                  placeholder="numero de documento"
-                  v-model="info.identificacion"
+                  class="input"
+                  type="text"
+                  placeholder="Nombres"
+                  v-model="info.nombres"
                   required
                 />
               </div>
             </div>
           </div>
-          <div class="field">
-            <label class="label">Nombres Completos</label>
-            <div class="control">
-              <input
-                class="input is-medium"
-                type="text"
-                placeholder="Nombres"
-                v-model="info.nombres"
-                required
-              />
-            </div>
-          </div>
-          <div class="field">
+        </div>
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
             <label class="label">Apellidos</label>
-            <div class="control">
-              <input
-                class="input is-medium"
-                type="text"
-                placeholder="Apellidos"
-                v-model="info.apellidos"
-                required
-              />
-            </div>
           </div>
-          <div class="field">
-            <label class="label">Usuario</label>
-            <div class="control">
-              <input
-                class="input is-medium"
-                type="text"
-                placeholder="Usuario"
-                v-model="info.usuario"
-                autocomplete="off"
-                required
-              />
-            </div>
-          </div>
-          <div class="field">
-            <label class="label">Contraseña</label>
-            <div class="control">
-              <input
-                class="input is-medium"
-                type="password"
-                placeholder="Contraseña"
-                v-model="info.password"
-                autocomplete="new-password"
-                required
-              />
-            </div>
-          </div>
-          <div class="field">
-            <label class="label">Dirección de correo electrónico</label>
-            <div class="control">
-              <input
-                class="input is-medium"
-                type="email"
-                placeholder="Correo electrónico"
-                v-model="info.email"
-                required
-              />
-            </div>
-          </div>
-          <div class="field">
-            <label class="label">Número de teléfono fijo</label>
-            <div class="control">
-              <input
-                class="input is-medium"
-                type="tel"
-                pattern="[0-9]{7}"
-                title="Un número de telefono fijo tiene una longitud de 7 digitos con números entre 0 y 9"
-                placeholder="telefono fijo"
-                v-model="info.telefono"
-                required
-              />
-            </div>
-          </div>
-          <div class="field">
-            <label class="label">Número de teléfono celular</label>
-            <div class="control">
-              <input
-                class="input is-medium"
-                type="tel"
-                pattern="[3]{1}[0-9]{9}"
-                title="Un número de celular en Colombia inicia con el número 3 y tiene una longitud de 10 digitos con números entre 0 y 9"
-                placeholder="celular"
-                v-model="info.celular"
-                required
-              />
-            </div>
-          </div>
-          <div class="field">
-            <div class="control">
-              <label class="label">Tipo de usuario</label>
-            </div>
+          <div class="field-body">
             <div class="field">
               <div class="control">
-                <div class="select">
+                <input
+                  class="input"
+                  type="text"
+                  placeholder="Apellidos"
+                  v-model="info.apellidos"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label">Usuario</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <div class="control">
+                <input
+                  class="input"
+                  type="text"
+                  placeholder="Usuario"
+                  v-model="info.usuario"
+                  autocomplete="off"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label">Contraseña</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <div class="control">
+                <input
+                  class="input"
+                  type="password"
+                  placeholder="Contraseña"
+                  v-model="info.password"
+                  autocomplete="new-password"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label">Dirección de correo electrónico</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <div class="control">
+                <input
+                  class="input"
+                  type="email"
+                  placeholder="Correo electrónico"
+                  v-model="info.email"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label">Número de teléfono fijo</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <div class="control">
+                <input
+                  class="input is-medium"
+                  type="tel"
+                  pattern="[0-9]{7}"
+                  title="Un número de telefono fijo tiene una longitud de 7 digitos con números entre 0 y 9"
+                  placeholder="telefono fijo"
+                  v-model="info.telefono"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label">Número de teléfono celular</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <div class="control">
+                <input
+                  class="input is-medium"
+                  type="tel"
+                  pattern="[3]{1}[0-9]{9}"
+                  title="Un número de celular en Colombia inicia con el número 3 y tiene una longitud de 10 digitos con números entre 0 y 9"
+                  placeholder="celular"
+                  v-model="info.celular"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label">Tipo de usuario</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <div class="control">
+                <div class="select is-fullwidth">
                   <select v-model="tipo_usr">
                     <option v-if="root_admin === 'R'">Administrador</option>
                     <option>Cliente</option>
@@ -133,44 +175,38 @@
               </div>
             </div>
           </div>
-          <div class="field" v-if="apartamentos.length">
+        </div>
+        <div class="field is-horizontal" v-if="apartamentos.length">
+          <div class="field-label is-normal">
             <label class="label"
               >Seleccione el apartamento al cual pertenece</label
             >
-            <div class="control">
-              <div class="select">
-                <select v-model="apartSeleccionado">
-                  <option>{{ selectApart }}</option>
-                  <option
-                    v-for="apto in apartamentos"
-                    :value="apto"
-                    v-bind:key="apto.id"
-                  >
-                    {{ apto.bloque }} | {{ apto.apartamento }}
-                  </option>
-                </select>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <div class="control">
+                <div class="select is-fullwidth">
+                  <select v-model="apartSeleccionado">
+                    <option>{{ selectApart }}</option>
+                    <option
+                      v-for="apto in apartamentos"
+                      :value="apto"
+                      v-bind:key="apto.id"
+                    >
+                      {{ apto.bloque }} | {{ apto.apartamento }}
+                    </option>
+                  </select>
+                </div>
               </div>
             </div>
           </div>
-          <div class="field">
-            <div class="control">
-              <button class="button is-link is-fullwidth">
-                Agregar usuario
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
-      <div class="field">
-        <div class="control">
-          <transition name="slide">
-            <p v-if="error" class="help is-danger is-medium">
-              Hubo un error en la comunicación con el servidor. Si persiste, por
-              favor pongase en contacto con el administrador de la página
-            </p>
-          </transition>
         </div>
-      </div>
+        <div class="field">
+          <div class="control">
+            <button class="button is-link is-fullwidth">Agregar usuario</button>
+          </div>
+        </div>
+      </form>
     </div>
   </div>
 </template>

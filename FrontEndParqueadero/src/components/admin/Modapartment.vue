@@ -4,20 +4,28 @@
       <div class="field">
         <div class="control">
           <form @submit.prevent.once="selApartment" autocomplete="off">
-            <div class="field">
-              <label class="label">Seleccione el apartamento a modificar</label>
-              <div class="control">
-                <div class="select">
-                  <select v-model="apartamentoSeleccionado">
-                    <option>{{ selapto }}</option>
-                    <option
-                      v-for="apto in apartamentos"
-                      :value="apto"
-                      v-bind:key="apto.id"
-                    >
-                      {{ apto.bloque }} | {{ apto.apartamento }}
-                    </option>
-                  </select>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label"
+                  >Seleccione el apartamento a modificar</label
+                >
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <div class="select is-fullwidth">
+                      <select v-model="apartamentoSeleccionado">
+                        <option>{{ selapto }}</option>
+                        <option
+                          v-for="apto in apartamentos"
+                          :value="apto"
+                          v-bind:key="apto.id"
+                        >
+                          {{ apto.bloque }} | {{ apto.apartamento }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -36,35 +44,45 @@
             autocomplete="off"
             name="form"
           >
-            <div class="field">
-              <label class="label">Bloque/Interior al cual pertenece</label>
-              <div class="control">
-                <input
-                  class="input is-medium"
-                  type="text"
-                  placeholder="Bloque/Interior al cual pertenece"
-                  v-model="apartamentoSeleccionado.bloque"
-                  required
-                />
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label">Bloque/Interior al cual pertenece</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input
+                      class="input"
+                      type="text"
+                      placeholder="Bloque/Interior al cual pertenece"
+                      v-model="apartamentoSeleccionado.bloque"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label">Número/nombre del apartamento</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input
+                      class="input is-medium"
+                      type="text"
+                      placeholder="Número/nombre del apartamento"
+                      v-model="apartamentoSeleccionado.apartamento"
+                      required
+                    />
+                  </div>
+                </div>
               </div>
             </div>
             <div class="field">
-              <label class="label">Número/nombre del apartamento</label>
               <div class="control">
-                <input
-                  class="input is-medium"
-                  type="text"
-                  placeholder="Número/nombre del apartamento"
-                  v-model="apartamentoSeleccionado.apartamento"
-                  required
-                />
-              </div>
-            </div>
-            <div class="field">
-              <div class="control">
-                <button class="button is-colorcustom">
-                  Aceptar
-                </button>
+                <button class="button is-fullwidth is-link">Aceptar</button>
               </div>
             </div>
           </form>

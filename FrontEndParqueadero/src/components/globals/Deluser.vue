@@ -4,20 +4,26 @@
       <div class="field">
         <div class="control">
           <form @submit.prevent.once="delUser" autocomplete="off">
-            <div class="field">
-              <label class="label">Seleccione el usuario a eliminar</label>
-              <div class="control">
-                <div class="select">
-                  <select v-model="usuarioSeleccionado">
-                    <option>{{ selusuario }}</option>
-                    <option
-                      v-for="usuario in usuarios"
-                      :value="usuario"
-                      v-bind:key="usuario.identificacion"
-                    >
-                      {{ usuario.nombres }} {{ usuario.apellidos }}
-                    </option>
-                  </select>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label">Seleccione el usuario a eliminar</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <div class="select is-fullwidth">
+                      <select v-model="usuarioSeleccionado">
+                        <option>{{ selusuario }}</option>
+                        <option
+                          v-for="usuario in usuarios"
+                          :value="usuario"
+                          v-bind:key="usuario.identificacion"
+                        >
+                          {{ usuario.nombres }} {{ usuario.apellidos }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
