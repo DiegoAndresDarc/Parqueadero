@@ -96,7 +96,7 @@ export default {
       var requestObject = {
         tabla: "usuario",
         id_copropiedad: this.$session.get("id_coprop"),
-        tipo_usuario: "C",
+        tipo_usuario: "R",
       };
       this.$axios
         .get(url, { params: requestObject })
@@ -122,9 +122,7 @@ export default {
         .post(url, parqueadero)
         .then((response) => {
           if (response.data == true) alert(this.mssg);
-          this.loadParkings();
-          this.loadUsers();
-        })
+          this.loadParkings();        })
         .catch((e) => {
           console.log(e);
         });

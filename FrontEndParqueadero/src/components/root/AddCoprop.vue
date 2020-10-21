@@ -93,7 +93,6 @@ export default {
     this.$bus.$emit("checkSession", "");
   },
   created() {
-    console.log("AddCoprop.vue");
   },
 };
 </script>

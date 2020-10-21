@@ -206,7 +206,6 @@ export default {
   },
   created() {
     this.loadCoprops();
-    console.log("ModCoprop.vue");
   },
 };
 </script>

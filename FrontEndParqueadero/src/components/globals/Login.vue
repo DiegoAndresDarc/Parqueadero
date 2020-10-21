@@ -142,7 +142,6 @@ export default {
     },
   },
   created() {
-    console.log("Login.vue");
   },
 };
 </script>

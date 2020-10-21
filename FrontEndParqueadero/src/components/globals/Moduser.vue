@@ -13,7 +13,6 @@
                   <div class="control">
                     <div class="select is-fullwidth">
                       <select v-model="usuarioSeleccionado">
-                        <option>{{ selusuario }}</option>
                         <option
                           v-for="usuario in usuarios"
                           :value="usuario"
@@ -100,44 +99,6 @@
             </div>
             <div class="field is-horizontal">
               <div class="field-label is-normal">
-                <label class="label">Usuario</label>
-              </div>
-              <div class="field-body">
-                <div class="field">
-                  <div class="control">
-                    <input
-                      class="input"
-                      type="text"
-                      placeholder="Usuario"
-                      v-model="usuarioSeleccionado.usuario"
-                      autocomplete="off"
-                      required
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="field is-horizontal">
-              <div class="field-label is-normal">
-                <label class="label">Contraseña</label>
-              </div>
-              <div class="field-body">
-                <div class="field">
-                  <div class="control">
-                    <input
-                      class="input"
-                      type="password"
-                      placeholder="Contraseña"
-                      v-model="usuarioSeleccionado.password"
-                      autocomplete="new-password"
-                      required
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="field is-horizontal">
-              <div class="field-label is-normal">
                 <label class="label">Dirección de correo electrónico</label>
               </div>
               <div class="field-body">
@@ -204,26 +165,74 @@
                     <div class="select is-fullwidth">
                       <select v-model="tipo_usr">
                         <option v-if="root_admin === 'R'">Administrador</option>
-                        <option>Cliente</option>
-                        <option>Guardia de seguridad</option>
+                        <option v-if="root_admin === 'A'">Residente</option>
+                        <option v-if="root_admin === 'A'">
+                          Guardia de seguridad
+                        </option>
                       </select>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="field is-horizontal" v-if="apartamentos.length">
+            <div
+              class="field is-horizontal"
+              v-if="tipo_usr !== 'Residente'"
+            >
               <div class="field-label is-normal">
-                <label class="label"
-                  >Seleccione el apartamento al cual pertenece</label
-                >
+                <label class="label">Usuario</label>
               </div>
               <div class="field-body">
                 <div class="field">
                   <div class="control">
+                    <input
+                      class="input"
+                      type="text"
+                      placeholder="Usuario"
+                      v-model="usuarioSeleccionado.usuario"
+                      autocomplete="off"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="field is-horizontal"
+              v-if="tipo_usr !== 'Residente'"
+            >
+              <div class="field-label is-normal">
+                <label class="label">Contraseña</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input
+                      class="input"
+                      type="password"
+                      placeholder="Contraseña"
+                      v-model="usuarioSeleccionado.password"
+                      autocomplete="new-password"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="field is-horizontal"
+              v-if="root_admin === 'A' && tipo_usr === 'Residente'"
+            >
+              <div class="field-label is-normal" v-if="apartamentos.length > 0">
+                <label class="label"
+                  >Seleccione el apartamento al cual pertenece</label
+                >
+              </div>
+              <div class="field-body" v-if="apartamentos.length > 0">
+                <div class="field">
+                  <div class="control">
                     <div class="select is-fullwidth">
                       <select v-model="apartSeleccionado">
-                        <option>{{ selectApart }}</option>
                         <option
                           v-for="apto in apartamentos"
                           :value="apto"
@@ -235,6 +244,11 @@
                     </div>
                   </div>
                 </div>
+              </div>
+              <div v-else>
+                <p class="help is-danger is-medium field-body">
+                  Todavía no existen apartamentos en la copropiedad
+                </p>
               </div>
             </div>
             <div class="field">
@@ -256,17 +270,15 @@ export default {
   data() {
     return {
       mssg: "Usuario modificado con éxito",
-      selusuario: "Seleccione un usuario",
       usuarios: [],
       usuarioSeleccionado: {},
       seleccionado: false,
-      tipo_usr: "Cliente",
+      tipo_usr: "Residente",
       tipo_doc: "CC",
       root_admin: "",
       id_copropiedad: "",
       apartamentos: [],
       apartSeleccionado: {},
-      selectApart: "Seleccione un apartamento...",
     };
   },
   methods: {
@@ -300,6 +312,8 @@ export default {
       if (this.root_admin == "A") {
         this.id_copropiedad = this.$session.get("id_coprop");
         requestObject.id_copropiedad = this.id_copropiedad;
+      } else {
+        requestObject.tipo_usuario = "A";
       }
       this.$axios
         .get(url, { params: requestObject })
@@ -349,8 +363,10 @@ export default {
   },
   created() {
     this.root_admin = this.$session.get("user");
+    if (this.root_admin == "A") {
+      this.loadApartments();
+    }
     this.loadUsers();
-    console.log("Moduser.vue");
   },
 };
 </script>

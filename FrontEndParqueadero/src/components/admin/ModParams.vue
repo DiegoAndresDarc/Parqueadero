@@ -1,7 +1,7 @@
 <template>
   <div class="conf-params">
     <div class="content-conf-params">
-      <form @submit.prevent.once="modParams" autocomplete="off">
+      <form @submit.prevent="modParams" autocomplete="off">
         <div class="field is-horizontal">
           <div class="field-label is-normal">
             <label class="label">Peso máximo para vehículos</label>
@@ -48,18 +48,19 @@
             <label class="label">Día de la semana para arqueo de la caja</label>
           </div>
           <div class="field-body">
-            <div class="field">
+            <div class="field is-narrow">
               <div class="control">
-                <input
-                  class="input is-medium"
-                  type="number"
-                  placeholder="Día de arqueo de la caja"
-                  id="dia_arqueo"
-                  v-model="info.dia_arqueo"
-                  min="1"
-                  max="7"
-                  required
-                />
+                <div class="select">
+                  <select v-model="info.dia_arqueo">
+                    <option>LUNES</option>
+                    <option>MARTES</option>
+                    <option>MIERCOLES</option>
+                    <option>JUEVES</option>
+                    <option>VIERNES</option>
+                    <option>SABADO</option>
+                    <option>DOMINGO</option>
+                  </select>
+                </div>
               </div>
             </div>
           </div>
@@ -71,18 +72,19 @@
             >
           </div>
           <div class="field-body">
-            <div class="field">
+            <div class="field is-narrow">
               <div class="control">
-                <input
-                  class="input is-medium"
-                  type="number"
-                  placeholder="Día de alertas"
-                  id="dia_alertas"
-                  v-model="info.dia_alertas"
-                  min="1"
-                  max="7"
-                  required
-                />
+                <div class="select">
+                  <select v-model="info.dia_alertas">
+                    <option>LUNES</option>
+                    <option>MARTES</option>
+                    <option>MIERCOLES</option>
+                    <option>JUEVES</option>
+                    <option>VIERNES</option>
+                    <option>SABADO</option>
+                    <option>DOMINGO</option>
+                  </select>
+                </div>
               </div>
             </div>
           </div>
@@ -228,13 +230,9 @@
               <div class="control">
                 <div class="select">
                   <select v-model="info.tipo_pago_visitante">
-                    <option>SEGUNDO</option>
                     <option>MINUTO</option>
                     <option>HORA</option>
                     <option>DIA</option>
-                    <option>SEMANA</option>
-                    <option>MES</option>
-                    <option>AÑO</option>
                   </select>
                 </div>
               </div>
@@ -244,7 +242,8 @@
         <div class="field is-horizontal">
           <div class="field-label is-normal">
             <label class="label"
-              >Valor del pago para el periodo seleccionado</label
+              >Valor del pago por {{ info.tipo_pago_visitante }} en pesos
+              colombianos</label
             >
           </div>
           <div class="field-body">
@@ -267,8 +266,7 @@
         <div class="field is-horizontal">
           <div class="field-label is-normal">
             <label class="label"
-              >Tiempo de gracia antes de iniciar a cobrar a los
-              visitantes</label
+              >Tiempo de gracia en {{ info.tipo_pago_visitante }}</label
             >
           </div>
           <div class="field-body">
@@ -409,7 +407,6 @@ export default {
       this.info.encabezado_recibo = this.info.encabezado_recibo.toUpperCase();
       this.info.texto_responsabilidad = this.info.texto_responsabilidad.toUpperCase();
       this.info.pie_pagina_recibo = this.info.pie_pagina_recibo.toUpperCase();
-      console.log(this.info);
       this.$axios
         .post(url, this.info)
         .then((response) => {
@@ -426,7 +423,6 @@ export default {
   },
   created() {
     this.loadParams();
-    console.log("ConfParams.vue");
   },
 };
 </script>

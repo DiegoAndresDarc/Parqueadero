@@ -3,7 +3,7 @@
     <div class="content">
       <div class="field">
         <div class="control">
-          <form @submit.prevent.once="selApartment" autocomplete="off">
+          <form @submit.prevent="selApartment" autocomplete="off">
             <div class="field is-horizontal">
               <div class="field-label is-normal">
                 <label class="label"
@@ -151,7 +151,6 @@ export default {
   },
   created() {
     this.loadApartments();
-    console.log("ModApartment.vue");
   },
 };
 </script>

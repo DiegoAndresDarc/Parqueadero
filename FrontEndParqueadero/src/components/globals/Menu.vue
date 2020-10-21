@@ -137,7 +137,6 @@ export default {
     this.apellidos = this.$session.get("lastname");
     this.loadMenu();
     if (this.usuario == "A") this.loadCoprop();
-    console.log("Menu.vue");
   },
 };
 </script>

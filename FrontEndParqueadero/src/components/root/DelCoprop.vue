@@ -71,12 +71,10 @@ export default {
     },
     selCoprop() {
       this.seleccionado = true;
-      console.log(this.copropSeleccionada);
     },
     delCoprop() {
       var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/delete.php";
       this.seleccionado = true;
-      console.log(this.copropSeleccionada);
       var requestObject = {
         tabla: "copropiedad",
         id: this.copropSeleccionada.id,

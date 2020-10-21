@@ -91,7 +91,6 @@ export default {
   },
   created() {
     this.loadUsers();
-    console.log("Moduser.vue");
   },
 };
 </script>

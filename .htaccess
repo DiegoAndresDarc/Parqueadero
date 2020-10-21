@@ -1,4 +1,4 @@
 Header set Access-Control-Allow-Origin *
-Header set Access-Control-Allow-Methods GET,HEAD,OPTIONS,POST,PUT
-Header set Access-Control-Allow-Headers Origin,X-Requested-With,Content-Type,Accept,Authorization
-Header set Content-Type application/json
+Header set Access-Control-Allow-Headers Origin,X-Requested-With,Content-Type,Accept
+Header set Access-Control-Allow-Methods GET,POST,PUT,DELETE,OPTIONS
+Header set Content-Type application/json,multipart/form-data

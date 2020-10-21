@@ -31,7 +31,6 @@ export default {
     this.checkSession();
     this.$bus.$on("checkSession", this.checkSession);
     this.$bus.$on("logout", this.logout);
-    console.log("App.vue");
   },
 };
 </script>

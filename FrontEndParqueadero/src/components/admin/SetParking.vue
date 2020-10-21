@@ -98,7 +98,7 @@ export default {
       var requestObject = {
         tabla: "usuario",
         id_copropiedad: this.$session.get("id_coprop"),
-        tipo_usuario: "C",
+        tipo_usuario: "R",
       };
       this.$axios
         .get(url, { params: requestObject })

@@ -14,6 +14,6 @@ for ($i = 0; $i < $length; $i++) {
         $condicion[$keys[$i]] = is_numeric($values[$i]) ? $values[$i] : "'" . $values[$i] . "'";
     }
 }
-$campos = "codigo";
+$campos = "id,codigo";
 $response = $connection->select($tabla, $campos, $condicion);
 echo json_encode($response);

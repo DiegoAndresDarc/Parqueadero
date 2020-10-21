@@ -64,44 +64,6 @@
         </div>
         <div class="field is-horizontal">
           <div class="field-label is-normal">
-            <label class="label">Usuario</label>
-          </div>
-          <div class="field-body">
-            <div class="field">
-              <div class="control">
-                <input
-                  class="input"
-                  type="text"
-                  placeholder="Usuario"
-                  v-model="info.usuario"
-                  autocomplete="off"
-                  required
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="field is-horizontal">
-          <div class="field-label is-normal">
-            <label class="label">Contraseña</label>
-          </div>
-          <div class="field-body">
-            <div class="field">
-              <div class="control">
-                <input
-                  class="input"
-                  type="password"
-                  placeholder="Contraseña"
-                  v-model="info.password"
-                  autocomplete="new-password"
-                  required
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="field is-horizontal">
-          <div class="field-label is-normal">
             <label class="label">Dirección de correo electrónico</label>
           </div>
           <div class="field-body">
@@ -126,7 +88,7 @@
             <div class="field">
               <div class="control">
                 <input
-                  class="input is-medium"
+                  class="input"
                   type="tel"
                   pattern="[0-9]{7}"
                   title="Un número de telefono fijo tiene una longitud de 7 digitos con números entre 0 y 9"
@@ -146,7 +108,7 @@
             <div class="field">
               <div class="control">
                 <input
-                  class="input is-medium"
+                  class="input"
                   type="tel"
                   pattern="[3]{1}[0-9]{9}"
                   title="Un número de celular en Colombia inicia con el número 3 y tiene una longitud de 10 digitos con números entre 0 y 9"
@@ -168,26 +130,92 @@
                 <div class="select is-fullwidth">
                   <select v-model="tipo_usr">
                     <option v-if="root_admin === 'R'">Administrador</option>
-                    <option>Cliente</option>
-                    <option>Guardia de seguridad</option>
+                    <option v-if="root_admin === 'A'">Residente</option>
+                    <option v-if="root_admin === 'A'">
+                      Guardia de seguridad
+                    </option>
                   </select>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="field is-horizontal" v-if="apartamentos.length">
+        <div class="field is-horizontal" v-if="tipo_usr !== 'Residente'">
+          <div class="field-label is-normal">
+            <label class="label">Usuario</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <div class="control">
+                <input
+                  class="input"
+                  type="text"
+                  placeholder="Usuario"
+                  v-model="info.usuario"
+                  autocomplete="off"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="field is-horizontal" v-if="tipo_usr !== 'Residente'">
+          <div class="field-label is-normal">
+            <label class="label">Contraseña</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <div class="control">
+                <input
+                  class="input"
+                  type="password"
+                  placeholder="Contraseña"
+                  v-model="info.password"
+                  autocomplete="new-password"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="field is-horizontal" v-if="root_admin === 'R'">
           <div class="field-label is-normal">
             <label class="label"
-              >Seleccione el apartamento al cual pertenece</label
+              >Seleccione la copropiedad al cual pertenece</label
             >
           </div>
           <div class="field-body">
             <div class="field">
               <div class="control">
                 <div class="select is-fullwidth">
+                  <select v-model="copropSeleccionada">
+                    <option
+                      v-for="copropiedad in copropiedades"
+                      :value="copropiedad"
+                      v-bind:key="copropiedad.id"
+                    >
+                      {{ copropiedad.nombre }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="field is-horizontal"
+          v-if="root_admin === 'A' && tipo_usr === 'Residente'"
+        >
+          <div class="field-label is-normal" v-if="apartamentos.length > 0">
+            <label class="label"
+              >Seleccione el apartamento al cual pertenece</label
+            >
+          </div>
+          <div class="field-body" v-if="apartamentos.length > 0">
+            <div class="field">
+              <div class="control">
+                <div class="select is-fullwidth">
                   <select v-model="apartSeleccionado">
-                    <option>{{ selectApart }}</option>
                     <option
                       v-for="apto in apartamentos"
                       :value="apto"
@@ -199,6 +227,11 @@
                 </div>
               </div>
             </div>
+          </div>
+          <div v-else>
+            <p class="help is-danger is-medium field-body">
+              Todavía no existen apartamentos en la copropiedad
+            </p>
           </div>
         </div>
         <div class="field">
@@ -223,26 +256,32 @@ export default {
       tipo_doc: "CC",
       tipo_usr: "Cliente",
       root_admin: "",
-      info: {
-        tabla: "",
-        nombres: "",
-        apellidos: "",
-        usuario: "",
-        password: "",
-        email: "",
-        telefono: "",
-        celular: "",
-        identificacion: "",
-        tipo_identificacion: "",
-        tipo_usuario: "",
-      },
+      info: {},
       id_copropiedad: "",
       apartamentos: [],
       apartSeleccionado: {},
-      selectApart: "Seleccione un apartamento...",
+      copropiedades: [],
+      copropSeleccionada: {},
     };
   },
   methods: {
+    loadCoprops() {
+      var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/select.php";
+      this.copropiedades = [];
+      this.copropSeleccionada = {};
+      var requestObject = {
+        tabla: "copropiedad",
+      };
+      this.$axios
+        .get(url, { params: requestObject })
+        .then((response) => {
+          this.copropiedades = response.data;
+        })
+        .catch((e) => {
+          console.log(e);
+          this.error = true;
+        });
+    },
     loadApartments() {
       var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/select.php";
       this.id_copropiedad = this.$session.get("id_coprop");
@@ -267,17 +306,20 @@ export default {
       this.info.tabla = "usuario";
       this.info.nombres = this.info.nombres.toUpperCase();
       this.info.apellidos = this.info.apellidos.toUpperCase();
-      this.info.password = crypto.SHA512(this.info.password).toString();
+      if (this.info.usuario && this.info.password) {
+        this.info.password = crypto.SHA512(this.info.password).toString();
+      }
       this.info.email = this.info.email.toUpperCase();
       this.info.tipo_usuario = this.tipo_usr.charAt(0);
       this.info.tipo_identificacion = this.tipo_doc;
       if (this.root_admin == "A") {
         this.info.id_copropiedad = this.id_copropiedad;
+      } else {
+        this.info.id_copropiedad = this.copropSeleccionada.id;
       }
       if (this.apartSeleccionado.length) {
         this.info.id_apartamento = this.apartSeleccionado.id_copropiedad;
       }
-      console.log(this.info);
       this.$axios
         .post(url, this.info)
         .then((response) => {
@@ -297,8 +339,11 @@ export default {
   },
   created() {
     this.root_admin = this.$session.get("user");
-    this.loadApartments();
-    console.log("Adduser.vue");
+    if (this.root_admin == "R") {
+      this.loadCoprops();
+    } else {
+      this.loadApartments();
+    }
   },
 };
 </script>

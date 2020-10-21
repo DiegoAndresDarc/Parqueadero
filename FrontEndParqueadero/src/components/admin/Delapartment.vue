@@ -91,7 +91,6 @@ export default {
   },
   created() {
     this.loadApartments();
-    console.log("ModApartment.vue");
   },
 };
 </script>

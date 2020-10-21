@@ -26,7 +26,6 @@ export default {
       this.$bus.$emit("checkSession", "");
   },
   created() {
-    console.log("Container.vue");
   },
 };
 </script>
@@ -40,7 +39,7 @@ export default {
 .container-content {
   width: calc(100% - 250px);
   margin-left: auto;
-  padding: 20px;
-  border-left: 2px;
+  padding-left: 30px;
+  padding-right: 20px;
 }
 </style>

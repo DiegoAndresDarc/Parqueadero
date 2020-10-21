@@ -1,7 +1,7 @@
 <template>
   <div class="addaptm">
     <div class="content-aptm">
-      <form @submit.prevent.once="addApartm" autocomplete="off" name="form">
+      <form @submit.prevent="addApartm" autocomplete="off" name="form">
         <div class="field is-horizontal">
           <div class="field-label is-normal">
             <label class="label">Bloque/Interior al cual pertenece</label>

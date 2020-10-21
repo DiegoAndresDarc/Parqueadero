@@ -80,6 +80,24 @@
         </div>
         <div class="field is-horizontal">
           <div class="field-label is-normal">
+            <label class="label">Color del vehículo</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <div class="control">
+                <input
+                  class="input"
+                  type="text"
+                  placeholder="color del vehículo"
+                  v-model="info.color"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
             <label class="label">Peso del vehículo</label>
           </div>
           <div class="field-body">
@@ -146,7 +164,7 @@
                   class="input"
                   type="file"
                   placeholder=""
-                  name="soat"
+                  :name="nombreArchivoSoat"
                   accept=".pdf"
                   @change="getSOAT"
                   required
@@ -168,7 +186,7 @@
                   class="input"
                   type="file"
                   placeholder=""
-                  name="carta_propiedad"
+                  :name="nombreArchivoCartaPropiedad"
                   accept=".pdf"
                   @change="getOwnerShip"
                   required
@@ -198,34 +216,30 @@ export default {
       usuarios: [],
       usuarioSeleccionado: {},
       soat: "",
-      carta_propiedad: "",
+      cartaPropiedad: "",
+      nombreArchivoSoat: "",
+      nombreArchivoCartaPropiedad: "",
     };
   },
   methods: {
     addVehicle() {
       var fileName =
-        this.usuarioSeleccionado.id +
-        this.info.marca +
-        this.info.modelo +
-        "_SOAT.pdf";
-      this.uploadFile(fileName, this.soat);
-      fileName =
-        this.usuarioSeleccionado.id +
-        this.info.marca +
-        this.info.modelo +
-        "_OwnerShip.pdf";
-      this.uploadFile(fileName, this.carta_propiedad);
-      var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/insert.php";
-      this.id_propietario = this.usuarioSeleccionado.id;
+        this.usuarioSeleccionado.id + this.info.marca + this.info.modelo;
+      this.nombreArchivoSoat = fileName + "_SOAT.pdf";
+      this.nombreArchivoCartaPropiedad = fileName + "_OwnerShip.pdf";
+      var url =
+        jsonInfo.url_server + jsonInfo.name_app + "/admin/insertVehicle.php";
+      this.info.id_propietario = this.usuarioSeleccionado.id;
       this.info.tabla = "vehiculo";
       this.info.marca = this.info.marca.toUpperCase();
       this.info.modelo = this.info.modelo.toUpperCase();
-      console.log(this.info);
-      console.log(this.soat);
-      console.log(this.carta_propiedad);
+      this.info.color = this.info.color.toUpperCase();
+      this.info.soat = this.soat;
+      this.info.carta_propiedad = this.cartaPropiedad;
       this.$axios
         .post(url, this.info)
         .then((response) => {
+          console.log(response.data);
           if (response.data == true) alert(this.mssg);
           this.info = {};
         })
@@ -233,29 +247,29 @@ export default {
           console.log(e);
         });
     },
-    uploadFile(fileName, file) {
-      var url =
-        jsonInfo.url_server + jsonInfo.name_app + "/admin/uploadFile.php";
-      var formData = new FormData();
-      formData.append(fileName, file);
-      this.$axios
-        .post(url, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
     getSOAT(event) {
-      this.soat = event.target.files[0];
+      var file = event.target.files[0];
+      var app = this;
+      var reader = new FileReader();
+      reader.onloadend = function (e) {
+        if (e.target.readyState == FileReader.DONE) {
+          const b64 = e.target.result.split(",")[1];
+          app.soat = b64;
+        }
+      };
+      reader.readAsDataURL(file);
     },
     getOwnerShip(event) {
-      this.carta_propiedad = event.target.files[0];
+      var file = event.target.files[0];
+      var reader = new FileReader();
+      var app = this;
+      reader.onloadend = function (e) {
+        if (e.target.readyState == FileReader.DONE) {
+          const b64 = e.target.result.split(",")[1];
+          app.cartaPropiedad = b64;
+        }
+      };
+      reader.readAsDataURL(file);
     },
     loadUsers() {
       var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/select.php";
@@ -264,7 +278,7 @@ export default {
       var requestObject = {
         tabla: "usuario",
         id_copropiedad: this.$session.get("id_coprop"),
-        tipo_usuario: "C",
+        tipo_usuario: "R",
       };
       this.$axios
         .get(url, { params: requestObject })
