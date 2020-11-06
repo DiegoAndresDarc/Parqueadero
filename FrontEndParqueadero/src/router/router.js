@@ -24,6 +24,7 @@ import Removeparking from '../components/admin/Removeparking.vue'
 import AddVehicle from '../components/admin/AddVehicle.vue'
 import ModVehicle from '../components/admin/ModVehicle.vue'
 import DelVehicle from '../components/admin/DelVehicle.vue'
+import ViewInfoParking from '../components/admin/ViewInfoParking.vue'
 import ModPrincipalData from '../components/client/ModPrincipalData.vue'
 import ModPassword from '../components/client/ModPassword.vue'
 import ViewInfoMyParkings from '../components/client/ViewInfoMyParkings.vue'
@@ -135,6 +136,11 @@ export default new Router({
           path: '/Quitar-un-parqueadero',
           name: 'Quitar-un-parqueadero',
           component: Removeparking
+        },,
+        {
+          path: '/Visualizar-parqueadero',
+          name: 'Visualizar-parqueadero',
+          component: ViewInfoParking
         },
         {
           path: '/Agregar-vehiculo',

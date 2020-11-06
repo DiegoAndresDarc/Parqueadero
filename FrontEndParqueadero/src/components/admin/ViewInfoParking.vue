@@ -1,25 +1,38 @@
 <template>
-  <div class="guard">
+  <div class="parking">
     <div class="content">
       <div class="field">
         <div class="control">
-          <form @submit.prevent="viewInfoParking">
+          <form @submit.prevent="getParkingInfo" autocomplete="off">
             <div class="field is-horizontal">
-              <div class="field-label is-normal">
-                <label class="label">Código de barras del parqueadero</label>
+              <div class="field-label">
+                <label class="label"
+                  >Seleccione el parqueadero a visualizar</label
+                >
               </div>
               <div class="field-body">
-                <input
-                  class="input"
-                  type="password"
-                  v-model="codigo_barras"
-                  required
-                />
+                <div class="field">
+                  <div class="control is-expanded">
+                    <div class="select is-fullwidth">
+                      <select v-model="parqueaderoSeleccionado">
+                        <option
+                          v-for="parqueadero in parqueaderos"
+                          :value="parqueadero"
+                          v-bind:key="parqueadero.id"
+                        >
+                          {{ parqueadero.codigo }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="field">
               <div class="control">
-                <button class="button is-fullwidth is-link">Aceptar</button>
+                <button class="button is-link is-fullwidth">
+                  Visualizar Parqueadero
+                </button>
               </div>
             </div>
           </form>
@@ -34,7 +47,7 @@
             <div class="field-body">
               <div class="field">
                 <div class="control">
-                  <h2 class="subtitle">{{ parqueadero.codigo }}</h2>
+                  <h2 class="subtitle">{{ parqueaderoSeleccionado.codigo }}</h2>
                 </div>
               </div>
             </div>
@@ -54,30 +67,13 @@
           <div class="field">
             <label class="label">Vehiculo(s) asignados al parqueadero</label>
             <div class="control">
-              <table class="table is-fullwidth is-bordered is-striped">
-                <thead>
-                  <tr>
-                    <th>Vehiculo</th>
-                    <th>Acción</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="vehiculo in vehiculos" v-bind:key="vehiculo.id">
-                    <td>
-                      <img :src="vehiculo.foto" height="150px" width="150px" />
-                    </td>
-                    <td style="text-align: center; vertical-align: middle">
-                      <button
-                        type="submit"
-                        class="button is-link is-fullwidth"
-                        @click.once="goInVehicle(vehiculo)"
-                      >
-                        Dar entrada
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+              <img
+                v-for="vehiculo in vehiculos"
+                v-bind:key="vehiculo.id"
+                :src="vehiculo.foto"
+                height="250px"
+                width="250px"
+              />
             </div>
           </div>
         </div>
@@ -89,55 +85,36 @@
 <script>
 import jsonInfo from "../../assets/info.json";
 export default {
-  name: "goInVehicle",
+  name: "viewInfoParking",
   data() {
     return {
-      mssg: "La entrada del vehiculo ha sido exitosa",
-      fecha: "",
-      codigo_barras: "",
-      vehiculos: [],
+      mssg: "",
+      parqueaderos: [],
+      parqueaderoSeleccionado: {},
       usuario: {},
-      parqueadero: {},
+      usuarioSeleccionado: {},
+      vehiculos: [],
       selected: false,
     };
   },
   methods: {
-    viewInfoParking() {
-      this.loadParking();
+    getParkingInfo() {
       this.selected = true;
-    },
-    goInVehicle(vehiculo) {
-      var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/insert.php";
-      var info = {
-        id_vehiculo: vehiculo.id,
-        tabla: "registro_uso",
-      };
-      var date = new Date();
-      info.fecha_ingreso =
-        date.getFullYear() + "/" + date.getMonth() + "/" + date.getDate();
-      info.hora_ingreso =
-        date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
-      this.$axios
-        .post(url, info)
-        .then((response) => {
-          if (response.data == true) alert(this.mssg);
-          this.selected = false;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-    loadParking() {
+      this.loadUsers();
       var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/select.php";
+    },
+    loadParkings() {
+      var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/select.php";
+      this.parqueaderos = [];
+      this.parqueaderoSeleccionado = {};
       var requestObject = {
         tabla: "parqueadero",
-        codigo_barras: this.codigo_barras,
+        id_copropiedad: this.$session.get("id_coprop"),
       };
       this.$axios
         .get(url, { params: requestObject })
         .then((response) => {
-          this.parqueadero = response.data[0];
-          this.loadUsers();
+          this.parqueaderos = response.data;
         })
         .catch((e) => {
           console.log(e);
@@ -148,7 +125,7 @@ export default {
       this.usuario = {};
       var requestObject = {
         tabla: "usuario",
-        id: this.parqueadero.id_usuario,
+        id: this.parqueaderoSeleccionado.id_usuario,
         tipo_usuario: "R",
       };
       this.$axios
@@ -163,16 +140,19 @@ export default {
         });
     },
     loadVehicles() {
-      var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/select.php";
+      var url =
+        jsonInfo.url_server + jsonInfo.name_app + "/globals/select.php";
       this.vehiculos = [];
       var requestObject = {
         tabla: "vehiculo",
         id_propietario: this.usuario.id,
-        id_parqueadero: this.parqueadero.id,
+        id_parqueadero: this.parqueaderoSeleccionado.id,
       };
+      console.log(requestObject);
       this.$axios
         .get(url, { params: requestObject })
         .then((response) => {
+          console.log(response.data);
           this.vehiculos = response.data;
           this.vehiculos.forEach((item) => {
             var url = jsonInfo.url_server + jsonInfo.name_app;
@@ -190,7 +170,9 @@ export default {
   beforeCreate() {
     this.$bus.$emit("checkSession", "");
   },
-  created() {},
+  created() {
+    this.loadParkings();
+  },
 };
 </script>
 

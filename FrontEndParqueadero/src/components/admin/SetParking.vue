@@ -24,7 +24,7 @@
             </div>
           </div>
         </div>
-        <div class="field is-horizontal">
+        <div class="field is-horizontal" v-if="parqueaderoSeleccionado.id">
           <div class="field-label">
             <label class="label">Seleccione el residente</label>
           </div>
@@ -39,6 +39,29 @@
                       v-bind:key="usuario.id"
                     >
                       {{ usuario.nombres }} {{ usuario.apellidos }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="field is-horizontal" v-if="usuarioSeleccionado.id">
+          <div class="field-label">
+            <label class="label">Seleccione el vehiculo</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <div class="control is-expanded">
+                <div class="select is-fullwidth">
+                  <select v-model="vehiculoSeleccionado">
+                    <option
+                      v-for="vehiculo in vehiculos"
+                      :value="vehiculo"
+                      v-bind:key="vehiculo.id"
+                    >
+                      {{ vehiculo.tipo }} {{ vehiculo.marca }}
+                      {{ vehiculo.modelo }} {{ vehiculo.color }}
                     </option>
                   </select>
                 </div>
@@ -68,7 +91,9 @@ export default {
       parqueaderos: [],
       parqueaderoSeleccionado: {},
       usuarios: [],
-      usuarioSeleccionado: [],
+      usuarioSeleccionado: {},
+      vehiculos: [],
+      vehiculoSeleccionado: {},
     };
   },
   methods: {
@@ -110,6 +135,33 @@ export default {
           this.error = true;
         });
     },
+    loadVehicles() {
+      var url =
+        jsonInfo.url_server + jsonInfo.name_app + "/admin/getUserVehicles.php";
+      this.vehiculoSeleccionado = {};
+      this.vehiculos = [];
+      var requestObject = {
+        id_propietario: this.usuarioSeleccionado.id,
+      };
+      if (this.parqueaderoSeleccionado.admite_carro == 1) {
+        requestObject.carro = "CARRO";
+      }
+      if (this.parqueaderoSeleccionado.admite_moto == 1) {
+        requestObject.moto = "MOTO";
+      }
+      if (this.parqueaderoSeleccionado.admite_bicicleta == 1) {
+        requestObject.bicicleta = "BICICLETA";
+      }
+      this.$axios
+        .get(url, { params: requestObject })
+        .then((response) => {
+          this.vehiculos = response.data;
+        })
+        .catch((e) => {
+          console.log(e);
+          this.error = true;
+        });
+    },
     setParking() {
       var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/update.php";
       this.parqueaderoSeleccionado.tabla = "parqueadero";
@@ -126,6 +178,23 @@ export default {
         .catch((e) => {
           console.log(e);
         });
+      this.setVehicleParking();
+    },
+    setVehicleParking() {
+      var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/update.php";
+      this.vehiculoSeleccionado.tabla = "vehiculo";
+      this.vehiculoSeleccionado.id_parqueadero = this.parqueaderoSeleccionado.id;
+      this.$axios
+        .post(url, this.vehiculoSeleccionado)
+        .then((response) => {})
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+  },
+  watch: {
+    usuarioSeleccionado(newValue) {
+      if (newValue.id) this.loadVehicles();
     },
   },
   beforeCreate() {

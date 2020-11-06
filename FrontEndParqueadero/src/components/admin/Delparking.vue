@@ -1,7 +1,7 @@
 <template>
   <div class="parking">
     <div class="content">
-      <form @submit.prevent.once="delParking" autocomplete="off">
+      <form @submit.prevent="delParking" autocomplete="off">
         <div class="field is-horizontal">
           <div class="field-label is-normal">
             <label class="label is-expanded"
@@ -13,7 +13,6 @@
               <div class="control is-expanded">
                 <div class="select is-fullwidth">
                   <select v-model="parqueaderoSeleccionado">
-                    <option>{{ selprk }}</option>
                     <option
                       v-for="parqueadero in parqueaderos"
                       :value="parqueadero"
@@ -44,7 +43,6 @@ export default {
   data() {
     return {
       mssg: "Parqueadero eliminado con éxito",
-      selprk: "Seleccione un parqueadero...",
       parqueaderos: [],
       parqueaderoSeleccionado: {},
       idCopropiedad: "",

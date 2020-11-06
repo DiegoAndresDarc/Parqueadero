@@ -47,9 +47,20 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(parqueadero) in parqueaderos" v-bind:key="parqueadero.codigo">
-              <td>{{parqueadero.codigo}}</td>
-              <td><button type="submit" class="button is-danger" @click="removeParking(parqueadero)">Remover parqueadero</button></td>
+            <tr
+              v-for="parqueadero in parqueaderos"
+              v-bind:key="parqueadero.codigo"
+            >
+              <td>{{ parqueadero.codigo }}</td>
+              <td>
+                <button
+                  type="submit"
+                  class="button is-danger"
+                  @click="removeParking(parqueadero)"
+                >
+                  Remover parqueadero
+                </button>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -68,12 +79,14 @@ export default {
       parqueaderos: [],
       usuarios: [],
       usuarioSeleccionado: [],
+      vehiculos: [],
       seleccionado: false,
     };
   },
   methods: {
     loadParkings() {
-      var url = jsonInfo.url_server + jsonInfo.name_app + "/admin/getUserParkings.php";
+      var url =
+        jsonInfo.url_server + jsonInfo.name_app + "/admin/getUserParkings.php";
       this.parqueaderos = [];
       var requestObject = {
         tabla: "parqueadero",
@@ -112,8 +125,9 @@ export default {
       this.loadParkings();
     },
     removeParking(parqueadero) {
-      
-      var url = jsonInfo.url_server + jsonInfo.name_app + "/admin/removeParking.php";
+      this.loadVehicles(parqueadero);
+      var url =
+        jsonInfo.url_server + jsonInfo.name_app + "/admin/removeParking.php";
       parqueadero.tabla = "parqueadero";
       parqueadero.id_usuario = "";
       parqueadero.esta_libre = 1;
@@ -122,10 +136,44 @@ export default {
         .post(url, parqueadero)
         .then((response) => {
           if (response.data == true) alert(this.mssg);
-          this.loadParkings();        })
+          this.loadParkings();
+        })
         .catch((e) => {
           console.log(e);
         });
+    },
+    loadVehicles(parqueadero) {
+      var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/select.php";
+      this.vehiculos = [];
+      var requestObject = {
+        tabla: "vehiculo",
+        id_parqueadero: parqueadero.id,
+      };
+      this.$axios
+        .get(url, { params: requestObject })
+        .then((response) => {
+          this.vehiculos = response.data;
+          this.removeVehicles();
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    removeVehicles() {
+      var url =
+        jsonInfo.url_server + jsonInfo.name_app + "/admin/removeParking.php";
+      for (var i = 0; i < this.vehiculos.length; i++) {
+        var vehiculo = this.vehiculos[i];
+        vehiculo.tabla = "vehiculo";
+        vehiculo.id_parqueadero = "";
+        this.$axios
+          .post(url, vehiculo)
+          .then((response) => {})
+          .catch((e) => {
+            console.log(e);
+          });
+      }
+      this.vehiculos = [];
     },
   },
   beforeCreate() {

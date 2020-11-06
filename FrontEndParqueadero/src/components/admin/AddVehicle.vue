@@ -158,18 +158,25 @@
             <label class="label">Soporte en formato pdf del SOAT</label>
           </div>
           <div class="field-body">
-            <div class="field">
-              <div class="control">
+            <div class="file has-name">
+              <label class="file-label">
                 <input
-                  class="input"
+                  class="file-input"
                   type="file"
-                  placeholder=""
-                  :name="nombreArchivoSoat"
                   accept=".pdf"
                   @change="getSOAT"
                   required
                 />
-              </div>
+                <span class="file-cta">
+                  <span class="file-icon">
+                    <i class="mdi mdi-upload"></i>
+                  </span>
+                  <span class="file-label">Escoge un archivo</span>
+                </span>
+                <span class="file-name">
+                  {{ nombreArchivoSoat }}
+                </span>
+              </label>
             </div>
           </div>
         </div>
@@ -180,18 +187,52 @@
             >
           </div>
           <div class="field-body">
-            <div class="field">
-              <div class="control">
+            <div class="file">
+              <label class="file-label">
                 <input
-                  class="input"
+                  class="file-input"
                   type="file"
-                  placeholder=""
-                  :name="nombreArchivoCartaPropiedad"
                   accept=".pdf"
                   @change="getOwnerShip"
                   required
                 />
-              </div>
+                <span class="file-cta">
+                  <span class="file-icon">
+                    <i class="mdi mdi-upload"></i>
+                  </span>
+                  <span class="file-label">Escoge un archivo</span>
+                </span>
+                <span class="file-name">
+                  {{ nombreArchivoCartaPropiedad }}
+                </span>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="field is-horizontal">
+          <div class="field-label">
+            <label class="label">Foto/Imagen del vehículo</label>
+          </div>
+          <div class="field-body">
+            <div class="file">
+              <label class="file-label">
+                <input
+                  class="file-input"
+                  type="file"
+                  accept=".jpeg"
+                  @change="getVehicleImg"
+                  required
+                />
+                <span class="file-cta">
+                  <span class="file-icon">
+                    <i class="mdi mdi-upload"></i>
+                  </span>
+                  <span class="file-label">Escoge un archivo</span>
+                </span>
+                <span class="file-name">
+                  {{ nombreImagenVehiculo }}
+                </span>
+              </label>
             </div>
           </div>
         </div>
@@ -217,16 +258,14 @@ export default {
       usuarioSeleccionado: {},
       soat: "",
       cartaPropiedad: "",
+      imagenVehiculo: "",
       nombreArchivoSoat: "",
       nombreArchivoCartaPropiedad: "",
+      nombreImagenVehiculo: "",
     };
   },
   methods: {
     addVehicle() {
-      var fileName =
-        this.usuarioSeleccionado.id + this.info.marca + this.info.modelo;
-      this.nombreArchivoSoat = fileName + "_SOAT.pdf";
-      this.nombreArchivoCartaPropiedad = fileName + "_OwnerShip.pdf";
       var url =
         jsonInfo.url_server + jsonInfo.name_app + "/admin/insertVehicle.php";
       this.info.id_propietario = this.usuarioSeleccionado.id;
@@ -236,12 +275,15 @@ export default {
       this.info.color = this.info.color.toUpperCase();
       this.info.soat = this.soat;
       this.info.carta_propiedad = this.cartaPropiedad;
+      this.info.foto = this.imagenVehiculo;
       this.$axios
         .post(url, this.info)
         .then((response) => {
-          console.log(response.data);
           if (response.data == true) alert(this.mssg);
           this.info = {};
+          this.nombreArchivoSoat = "";
+          this.nombreArchivoCartaPropiedad = "";
+          this.nombreImagenVehiculo = "";
         })
         .catch((e) => {
           console.log(e);
@@ -249,6 +291,7 @@ export default {
     },
     getSOAT(event) {
       var file = event.target.files[0];
+      this.nombreArchivoSoat = file.name;
       var app = this;
       var reader = new FileReader();
       reader.onloadend = function (e) {
@@ -261,12 +304,26 @@ export default {
     },
     getOwnerShip(event) {
       var file = event.target.files[0];
+      this.nombreArchivoCartaPropiedad = file.name;
       var reader = new FileReader();
       var app = this;
       reader.onloadend = function (e) {
         if (e.target.readyState == FileReader.DONE) {
           const b64 = e.target.result.split(",")[1];
           app.cartaPropiedad = b64;
+        }
+      };
+      reader.readAsDataURL(file);
+    },
+    getVehicleImg(event) {
+      var file = event.target.files[0];
+      this.nombreImagenVehiculo = file.name;
+      var reader = new FileReader();
+      var app = this;
+      reader.onloadend = function (e) {
+        if (e.target.readyState == FileReader.DONE) {
+          const b64 = e.target.result.split(",")[1];
+          app.imagenVehiculo = b64;
         }
       };
       reader.readAsDataURL(file);

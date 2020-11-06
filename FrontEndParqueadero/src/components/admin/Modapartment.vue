@@ -15,7 +15,6 @@
                   <div class="control">
                     <div class="select is-fullwidth">
                       <select v-model="apartamentoSeleccionado">
-                        <option>{{ selapto }}</option>
                         <option
                           v-for="apto in apartamentos"
                           :value="apto"
@@ -98,7 +97,6 @@ export default {
   data() {
     return {
       mssg: "Apartamento modificado con éxito",
-      selapto: "Seleccione un apartamento",
       apartamentos: [],
       apartamentoSeleccionado: {},
       seleccionado: false,

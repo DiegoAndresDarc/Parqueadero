@@ -45,6 +45,7 @@ class Connection
             $pos = strripos($query, " AND ");
             $query = substr($query, 0, $pos);
         }
+        //echo $query;
         $result = $this->conexion->query($query) or die($this->conexion->error);
         if ($result) {
             return $result->fetch_all(MYSQLI_ASSOC);
@@ -86,6 +87,15 @@ class Connection
         return false;
     }
 
+    //QUERY SELECT
+    public function query_select($query)
+    {
+        $result = $this->conexion->query($query) or die($this->conexion->error);
+        if ($result) {
+            return $result->fetch_all(MYSQLI_ASSOC);
+        }
+        return $result;
+    }
     public function getpassword()
     {
         return $this->clave;

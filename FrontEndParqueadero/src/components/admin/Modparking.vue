@@ -14,7 +14,6 @@
                 <div class="control is-expanded">
                   <div class="select is-fullwidth">
                     <select v-model="parqueaderoSeleccionado">
-                      <option>{{ selprk }}</option>
                       <option
                         v-for="parqueadero in parqueaderos"
                         :value="parqueadero"
@@ -161,6 +160,44 @@
               </div>
             </div>
           </div>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label"
+                  >Parqueadero para uso de</label
+                >
+              </div>
+              <div class="field-body">
+                <div class="field is-narrow">
+                  <div class="control">
+                    <div class="select">
+                      <select v-model="parqueaderoSeleccionado.tipo">
+                        <option>RESIDENTE</option>
+                        <option>VISITANTE</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <div class="field is-horizontal">
+            <div class="field-label is-normal">
+              <label class="label">Código de barras</label>
+            </div>
+            <div class="field-body">
+              <div class="field">
+                <div class="control">
+                  <input
+                    type="text"
+                    class="input"
+                    placeholder="Codigo de barras"
+                    v-model="parqueaderoSeleccionado.codigo_barras"
+                    min="0"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="field">
             <div class="control">
               <button class="button is-link is-fullwidth">Aceptar</button>
@@ -179,7 +216,6 @@ export default {
   data() {
     return {
       mssg: "Parqueadero añadido con éxito",
-      selprk: "Seleccione un parqueadero...",
       parqueaderos: [],
       parqueaderoSeleccionado: {},
       idCopropiedad: "",

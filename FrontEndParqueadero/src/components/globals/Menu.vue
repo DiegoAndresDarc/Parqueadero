@@ -2,12 +2,12 @@
   <div id="menuview" class="navuser">
     <div class="field">
       <div class="control">
-        <h1>{{ message }}</h1>
+        <h1 class="menu-label">{{ message }}</h1>
       </div>
     </div>
     <div class="field">
       <div class="control">
-        <aside class="menu-aside">
+        <aside class="menu">
           <ul class="menu-list">
             <li v-for="item in menu" v-bind:key="item.id_menu">
               <a
@@ -20,7 +20,7 @@
                 "
               >
                 {{ item.nombre }}
-                <span class="icon icon-menu i-menu">
+                <span class="icon">
                   <i
                     :class="
                       item.tiene_hijos == 0
@@ -31,7 +31,7 @@
                 </span>
               </a>
               <transition type="slide">
-                <ul class="submenu-list child" v-if="item.mostrar">
+                <ul class="child" v-if="item.mostrar">
                   <li
                     v-for="subitem in loadSubmenu(item.id_menu)"
                     v-bind:key="subitem.id_menu"
