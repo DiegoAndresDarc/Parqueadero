@@ -100,4 +100,12 @@ class Connection
     {
         return $this->clave;
     }
+    //QUERY UPDATE
+    public function query_update($query)
+    {
+        $result = $this->conexion->query($query) or die($this->conexion->error);
+        if ($result)
+            return true;
+        return false;
+    }
 }

@@ -1,9 +1,16 @@
 <template>
   <div class="guard">
     <div class="content">
-      <div class="field">
+      <div class="field" v-if="!turno_iniciado">
         <div class="control">
-          <form @submit.prevent="viewInfoParking">
+          <h2>
+            Para realizar esta función se debe haber iniciado la jornada laboral
+          </h2>
+        </div>
+      </div>
+      <div class="field" v-else>
+        <div class="control">
+          <form @submit.prevent="viewParkingInfo" autocomplete="off">
             <div class="field is-horizontal">
               <div class="field-label is-normal">
                 <label class="label">Código de barras del parqueadero</label>
@@ -99,10 +106,11 @@ export default {
       usuario: {},
       parqueadero: {},
       selected: false,
+      turno_iniciado: false,
     };
   },
   methods: {
-    viewInfoParking() {
+    viewParkingInfo() {
       this.loadParking();
       this.selected = true;
     },
@@ -163,12 +171,16 @@ export default {
         });
     },
     loadVehicles() {
-      var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/select.php";
+      var url =
+        jsonInfo.url_server +
+        jsonInfo.name_app +
+        "/admin/getVehiclesInParking.php";
       this.vehiculos = [];
       var requestObject = {
-        tabla: "vehiculo",
         id_propietario: this.usuario.id,
         id_parqueadero: this.parqueadero.id,
+        fecha_ingreso: "",
+        hora_ingreso: "",
       };
       this.$axios
         .get(url, { params: requestObject })
@@ -176,8 +188,6 @@ export default {
           this.vehiculos = response.data;
           this.vehiculos.forEach((item) => {
             var url = jsonInfo.url_server + jsonInfo.name_app;
-            item.soat = item.soat.replace("..", url);
-            item.carta_propiedad = item.carta_propiedad.replace("..", url);
             item.foto = item.foto.replace("..", url);
           });
         })
@@ -190,7 +200,11 @@ export default {
   beforeCreate() {
     this.$bus.$emit("checkSession", "");
   },
-  created() {},
+  created() {
+    if (this.$session.get("dinero") >= 0) {
+      this.turno_iniciado = true;
+    }
+  },
 };
 </script>
 

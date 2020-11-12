@@ -52,7 +52,7 @@
               </div>
             </div>
           </div>
-          <div class="field is-horizontal">
+          <div class="field is-horizontal" v-if="usuario.length">
             <div class="field-label">
               <label class="label">Usuario del parqueadero</label>
             </div>
@@ -64,7 +64,12 @@
               </div>
             </div>
           </div>
-          <div class="field">
+          <div class="field" v-else>
+            <div class="control">
+              <label class="label">El parqueadero está disponible</label>
+            </div>
+          </div>
+          <div class="field" v-if="vehiculos.length">
             <label class="label">Vehiculo(s) asignados al parqueadero</label>
             <div class="control">
               <img
@@ -123,36 +128,35 @@ export default {
     loadUsers() {
       var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/select.php";
       this.usuario = {};
-      var requestObject = {
-        tabla: "usuario",
-        id: this.parqueaderoSeleccionado.id_usuario,
-        tipo_usuario: "R",
-      };
-      this.$axios
-        .get(url, { params: requestObject })
-        .then((response) => {
-          this.usuario = response.data[0];
-          this.loadVehicles();
-        })
-        .catch((e) => {
-          console.log(e);
-          this.error = true;
-        });
+      if (this.parqueaderoSeleccionado.id_usuario) {
+        var requestObject = {
+          tabla: "usuario",
+          id: this.parqueaderoSeleccionado.id_usuario,
+          tipo_usuario: "R",
+        };
+        this.$axios
+          .get(url, { params: requestObject })
+          .then((response) => {
+            this.usuario = response.data[0];
+            this.loadVehicles();
+          })
+          .catch((e) => {
+            console.log(e);
+            this.error = true;
+          });
+      }
     },
     loadVehicles() {
-      var url =
-        jsonInfo.url_server + jsonInfo.name_app + "/globals/select.php";
+      var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/select.php";
       this.vehiculos = [];
       var requestObject = {
         tabla: "vehiculo",
         id_propietario: this.usuario.id,
         id_parqueadero: this.parqueaderoSeleccionado.id,
       };
-      console.log(requestObject);
       this.$axios
         .get(url, { params: requestObject })
         .then((response) => {
-          console.log(response.data);
           this.vehiculos = response.data;
           this.vehiculos.forEach((item) => {
             var url = jsonInfo.url_server + jsonInfo.name_app;
