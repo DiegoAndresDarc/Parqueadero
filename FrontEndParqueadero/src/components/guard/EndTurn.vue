@@ -58,7 +58,6 @@ export default {
         date.getFullYear() + "/" + date.getMonth() + "/" + date.getDate();
       info.hora_salida =
         date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
-      console.log(info);
       this.$axios
         .post(url, info)
         .then((response) => {
@@ -77,7 +76,8 @@ export default {
     this.$bus.$emit("checkSession", "");
   },
   created() {
-    if (this.$session.get("dinero") >= 0) {
+    var dinero = this.$session.get("dinero");
+    if (dinero && dinero >= 0) {
       this.turno_iniciado = true;
     }
   },

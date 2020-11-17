@@ -88,7 +88,8 @@ export default {
     this.$bus.$emit("checkSession", "");
   },
   created() {
-    if (this.$session.get("dinero") >= 0) {
+    var dinero = this.$session.get("dinero");
+    if (dinero && dinero >= 0) {
       this.turno_iniciado = true;
     } else this.getCash();
   },

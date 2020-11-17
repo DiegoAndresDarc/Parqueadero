@@ -25,6 +25,8 @@ import AddVehicle from '../components/admin/AddVehicle.vue'
 import ModVehicle from '../components/admin/ModVehicle.vue'
 import DelVehicle from '../components/admin/DelVehicle.vue'
 import ViewInfoParking from '../components/admin/ViewInfoParking.vue'
+import SinglePayment from '../components/admin/SinglePayment.vue'
+import MultiplePayment from '../components/admin/MultiplePayment.vue'
 import ModPrincipalData from '../components/client/ModPrincipalData.vue'
 import ModPassword from '../components/client/ModPassword.vue'
 import ViewInfoMyParkings from '../components/client/ViewInfoMyParkings.vue'
@@ -156,6 +158,16 @@ export default new Router({
           path: '/Eliminar-vehiculo',
           name: 'Eliminar-vehiculo',
           component: DelVehicle
+        },
+        {
+          path: '/Pago-individual',
+          name: 'Pago-individual',
+          component: SinglePayment
+        },
+        {
+          path: '/Pago-multiple',
+          name: 'Pago-multiple',
+          component: MultiplePayment
         },
         {
           path: '/Modificar-datos-principales',
