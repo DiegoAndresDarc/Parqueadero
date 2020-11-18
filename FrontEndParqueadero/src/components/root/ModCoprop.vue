@@ -15,7 +15,6 @@
                   <div class="control">
                     <div class="select is-fullwidth">
                       <select v-model="copropSeleccionada">
-                        <option>{{ selectCoprop }}</option>
                         <option
                           v-for="coprop in coprops"
                           :value="coprop"
@@ -133,7 +132,6 @@ export default {
       mssg: "Copropiedad/Conjunto residencial modificado con exito",
       coprops: [],
       copropSeleccionada: {},
-      selectCoprop: "Seleccione una copropiedad...",
       seleccionado: false,
       habilitada: "Si",
       selusuario: "Seleccione un usuario",
