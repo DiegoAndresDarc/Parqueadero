@@ -174,6 +174,25 @@
               </div>
             </div>
             <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label" for="color">Placa del vehículo</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input
+                      id="placa"
+                      class="input"
+                      type="text"
+                      placeholder="placa del vehículo"
+                      v-model="vehiculoSeleccionado.placa"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field is-horizontal">
               <div class="field-label">
                 <label class="label">Fecha de vencimiento del SOAT</label>
               </div>
@@ -311,6 +330,7 @@ export default {
       this.vehiculoSeleccionado.marca = this.vehiculoSeleccionado.marca.toUpperCase();
       this.vehiculoSeleccionado.modelo = this.vehiculoSeleccionado.modelo.toUpperCase();
       this.vehiculoSeleccionado.color = this.vehiculoSeleccionado.color.toUpperCase();
+      this.vehiculoSeleccionado.placa = this.vehiculoSeleccionado.placa.toUpperCase();
       if (this.soat) this.vehiculoSeleccionado.soat = this.soat;
       if (this.cartaPropiedad)
         this.invehiculoSeleccionadofo.carta_propiedad = this.cartaPropiedad;

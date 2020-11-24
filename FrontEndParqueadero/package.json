@@ -1,7 +1,7 @@
 {
   "name": "parqueadero",
-  "description": "A Vue.js project",
-  "version": "1.0.0",
+  "description": "Proyecto de parqueadero para copropiedades",
+  "version": "1.0.1",
   "author": "Brian Botina",
   "license": "MIT",
   "private": true,

@@ -85,10 +85,16 @@ export default {
       this.$axios
         .get(url, { params: param })
         .then((response) => {
-          this.menu = response.data;
-          this.menu.forEach((item) => {
-            item.mostrar = true;
-          });
+          if (typeof response.data === "object") {
+            this.menu = response.data;
+            this.menu.forEach((item) => {
+              item.mostrar = true;
+            });
+          } else {
+            alert(
+              "Hubo un error al obtener el menú, por favor contacte al administrador"
+            );
+          }
         })
         .catch((e) => {
           console.log(e);
@@ -110,7 +116,10 @@ export default {
       }
     },
     logout() {
-      this.$bus.$emit("logout", "");
+      var dinero = this.$session.get("dinero");
+      if (dinero != null) {
+        alert("Debe finalizar el turno antes de salir de la aplicación");
+      } else this.$bus.$emit("logout", "");
     },
     loadCoprop() {
       var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/select.php";

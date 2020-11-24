@@ -112,6 +112,25 @@
             </div>
             <div class="field is-horizontal">
               <div class="field-label is-normal">
+                <label class="label" for="color">Placa del vehículo</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input
+                      id="placa"
+                      class="input"
+                      type="text"
+                      placeholder="placa del vehículo"
+                      v-model="info.placa"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
                 <label class="label">Foto del vehiculo</label>
               </div>
               <div class="field-body">
@@ -120,7 +139,7 @@
                     <input
                       class="file-input"
                       type="file"
-                      accept=".jpeg"
+                      accept=".jpeg,.jpg"
                       @change="getVehicleImg"
                       required
                     />
@@ -225,6 +244,7 @@ export default {
       this.info.id_parqueadero = this.parqueadero.id;
       this.info.marca = this.info.marca.toUpperCase();
       this.info.color = this.info.color.toUpperCase();
+      this.info.placa = this.info.placa.toUpperCase();
       if (this.nombreImagenVehiculo) this.info.foto = this.imagenVehiculo;
       var date = new Date();
       this.info.fecha_entrada =
@@ -235,12 +255,11 @@ export default {
       this.$axios
         .post(url, this.info)
         .then((response) => {
-          console.log(response.data);
           if (response.data == true) {
             alert(this.mssg);
             this.updateParking();
             this.disponible = false;
-            window.print();
+            this.$bus.$emit("print", this.info);
           }
           this.info = {};
           this.nombreImagenVehiculo = "";
@@ -254,12 +273,10 @@ export default {
       this.parqueadero.tabla = "parqueadero";
       this.parqueadero.esta_libre = 0;
       this.parqueadero.esta_asignado = 1;
-      delete this.parqueadero.id_usario;
-      console.log(this.parqueadero);
+      delete this.parqueadero.id_usuario;
       this.$axios
         .post(url, this.parqueadero)
-        .then((response) => {
-        })
+        .then((response) => {})
         .catch((e) => {
           console.log(e);
         });
@@ -269,7 +286,7 @@ export default {
     this.$bus.$emit("checkSession", "");
   },
   created() {
-    if (this.$session.get("dinero") >= 0) {
+    if (this.$session.get("dinero") != null) {
       this.turno_iniciado = true;
     }
   },

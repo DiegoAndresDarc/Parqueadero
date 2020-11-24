@@ -256,7 +256,7 @@
             <div class="field is-horizontal">
               <div class="field-label is-normal">
                 <label class="label"
-                  >Valor del pago por {{ info.tipo_pago_visitante }} en pesos
+                  >Valor del pago para carros por {{ info.tipo_pago_visitante }} en pesos
                   colombianos</label
                 >
               </div>
@@ -267,8 +267,8 @@
                       class="input is-medium"
                       type="number"
                       placeholder="Valor del pago para el periodo seleccionado"
-                      id="valor_pago_visitante"
-                      v-model="info.valor_pago_visitante"
+                      id="valor_pago_carro"
+                      v-model="info.valor_pago_carro"
                       min="0"
                       step="any"
                       required
@@ -280,7 +280,55 @@
             <div class="field is-horizontal">
               <div class="field-label is-normal">
                 <label class="label"
-                  >Tiempo de gracia en {{ info.tipo_pago_visitante }}</label
+                  >Valor del pago para motos por {{ info.tipo_pago_visitante }} en pesos
+                  colombianos</label
+                >
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input
+                      class="input is-medium"
+                      type="number"
+                      placeholder="Valor del pago para el periodo seleccionado"
+                      id="valor_pago_moto"
+                      v-model="info.valor_pago_moto"
+                      min="0"
+                      step="any"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label"
+                  >Valor del pago para bicicletas por {{ info.tipo_pago_visitante }} en pesos
+                  colombianos</label
+                >
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input
+                      class="input is-medium"
+                      type="number"
+                      placeholder="Valor del pago para el periodo seleccionado"
+                      id="valor_pago_bicicleta"
+                      v-model="info.valor_pago_bicicleta"
+                      min="0"
+                      step="any"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label"
+                  >Tiempo de gracia en {{ info.tipo_pago_visitante }}S</label
                 >
               </div>
               <div class="field-body">
@@ -379,25 +427,7 @@ export default {
   data() {
     return {
       mssg: "Copropiedad/Conjunto residencial configurado con éxito",
-      info: {
-        id_copropiedad: "",
-        peso_maximo: "",
-        ejes_maximos: "",
-        dia_arqueo: "",
-        dia_alertas: "",
-        n_parqueaderos_carro: "",
-        n_parqueaderos_moto: "",
-        n_parqueaderos_bicicleta: "",
-        n_parqueaderos_carro_vis: "",
-        n_parqueaderos_moto_vis: "",
-        n_parqueaderos_bicicleta_vis: "",
-        tipo_pago_visitante: "MINUTO",
-        valor_pago_visitante: "",
-        tiempo_gracia: "",
-        encabezado_recibo: "",
-        texto_responsabilidad: "",
-        pie_pagina_recibo: "",
-      },
+      info: {},
       configurado: false,
     };
   },
@@ -448,7 +478,4 @@ export default {
 </script>
 
 <style>
-.label {
-  color: black;
-}
 </style>

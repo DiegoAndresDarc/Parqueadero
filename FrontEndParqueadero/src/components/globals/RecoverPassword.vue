@@ -1,49 +1,56 @@
 <template>
   <div class="recoverPassword">
-    <div class="head">
-      <nav class="navbar"></nav>
-    </div>
-    <div class="box clogin content-recoverPsswd">
+    <div class="content">
       <div class="field">
-        <form @submit.prevent="recoverPassword()" autocomplete="off">
-          <h1 class="subtitle is-size-3">Recuperar contraseña</h1>
-          <div class="field">
-            <label class="label">Digite el correo electrónico asociado a la cuenta</label>
-            <div class="control">
-              <input
-                class="input is-medium"
-                type="email"
-                placeholder="Correo electrónico"
-                id="email"
-                required
-              />
-            </div>
-          </div>
-          <div class="field">
-            <div class="control">
-              <transition name="slide">
-                <p
-                  v-if="success"
-                  class="help is-success is-medium"
-                >Si el correo electrónico digitado está asociado a una cuenta, se le enviará al correo electrónico su nueva contraseña.</p>
-              </transition>
-            </div>
-          </div>
-          <div class="field">
-            <div class="control">
-              <button class="button is-colorcustom">Recuperar contraseña</button>
-            </div>
-          </div>
-        </form>
+        <div class="control">
+          <h1 class="title">Recuperar contraseña</h1>
+        </div>
       </div>
       <div class="field">
         <div class="control">
-          <button class="button is-colorcustom" v-on:click="cancelar">Cancelar</button>
+          <form @submit.prevent="recoverPassword()" autocomplete="off">
+            <div class="field">
+              <label class="label"
+                >Digite el correo electrónico asociado a la cuenta</label
+              >
+              <div class="control">
+                <input
+                  class="input is-medium"
+                  type="email"
+                  placeholder="Correo electrónico"
+                  id="email"
+                  required
+                />
+              </div>
+            </div>
+            <div class="field">
+              <div class="control">
+                <transition name="slide">
+                  <p v-if="success" class="help is-success is-medium">
+                    Si el correo electrónico digitado está asociado a una
+                    cuenta, se le enviará al correo electrónico su nueva
+                    contraseña.
+                  </p>
+                </transition>
+              </div>
+            </div>
+            <div class="field">
+              <div class="control">
+                <button class="button is-link is-fullwidth">
+                  Recuperar contraseña
+                </button>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
-    </div>
-    <div class="foot">
-      <nav class="navbar"></nav>
+      <div class="field">
+        <div class="control">
+          <button class="button is-link is-fullwidth" v-on:click="cancelar">
+            Cancelar
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>

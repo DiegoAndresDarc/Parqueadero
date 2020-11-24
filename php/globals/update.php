@@ -13,8 +13,7 @@ foreach ($data as $clave => $valor) {
     } else if ($clave == 'id') {
         $condicion[$clave] = $valor;
     } else {
-        if (!empty($valor) || $valor >= 0)
-            $datos[$clave] = is_numeric($valor) ? $valor : "'" . $valor . "'";
+        $datos[$clave] = is_numeric($valor) ? $valor : "'" . $valor . "'";
     }
 }
 $response = $connection->update($tabla, $datos, $condicion);

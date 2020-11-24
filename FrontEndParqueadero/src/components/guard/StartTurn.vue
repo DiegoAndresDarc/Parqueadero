@@ -52,7 +52,7 @@ export default {
       this.$axios
         .get(url)
         .then((response) => {
-          if (response.data.length) dinero = response.data[0].dinero_final;
+          if (response.data.length) this.dinero = response.data[0].dinero_final;
         })
         .catch((e) => {
           console.log(e);
@@ -89,7 +89,7 @@ export default {
   },
   created() {
     var dinero = this.$session.get("dinero");
-    if (dinero && dinero >= 0) {
+    if (dinero != null) {
       this.turno_iniciado = true;
     } else this.getCash();
   },

@@ -77,8 +77,9 @@ export default {
   },
   created() {
     var dinero = this.$session.get("dinero");
-    if (dinero && dinero >= 0) {
+    if (dinero != null) {
       this.turno_iniciado = true;
+      this.dinero = dinero;
     }
   },
 };
