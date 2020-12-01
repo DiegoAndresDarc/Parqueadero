@@ -15,7 +15,7 @@
               >
             </div>
             <div class="field-body">
-              <h3>${{ dinero }} COP</h3>
+              <h3>${{ dineroVisual }} COP</h3>
             </div>
           </div>
           <div class="field">
@@ -44,6 +44,7 @@ export default {
       mssg: "Jornada laboral finalizada",
       turno_iniciado: false,
       dinero: 0,
+      dineroVisual: "0",
     };
   },
   methods: {
@@ -55,7 +56,7 @@ export default {
       };
       var date = new Date();
       info.fecha_salida =
-        date.getFullYear() + "/" + date.getMonth() + "/" + date.getDate();
+        date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate();
       info.hora_salida =
         date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
       this.$axios
@@ -80,6 +81,7 @@ export default {
     if (dinero != null) {
       this.turno_iniciado = true;
       this.dinero = dinero;
+      this.dineroVisual = Number(this.dinero).toLocaleString();
     }
   },
 };

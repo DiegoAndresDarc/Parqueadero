@@ -32,7 +32,7 @@
           </form>
         </div>
       </div>
-      <div class="field" v-show="disponible">
+      <div class="field" v-if="disponible">
         <div class="control">
           <form @submit.prevent="goInVisit" autocomplete="off">
             <div class="field is-horizontal">
@@ -172,8 +172,12 @@
 
 <script>
 import jsonInfo from "../../assets/info.json";
+import VisitTicket from "./VisitTicket.vue";
 export default {
   name: "goInVisit",
+  components: {
+    visitTicket: VisitTicket,
+  },
   data() {
     return {
       mssg: "Entrada de visitante exitosa",
@@ -248,10 +252,9 @@ export default {
       if (this.nombreImagenVehiculo) this.info.foto = this.imagenVehiculo;
       var date = new Date();
       this.info.fecha_entrada =
-        date.getFullYear() + "/" + date.getMonth() + "/" + date.getDate();
+        date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate();
       this.info.hora_entrada =
         date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
-      console.log(this.info);
       this.$axios
         .post(url, this.info)
         .then((response) => {
@@ -259,10 +262,19 @@ export default {
             alert(this.mssg);
             this.updateParking();
             this.disponible = false;
-            this.$bus.$emit("print", this.info);
+            alert(
+              "Recuerde que debe imprimir el recibo para entregarselo al visitante"
+            );
+            let routeData = this.$router.resolve({
+              name: "ticket",
+              params: { placa: this.info.placa },
+            });
+            window.open(routeData.href, "_blank");
+            //this.$router.push({});
           }
           this.info = {};
           this.nombreImagenVehiculo = "";
+          this.$bus.$emit("print", "");
         })
         .catch((e) => {
           console.log(e);

@@ -104,7 +104,7 @@ export default {
       };
       var date = new Date();
       info.fecha_salida =
-        date.getFullYear() + "/" + date.getMonth() + "/" + date.getDate();
+        date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate();
       info.hora_salida =
         date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
       this.$axios
@@ -166,7 +166,7 @@ export default {
     this.$bus.$emit("checkSession", "");
   },
   created() {
-    if (this.$session.get("dinero") >= 0) {
+    if (this.$session.get("dinero") != null) {
       this.turno_iniciado = true;
     }
   },

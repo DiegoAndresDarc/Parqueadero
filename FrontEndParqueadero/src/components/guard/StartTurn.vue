@@ -15,7 +15,7 @@
               >
             </div>
             <div class="field-body">
-              <h3>${{ dinero }} COP</h3>
+              <h3>${{ dineroVisual }} COP</h3>
             </div>
           </div>
           <div class="field">
@@ -43,6 +43,7 @@ export default {
     return {
       mssg: "Jornada laboral iniciada",
       dinero: 0,
+      dineroVisual: "0",
       turno_iniciado: false,
     };
   },
@@ -52,7 +53,10 @@ export default {
       this.$axios
         .get(url)
         .then((response) => {
-          if (response.data.length) this.dinero = response.data[0].dinero_final;
+          if (response.data.length) {
+            this.dinero = parseFloat(response.data[0].dinero_final);
+            this.dineroVisual = Number(this.dinero).toLocaleString();
+          }
         })
         .catch((e) => {
           console.log(e);
@@ -67,7 +71,7 @@ export default {
       };
       var date = new Date();
       info.fecha_entrada =
-        date.getFullYear() + "/" + date.getMonth() + "/" + date.getDate();
+        date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate();
       info.hora_entrada =
         date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
       this.$axios

@@ -79,7 +79,7 @@ export default {
       };
       var date = new Date();
       requestObject.fecha_pago =
-        date.getFullYear() + "/" + date.getMonth() + "/" + date.getDate();
+        date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate();
       requestObject.hora_pago =
         date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
       this.$axios
@@ -87,7 +87,7 @@ export default {
         .then((response) => {
           if (response.data == true) {
             alert(this.mssg);
-            this.usuarioSeleccionado={};
+            this.usuarioSeleccionado = {};
           }
         })
         .catch((e) => {

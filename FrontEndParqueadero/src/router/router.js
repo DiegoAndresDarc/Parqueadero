@@ -36,10 +36,10 @@ import GoinVisit from '../components/guard/GoinVisit.vue'
 import GooutVisit from '../components/guard/GooutVisit.vue'
 import StartTurn from '../components/guard/StartTurn.vue'
 import EndTurn from '../components/guard/EndTurn.vue'
+import VisitTicket from '../components/guard/VisitTicket.vue'
 Vue.use(Router);
 
 export default new Router({
-  base: process.env.BASE_URL,
   mode: 'history',
   routes: [{
       path: '/',
@@ -138,7 +138,7 @@ export default new Router({
           path: '/Quitar-un-parqueadero',
           name: 'Quitar-un-parqueadero',
           component: Removeparking
-        },,
+        }, ,
         {
           path: '/Visualizar-parqueadero',
           name: 'Visualizar-parqueadero',
@@ -219,6 +219,12 @@ export default new Router({
     {
       path: '/recoverPassword',
       component: RecoverPassword
+    },
+    {
+      path: '/ticket/:placa',
+      name: 'ticket',
+      component: VisitTicket,
+      props: true
     }
   ]
 });
