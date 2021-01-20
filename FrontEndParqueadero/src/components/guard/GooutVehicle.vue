@@ -110,10 +110,10 @@ export default {
       this.$axios
         .post(url, info)
         .then((response) => {
-          console.log(response.data);
           if (response.data == true) alert(this.mssg);
           this.selected = false;
           this.vehiculos = [];
+          this.updateParking();
         })
         .catch((e) => {
           console.log(e);
@@ -149,7 +149,6 @@ export default {
       this.$axios
         .get(url, { params: requestObject })
         .then((response) => {
-          console.log(response.data);
           this.vehiculos = response.data;
           this.vehiculos.forEach((item) => {
             var url = jsonInfo.url_server + jsonInfo.name_app;
@@ -159,6 +158,19 @@ export default {
         .catch((e) => {
           console.log(e);
           this.error = true;
+        });
+    },
+    updateParking() {
+      var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/update.php";
+      this.parqueadero.tabla = "parqueadero";
+      this.parqueadero.en_uso = 0;
+      this.$axios
+        .post(url, this.parqueadero)
+        .then((response) => {
+          this.parqueadero = {};
+        })
+        .catch((e) => {
+          console.log(e);
         });
     },
   },

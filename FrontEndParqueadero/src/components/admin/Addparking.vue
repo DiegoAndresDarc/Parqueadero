@@ -369,6 +369,7 @@ export default {
   },
   created() {
     this.loadParkingsAmount();
+    for (var i = 0; i < 500; i++);
   },
 };
 </script>

@@ -89,7 +89,7 @@ export default {
         jsonInfo.url_server + jsonInfo.name_app + "/admin/getUserParkings.php";
       this.parqueaderos = [];
       var requestObject = {
-        tabla: "parqueadero",
+        tabla: "usuario_parqueadero",
         id_usuario: this.usuarioSeleccionado.id,
       };
       this.$axios
@@ -126,14 +126,14 @@ export default {
     },
     removeParking(parqueadero) {
       this.loadVehicles(parqueadero);
-      var url =
-        jsonInfo.url_server + jsonInfo.name_app + "/admin/removeParking.php";
-      parqueadero.tabla = "parqueadero";
-      parqueadero.id_usuario = "";
-      parqueadero.esta_libre = 1;
-      parqueadero.esta_asignado = 0;
+      var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/delete.php";
+      var object = {
+        tabla: "usuario_parqueadero",
+        id_usuario: this.usuarioSeleccionado.id,
+        id_parqueadero: parqueadero.id,
+      };
       this.$axios
-        .post(url, parqueadero)
+        .post(url, object)
         .then((response) => {
           if (response.data == true) alert(this.mssg);
           this.loadParkings();

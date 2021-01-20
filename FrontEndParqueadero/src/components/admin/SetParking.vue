@@ -103,9 +103,7 @@ export default {
       this.parqueaderoSeleccionado = {};
       var requestObject = {
         tabla: "parqueadero",
-        id_copropiedad: this.$session.get("id_coprop"),
-        esta_libre: 1,
-        esta_asignado: 0,
+        id_copropiedad: this.$session.get("id_coprop")
       };
       this.$axios
         .get(url, { params: requestObject })
@@ -163,13 +161,14 @@ export default {
         });
     },
     setParking() {
-      var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/update.php";
-      this.parqueaderoSeleccionado.tabla = "parqueadero";
-      this.parqueaderoSeleccionado.id_usuario = this.usuarioSeleccionado.id;
-      this.parqueaderoSeleccionado.esta_libre = 0;
-      this.parqueaderoSeleccionado.esta_asignado = 1;
+      var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/insert.php";
+      var object = {
+        tabla:"usuario_parqueadero",
+        id_usuario:this.usuarioSeleccionado.id,
+        id_parqueadero:this.parqueaderoSeleccionado.id
+      }
       this.$axios
-        .post(url, this.parqueaderoSeleccionado)
+        .post(url, object)
         .then((response) => {
           if (response.data == true) alert(this.mssg);
           this.loadParkings();

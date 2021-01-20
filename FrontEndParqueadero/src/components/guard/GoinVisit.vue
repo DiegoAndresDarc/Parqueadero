@@ -206,11 +206,7 @@ export default {
         .then((response) => {
           this.parqueadero = response.data[0];
           if (this.parqueadero.tipo === "VISITANTE") {
-            if (
-              this.parqueadero.esta_libre == 1 &&
-              this.parqueadero.esta_asignado == 0
-            )
-              this.disponible = true;
+            if (this.parqueadero.en_uso == 0) this.disponible = true;
             else {
               alert("El parqueadero escogido no está disponible");
               this.disponible = false;
@@ -283,12 +279,12 @@ export default {
     updateParking() {
       var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/update.php";
       this.parqueadero.tabla = "parqueadero";
-      this.parqueadero.esta_libre = 0;
-      this.parqueadero.esta_asignado = 1;
-      delete this.parqueadero.id_usuario;
+      this.parqueadero.en_uso = 1;
       this.$axios
         .post(url, this.parqueadero)
-        .then((response) => {})
+        .then((response) => {
+          this.parqueadero = {};
+        })
         .catch((e) => {
           console.log(e);
         });

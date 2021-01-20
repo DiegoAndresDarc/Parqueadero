@@ -97,7 +97,6 @@
                   <div class="control">
                     <div class="select is-fullwidth">
                       <select v-model="usuarioSeleccionado">
-                        <option>{{ selusuario }}</option>
                         <option
                           v-for="usuario in usuarios"
                           :value="usuario"
@@ -134,7 +133,6 @@ export default {
       copropSeleccionada: {},
       seleccionado: false,
       habilitada: "Si",
-      selusuario: "Seleccione un usuario",
       usuarios: [],
       usuarioSeleccionado: {},
     };

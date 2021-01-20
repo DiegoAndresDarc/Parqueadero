@@ -52,21 +52,22 @@
               </div>
             </div>
           </div>
-          <div class="field is-horizontal" v-if="usuario.length">
+          <div class="field is-horizontal" v-if="usuarios.length">
             <div class="field-label">
-              <label class="label">Usuario del parqueadero</label>
+              <label class="label">Usuarios del parqueadero</label>
             </div>
             <div class="field-body">
               <div class="field">
                 <div class="control">
-                  <h3>{{ usuario.nombres }} {{ usuario.apellidos }}</h3>
+                  <ul class="menu-list">
+                    <li v-for="usuario in usuarios" v-bind:key="usuario.id">
+                      <a @click="loadVehicles(usuario)"
+                        >{{ usuario.nombres }} {{ usuario.apellidos }}</a
+                      >
+                    </li>
+                  </ul>
                 </div>
               </div>
-            </div>
-          </div>
-          <div class="field" v-else>
-            <div class="control">
-              <label class="label">El parqueadero está disponible</label>
             </div>
           </div>
           <div class="field" v-if="vehiculos.length">
@@ -96,7 +97,7 @@ export default {
       mssg: "",
       parqueaderos: [],
       parqueaderoSeleccionado: {},
-      usuario: {},
+      usuarios: [],
       usuarioSeleccionado: {},
       vehiculos: [],
       selected: false,
@@ -106,7 +107,6 @@ export default {
     getParkingInfo() {
       this.selected = true;
       this.loadUsers();
-      var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/select.php";
     },
     loadParkings() {
       var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/select.php";
@@ -126,32 +126,30 @@ export default {
         });
     },
     loadUsers() {
-      var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/select.php";
-      this.usuario = {};
-      if (this.parqueaderoSeleccionado.id_usuario) {
-        var requestObject = {
-          tabla: "usuario",
-          id: this.parqueaderoSeleccionado.id_usuario,
-          tipo_usuario: "R",
-        };
-        this.$axios
-          .get(url, { params: requestObject })
-          .then((response) => {
-            this.usuario = response.data[0];
-            this.loadVehicles();
-          })
-          .catch((e) => {
-            console.log(e);
-            this.error = true;
-          });
-      }
+      var url =
+        jsonInfo.url_server +
+        jsonInfo.name_app +
+        "/admin/getUsersofParking.php";
+      this.usuarios = [];
+      var requestObject = {
+        id_parqueadero: this.parqueaderoSeleccionado.id,
+      };
+      this.$axios
+        .get(url, { params: requestObject })
+        .then((response) => {
+          this.usuarios = response.data;
+        })
+        .catch((e) => {
+          console.log(e);
+          this.error = true;
+        });
     },
-    loadVehicles() {
+    loadVehicles(usuario) {
       var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/select.php";
       this.vehiculos = [];
       var requestObject = {
         tabla: "vehiculo",
-        id_propietario: this.usuario.id,
+        id_propietario: usuario.id,
         id_parqueadero: this.parqueaderoSeleccionado.id,
       };
       this.$axios

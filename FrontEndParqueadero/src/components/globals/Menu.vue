@@ -131,10 +131,14 @@ export default {
         .get(url, { params: requestObject })
         .then((response) => {
           this.$session.set("id_coprop", response.data[0].id);
+          this.loadMessages();
         })
         .catch((e) => {
           console.log(e);
         });
+    },
+    loadMessages() {
+      this.$router.push("/Notificaciones");
     },
   },
   beforeCreate() {

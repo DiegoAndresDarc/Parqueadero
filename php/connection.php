@@ -2,16 +2,14 @@
 class Connection
 {
     private $host = "localhost";
-    /*
     private $usuario = "root";
     private $clave = "";
     private $db = "parqueadero";
-    
-    */
+    /*
     private $usuario = "id15437333_root";
     private $clave = 'UtUl/K1HUj$N~jy@';
     private $db = "id15437333_parqueaderocopropiedad";
-    
+    */
     public $conexion;
     public function __construct()
     {

@@ -166,13 +166,28 @@ export default {
       this.$axios
         .post(url, this.registro)
         .then((response) => {
-          console.log(response.data);
           if (response.data == true) alert(this.mssg);
           var dinero = this.$session.get("dinero");
           var pago = parseFloat(this.total.replaceAll(".", ""));
           dinero += pago;
           this.$session.set("dinero", dinero);
           this.encontrado = false;
+          this.updateParking();
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    updateParking() {
+      var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/update.php";
+      var object = {
+        tabla: "parqueadero",
+        id: this.registro.id_parqueadero,
+        en_uso: 0,
+      };
+      this.$axios
+        .post(url, object)
+        .then((response) => {
           this.registro = {};
         })
         .catch((e) => {

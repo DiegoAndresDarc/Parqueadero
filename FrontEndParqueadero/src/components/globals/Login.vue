@@ -3,11 +3,7 @@
     <div class="content-login">
       <div class="box clogin">
         <div class="field">
-          <form
-            @submit.prevent.once="loginUser()"
-            autocomplete="off"
-            name="form"
-          >
+          <form @submit.prevent="loginUser()" autocomplete="off" name="form">
             <h1 class="subtitle is-size-3">Incio de Sesión</h1>
             <div class="field">
               <div class="control has-icons-left">
@@ -121,6 +117,7 @@ export default {
             this.$router.replace({ name: "Home" });
           } else {
             this.invalidData = true;
+            this.info = {};
             this.cleanMessages();
           }
         })
@@ -128,6 +125,7 @@ export default {
           console.log(e);
           this.error = true;
           this.cleanMessages();
+          this.info = {};
         });
     },
     cleanMessages() {
@@ -141,8 +139,7 @@ export default {
       }, 2000);
     },
   },
-  created() {
-  },
+  created() {},
 };
 </script>
 <style>

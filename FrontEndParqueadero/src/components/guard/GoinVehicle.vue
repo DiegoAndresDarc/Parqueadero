@@ -48,17 +48,23 @@
           </div>
           <div class="field is-horizontal">
             <div class="field-label">
-              <label class="label">Usuario del parqueadero</label>
+              <label class="label">Usuarios del parqueadero</label>
             </div>
             <div class="field-body">
               <div class="field">
                 <div class="control">
-                  <h3>{{ usuario.nombres }} {{ usuario.apellidos }}</h3>
+                  <ul class="menu-list">
+                    <li v-for="usuario in usuarios" v-bind:key="usuario.id">
+                      <a @click="loadVehicles(usuario)"
+                        >{{ usuario.nombres }} {{ usuario.apellidos }}</a
+                      >
+                    </li>
+                  </ul>
                 </div>
               </div>
             </div>
           </div>
-          <div class="field">
+          <div class="field" v-if="vehiculos.length">
             <label class="label">Vehiculo(s) asignados al parqueadero</label>
             <div class="control">
               <table class="table is-fullwidth is-bordered is-striped">
@@ -95,6 +101,7 @@
 
 <script>
 import jsonInfo from "../../assets/info.json";
+import moment from "moment";
 export default {
   name: "goInVehicle",
   data() {
@@ -103,7 +110,7 @@ export default {
       fecha: "",
       codigo_barras: "",
       vehiculos: [],
-      usuario: {},
+      usuarios: [],
       parqueadero: {},
       selected: false,
       turno_iniciado: false,
@@ -112,9 +119,17 @@ export default {
   methods: {
     viewParkingInfo() {
       this.loadParking();
-      this.selected = true;
     },
     goInVehicle(vehiculo) {
+      var dateMoment = moment(vehiculo.fecha_vencimiento_soat, "YYYY-MM-DD"),
+        toDayMoment = moment();
+      var diff = dateMoment.diff(toDayMoment, "days");
+      if (diff <= 0) {
+        alert(
+          "El vehiculo tiene el SOAT vencido, por lo cual no se le permite el ingreso"
+        );
+        return;
+      }
       var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/insert.php";
       var info = {
         id_vehiculo: vehiculo.id,
@@ -129,7 +144,10 @@ export default {
         .post(url, info)
         .then((response) => {
           if (response.data == true) alert(this.mssg);
+          this.updateParking();
           this.selected = false;
+          this.usuarios = [];
+          this.vehiculos = [];
         })
         .catch((e) => {
           console.log(e);
@@ -145,42 +163,47 @@ export default {
         .get(url, { params: requestObject })
         .then((response) => {
           this.parqueadero = response.data[0];
-          this.loadUsers();
+          if (this.parqueadero.en_uso == 1) {
+            alert("El parqueadero ya está en uso");
+            this.selected = false;
+            this.parqueadero = {};
+          } else {
+            this.loadUsers();
+            this.selected = true;
+          }
         })
         .catch((e) => {
           console.log(e);
         });
     },
     loadUsers() {
-      var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/select.php";
-      this.usuario = {};
+      var url =
+        jsonInfo.url_server +
+        jsonInfo.name_app +
+        "/admin/getUsersofParking.php";
+      this.usuarios = [];
       var requestObject = {
-        tabla: "usuario",
-        id: this.parqueadero.id_usuario,
-        tipo_usuario: "R",
+        id_parqueadero: this.parqueadero.id,
       };
       this.$axios
         .get(url, { params: requestObject })
         .then((response) => {
-          this.usuario = response.data[0];
-          this.loadVehicles();
+          this.usuarios = response.data;
         })
         .catch((e) => {
           console.log(e);
           this.error = true;
         });
     },
-    loadVehicles() {
+    loadVehicles(usuario) {
       var url =
         jsonInfo.url_server +
         jsonInfo.name_app +
-        "/admin/getVehiclesInParking.php";
+        "/admin/getVehiclesOfParking.php";
       this.vehiculos = [];
       var requestObject = {
-        id_propietario: this.usuario.id,
+        id_propietario: usuario.id,
         id_parqueadero: this.parqueadero.id,
-        fecha_ingreso: "",
-        hora_ingreso: "",
       };
       this.$axios
         .get(url, { params: requestObject })
@@ -194,6 +217,19 @@ export default {
         .catch((e) => {
           console.log(e);
           this.error = true;
+        });
+    },
+    updateParking() {
+      var url = jsonInfo.url_server + jsonInfo.name_app + "/globals/update.php";
+      this.parqueadero.tabla = "parqueadero";
+      this.parqueadero.en_uso = 1;
+      this.$axios
+        .post(url, this.parqueadero)
+        .then((response) => {
+          this.parqueadero = {};
+        })
+        .catch((e) => {
+          console.log(e);
         });
     },
   },
