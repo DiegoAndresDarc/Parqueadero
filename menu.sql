@@ -2,7 +2,7 @@
 -- Host:                         127.0.0.1
 -- Versión del servidor:         10.4.17-MariaDB - mariadb.org binary distribution
 -- SO del servidor:              Win64
--- HeidiSQL Versión:             11.1.0.6116
+-- HeidiSQL Versión:             11.2.0.6213
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -13,7 +13,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 -- Volcando estructura para tabla parqueadero.menu
-DROP TABLE IF EXISTS `menu`;
 CREATE TABLE IF NOT EXISTS `menu` (
   `id_menu` int(11) NOT NULL AUTO_INCREMENT,
   `id_padre` int(11) DEFAULT NULL,
@@ -25,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `menu` (
   KEY `IXFK_Menu_Menu` (`id_padre`),
   CONSTRAINT `FK_Menu_Menu` FOREIGN KEY (`id_padre`) REFERENCES `menu` (`id_menu`) ON DELETE SET NULL ON UPDATE SET NULL,
   CONSTRAINT `CK_Tipo_usuario` CHECK (`tipo_usuario` in ('A','C','G','R'))
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8 COMMENT='Tabla para manejar el arbol de menus de acuerdo al tipo de usuario.';
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8 COMMENT='Tabla para manejar el arbol de menus de acuerdo al tipo de usuario.';
 
 -- Volcando datos para la tabla parqueadero.menu: ~40 rows (aproximadamente)
 DELETE FROM `menu`;
@@ -70,10 +69,11 @@ INSERT INTO `menu` (`id_menu`, `id_padre`, `nombre`, `tipo_usuario`, `tiene_hijo
 	(39, NULL, 'Salida de vehiculo', 'G', 0, NULL),
 	(40, NULL, 'Administrar visitante', 'G', 1, NULL),
 	(41, 40, 'Entrada de visitante', 'G', 0, NULL),
-	(42, 40, 'Salida de visitante', 'G', 0, NULL);
+	(42, 40, 'Salida de visitante', 'G', 0, NULL),
+	(43, NULL, 'Arqueo de caja', 'G', 0, NULL);
 /*!40000 ALTER TABLE `menu` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
-/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;

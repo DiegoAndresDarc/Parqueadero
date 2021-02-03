@@ -37,6 +37,7 @@ import GooutVisit from '../components/guard/GooutVisit.vue'
 import StartTurn from '../components/guard/StartTurn.vue'
 import EndTurn from '../components/guard/EndTurn.vue'
 import VisitTicket from '../components/guard/VisitTicket.vue'
+import ArchBox from '../components/guard/ArchBox.vue'
 import Notifications from '../components/globals/Notifications.vue'
 Vue.use(Router);
 
@@ -219,6 +220,11 @@ export default new Router({
           path: '/Notificaciones',
           name: 'Notificaciones',
           component: Notifications
+        },
+        {
+          path: '/Arqueo-de-caja',
+          name: 'Arqueo-de-caja',
+          component: ArchBox
         }
       ]
     },
