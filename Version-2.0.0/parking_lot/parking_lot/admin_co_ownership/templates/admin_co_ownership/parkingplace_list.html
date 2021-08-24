@@ -1,0 +1,23 @@
+{% extends "base_template.html" %}
+
+{% block content %}
+<div class="nav-left">
+    <h3><a href="{% url 'adminHome' %}">Volver</a></h3>
+</div>
+<h1>ParkingPlace List</h1>
+
+{% if parkingplace_list %}
+<ul>
+
+    {% for parkingplace in parkingplace_list %}
+    <li>
+        <a href="{{ parkingplace.get_absolute_url }}">{{ parkingplace.code }}</a> ({{parkingplace.user_type}})
+    </li>
+    {% endfor %}
+
+</ul>
+
+{% else %}
+<p>There are no parking places in the co-ownership.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends "base_template.html" %}
+
+{% block content %}
+<div class="nav-left">
+    <h3><a href="{% url 'securityGuardHome' %}">Volver</a></h3>
+</div>
+<h2>The total to pay is: ${{money}} pesos</h2>
+<a href="{% url 'makePayment' pk=pk money=money %}"><input type="button" value="Make the payment"></a>
+{% endblock %}

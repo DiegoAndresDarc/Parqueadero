@@ -1,0 +1,10 @@
+{% extends "base_template.html" %}
+
+{% block content %}
+
+<div class="nav-left">
+    <h3><a href="{% url 'adminHome' %}">Volver</a></h3>
+</div>
+<h1>Payment for: {{inhabitant}} </h1>
+<p>Payment has been successful</p>
+{% endblock %}

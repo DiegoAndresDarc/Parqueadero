@@ -1,0 +1,26 @@
+{% extends "base_template.html" %}
+
+{% block content %}
+<div class="nav-left">
+    <h3><a href="{% url 'securityGuardHome' %}">Volver</a></h3>
+</div>
+{% if action == 'entry' %}
+<h2>The entry of the vehicle has been successful</h2>
+{% elif action == 'departure' %}
+<h2>The departure of the vehicle has been successful</h2>
+{% elif action == 'in use' %}
+<h2>The parking lot is already in use</h2>
+{% elif action == 'not in use' %}
+<h2>The parking lot does not register being in use</h2>
+{% elif action == 'visitor not registered' %}
+<h2>The visitor is not yet registered </h2>
+{% elif action == 'not entry' %}
+<h2>The vehicle does not register entry </h2>
+{% elif action == 'soat is due' %}
+<h2>The vehicle is not allowed entry, it has expired soat </h2>
+{% elif action == 'not up to date' %}
+<h2>The owner of the vehicle is not up to date with the parking payment </h2>
+{% else %}
+<h2>There was an unexpected error. Please try again </h2>
+{% endif %}
+{% endblock %}

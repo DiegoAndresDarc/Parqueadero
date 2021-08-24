@@ -1,0 +1,23 @@
+{% extends "base_template.html" %}
+
+{% block content %}
+<div class="nav-left">
+    <h3><a href="{% url 'adminHome' %}">Volver</a></h3>
+</div>
+<h1>Inhabitant List</h1>
+
+{% if inhabitant_list %}
+<ul>
+
+    {% for inhabitant in inhabitant_list %}
+    <li>
+        <a href="{{ inhabitant.get_absolute_url }}">{{ inhabitant.first_name }}</a> ({{inhabitant.last_name}})
+    </li>
+    {% endfor %}
+
+</ul>
+
+{% else %}
+<p>There are no inhabitants in the co-ownership.</p>
+{% endif %}
+{% endblock %}
