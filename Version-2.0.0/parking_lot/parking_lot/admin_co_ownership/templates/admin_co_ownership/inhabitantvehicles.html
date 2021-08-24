@@ -1,0 +1,39 @@
+{% extends "base_template.html" %}
+
+{% block content %}
+<div class="nav-left">
+    <h3><a href="{% url 'adminHome' %}">Volver</a></h3>
+</div>
+<h1>Select a vehicle:</h1>
+
+{% if inhabitantvehicle_list %}
+<ul>
+
+    {% for inhabitantvehicle in inhabitantvehicle_list %}
+    {% if action == 'set' %}
+    {% if inhabitantvehicle.parking_place is None %}
+    <li>
+        <a href="{% url 'vehicleStParkingPlace' pk=inhabitantvehicle.id %}">{{inhabitantvehicle.brand}} {{inhabitantvehicle.model}}
+            {{inhabitantvehicle.color}}</a> ({{inhabitantvehicle.owner}})
+    </li>
+    {% else %}
+    <p>There are no vehicles without parking place in the co-ownership.</p>
+    {% endif %}
+    {% else %}
+    {% if inhabitantvehicle.parking_place is not None %}
+    <li>
+        <a href="{% url 'vehicleRmParkingPlace' pk=inhabitantvehicle.id %}">{{ inhabitantvehicle.brand }} {{inhabitantvehicle.model}}
+            {{inhabitantvehicle.color}}</a> ({{inhabitantvehicle.owner}})
+    </li>
+    {% else %}
+    <p>There are no vehicles with parking place in the co-ownership.</p>
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+
+</ul>
+
+{% else %}
+<p>There are no vehicles in the co-ownership.</p>
+{% endif %}
+{% endblock %}

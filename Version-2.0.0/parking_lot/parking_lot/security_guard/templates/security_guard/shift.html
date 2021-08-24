@@ -1,0 +1,12 @@
+{% extends "base_template.html" %}
+
+{% block content %}
+<div class="nav-left">
+    <h3><a href="{% url 'securityGuardHome' %}">Volver</a></h3>
+</div>
+{% if action == 'start' %}
+<h2>Shift started with ${{money}} pesos</h2>
+{% else %}
+<h2>Shift ended with ${{money}} pesos</h2>
+{% endif %}
+{% endblock %}

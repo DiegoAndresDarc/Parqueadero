@@ -1,0 +1,23 @@
+{% extends "base_template.html" %}
+
+{% block content %}
+<div class="nav-left">
+    <h3><a href="{% url 'adminHome' %}">Volver</a></h3>
+</div>
+<h1>Security Guard List</h1>
+
+{% if securityguard_list %}
+<ul>
+
+    {% for securityguard in securityguard_list %}
+    <li>
+        <a href="{% url 'delSecurityGuard' pk=securityguard.pk %}">{{ securityguard.user }}</a>
+    </li>
+    {% endfor %}
+
+</ul>
+
+{% else %}
+<p>There are no apartments in the co-ownership.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base_template.html" %}
+
+{% block sidebar %}
+<li><a>Configuración</a></li>
+{% if not configured %}
+<li><a href="{% url 'setConfig' %}">Añadir</a></li>
+{% else %}
+<li><a href="{% url 'modConfig' pk=id_configuration %}">Modificar</a></li>
+<li><a href="{% url 'delConfig' pk=id_configuration %}">Eliminar</a></li>
+{% endif %}
+<li><a>Apartamentos</a></li>
+<li><a href="{% url 'addApto' %}">Añadir</a></li>
+<li><a href="{% url 'apartments' %}">Modificar/Eliminar</a></li>
+<li><a>Residentes</a></li>
+<li><a href="{% url 'addInhabitant' %}">Añadir</a></li>
+<li><a href="{% url 'inhabitants' %}">Modificar/Eliminar</a></li>
+<li><a>Parqueaderos</a></li>
+<li><a href="{% url 'addParkingPlace' %}">Añadir</a></li>
+<li><a href="{% url 'parkingPlaces' %}">Modificar/Eliminar</a></li>
+<li><a href="{% url 'setParkingPlace' %}">Asignar</a></li>
+<li><a href="{% url 'removeParkingPlace' %}">Quitar</a></li>
+<li><a>Vehículos</a></li>
+<li><a href="{% url 'addInhabitantVehicle' %}">Añadir</a></li>
+<li><a href="{% url 'vehicles' %}">Modificar/Eliminar</a></li>
+<li><a>Pagos</a></li>
+<li><a href="{% url 'addIPayment' %}">Individual</a></li>
+<li><a href="{% url 'addMPayment' %}">Multiple</a></li>
+<li><a>Guardia de seguridad</a></li>
+<li><a href="{% url 'addSecurityGuard' %}">Crear</a></li>
+<li><a href="{% url 'securityGuards' %}">Eliminar</a></li>
+<li><a href="{% url 'logout'%}">Logout</a></li>
+{% endblock %}

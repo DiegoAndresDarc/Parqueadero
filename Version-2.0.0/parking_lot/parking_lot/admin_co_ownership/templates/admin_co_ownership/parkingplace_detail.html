@@ -1,0 +1,17 @@
+{% extends "base_template.html" %}
+
+{% block content %}
+
+<div class="nav-left">
+    <h3><a href="{% url 'adminHome' %}">Volver</a></h3>
+</div>
+<h1>Code: {{ parkingplace.code }} </h1>
+<p>Used for: {% if parkingplace.user_type == 'H' %}Residents{% else %}Visitors{% endif %}</p>
+<div>
+    <h3>Acciones:</h3>
+    <ul>
+        <li><a href="{% url 'modParkingPlace' pk=parkingplace.id %}">Modificar</a></li>
+        <li><a href="{% url 'delParkingPlace' pk=parkingplace.id %}">Eliminar</a></li>
+    </ul>
+</div>
+{% endblock %}

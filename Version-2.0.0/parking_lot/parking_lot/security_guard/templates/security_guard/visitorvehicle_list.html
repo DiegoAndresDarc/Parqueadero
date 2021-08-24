@@ -1,0 +1,30 @@
+{% extends "base_template.html" %}
+
+{% block content %}
+<div class="nav-left">
+    <h3><a href="{% url 'securityGuardHome' %}">Volver</a></h3>
+</div>
+<h1>Visitor Vehicles List</h1>
+
+{% if visitorvehicle_list %}
+<ul>
+
+    {% for visitorvehicle in visitorvehicle_list %}
+    <li>
+        {% if action == 'entry' %}
+        <a href="{% url 'barcodeVEntry' pk=visitorvehicle.id %}">{{ visitorvehicle.brand }} {{ visitorvehicle.model }}
+            {{ visitorvehicle.color }}</a> Plate: ({{visitorvehicle.plate}})
+        {% else %}
+        <a href="{% url 'departureVisitorVehicle' pk=visitorvehicle.id %}">{{ visitorvehicle.brand }} {{ visitorvehicle.model }}
+            {{ visitorvehicle.color }}</a> Plate: ({{visitorvehicle.plate}})
+        {% endif %}
+    </li>
+    {% endfor %}
+
+</ul>
+
+{% else %}
+<p>There are no vehicles for the visitor.</p>
+{% endif %}
+<a href="{% url 'createVisitorVehicle' pk=pk %}"><input type="button" value="Add new vehicle"></a>
+{% endblock %}

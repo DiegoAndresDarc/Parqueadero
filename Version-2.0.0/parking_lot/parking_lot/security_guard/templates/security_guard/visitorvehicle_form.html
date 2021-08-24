@@ -1,0 +1,17 @@
+{% extends "base_template.html" %}
+
+{% block content %}
+
+<div class="nav-left">
+    <h3><a href="{% url 'securityGuardHome' %}">Volver</a></h3>
+</div>
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <table>
+        {{ form.as_table }}
+    </table>
+    <input type="submit" value="Submit"/>
+
+</form>
+
+{% endblock %}

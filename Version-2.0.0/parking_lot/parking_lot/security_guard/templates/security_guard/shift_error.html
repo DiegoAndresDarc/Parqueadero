@@ -1,0 +1,14 @@
+{% extends "base_template.html" %}
+
+{% block content %}
+<div class="nav-left">
+    <h3><a href="{% url 'securityGuardHome' %}">Volver</a></h3>
+</div>
+{% if action == 'start' %}
+<h2>The shift has already started. Please finish the previous shift</h2>
+{% elif action == 'end' %}
+<h2>The shift has already ended. Please start a new shift</h2>
+{% else %}
+<h2>There is no shift started</h2>
+{% endif %}
+{% endblock %}

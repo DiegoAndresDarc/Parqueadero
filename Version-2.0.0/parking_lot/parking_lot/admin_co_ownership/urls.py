@@ -1,0 +1,40 @@
+from django.conf.urls import url
+
+from . import views
+
+
+urlpatterns = [
+    url(r'^$', views.admin_home, name="adminHome"),
+    url(r'^config/set/$', views.set_configuration, name="setConfig"),
+    url(r'^config/(?P<pk>\d+)/modify/$', views.update_configuration, name="modConfig"),
+    url(r'^config/(?P<pk>\d+)/delete/$', views.ConfigurationDelete.as_view(), name="delConfig"),
+    url(r'^apartments/create/$', views.create_apartment, name="addApto"),
+    url(r'^apartments/list/$', views.ApartmentListView.as_view(), name="apartments"),
+    url(r'^apartments/apartment/(?P<pk>\d+)/$', views.ApartmentDetailView.as_view(), name="apartment-detail"),
+    url(r'^apartments/apartment/(?P<pk>\d+)/modify/$', views.ApartmentUpdate.as_view(), name="modApto"),
+    url(r'^apartments/apartment/(?P<pk>\d+)/delete/$', views.ApartmentDelete.as_view(), name="delApto"),
+    url(r'^inhabitants/create/$', views.InhabitantCreate.as_view(), name="addInhabitant"),
+    url(r'^inhabitants/list/$', views.InhabitantListView.as_view(), name="inhabitants"),
+    url(r'^inhabitants/inhabitant/(?P<pk>\d+)/$', views.InhabitantDetailView.as_view(), name="inhabitant-detail"),
+    url(r'^inhabitants/inhabitant/(?P<pk>\d+)/modify/$', views.InhabitantUpdate.as_view(), name="modInhabitant"),
+    url(r'^inhabitants/inhabitant/(?P<pk>\d+)/delete/$', views.InhabitantDelete.as_view(), name="delInhabitant"),
+    url(r'^parking-places/create/$', views.create_parking_place, name="addParkingPlace"),
+    url(r'^parking-places/list/$', views.ParkingPlaceListView.as_view(), name="parkingPlaces"),
+    url(r'^parking-places/parking-place/(?P<pk>\d+)/$', views.ParkingPlaceDetailView.as_view(), name="parking-place-detail"),
+    url(r'^parking-places/parking-place/(?P<pk>\d+)/modify/$', views.ParkingPlaceUpdate.as_view(), name="modParkingPlace"),
+    url(r'^parking-places/parking-place/(?P<pk>\d+)/delete/$', views.ParkingPlaceDelete.as_view(), name="delParkingPlace"),
+    url(r'^parking-places/set-parking-place/$', views.inhabitant_vehicles, {'action': 'set'}, name="setParkingPlace"),
+    url(r'^parking-places/set-parking-place/vehicle/(?P<pk>\d+)/$', views.SetParkingPlace.as_view(), name="vehicleStParkingPlace"),
+    url(r'^parking-places/remove-parking-place/$', views.inhabitant_vehicles, {'action': 'remove'}, name="removeParkingPlace"),
+    url(r'^parking-places/remove-parking-place/vehicle/(?P<pk>\d+)/$', views.remove_parking_place_to_vehicle, name="vehicleRmParkingPlace"),
+    url(r'^vehicles/create/$', views.create_vehicle, name="addInhabitantVehicle"),
+    url(r'^vehicles/list/$', views.InhabitantVehicleListView.as_view(), name="vehicles"),
+    url(r'^vehicles/vehicle/(?P<pk>\d+)/$', views.InhabitantVehicleDetailView.as_view(), name="vehicle-detail"),
+    url(r'^vehicles/vehicle/(?P<pk>\d+)/modify/$', views.InhabitantVehicleUpdate.as_view(), name="modInhabitantVehicle"),
+    url(r'^vehicles/vehicle/(?P<pk>\d+)/delete/$', views.InhabitantVehicleDelete.as_view(), name="delInhabitantVehicle"),
+    url(r'^payments/individual/$', views.create_payment, name="addIPayment"),
+    url(r'^payments/multiple/$', views.create_payment, name="addMPayment"),
+    url(r'^security-guard/create/$', views.create_security_guard, name="addSecurityGuard"),
+    url(r'^security-guard/list/$', views.SecurityGuardListView.as_view(), name="securityGuards"),
+    url(r'^security-guard/(?P<pk>\d+)/delete/$', views.delete_security_guard, name="delSecurityGuard"),
+]
