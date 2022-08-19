@@ -14,10 +14,10 @@
             <form role="form" method="post" action="{% url 'login' %}">
                 {% csrf_token %}
                 <div class="card-header">
-                    <h5 class="title">Login</h5>
+                    <h5 class="title">Inicio de sesión</h5>
 
                     <h6 class="card-category">
-                        Add your credentials
+                        Ingresa tus credenciales de acceso
                     </h6>
                 </div>
 
@@ -27,7 +27,7 @@
 
                         <div class="col-md-3 px-md-1">
                             <div class="form-group">
-                                <label>Username</label>
+                                <label>Usuario</label>
                                 <input class="form-control" id="username_login" name="username" required="" type="text" value="">
                             </div>
                         </div>
@@ -37,7 +37,7 @@
 
                         <div class="col-md-3 px-md-1">
                             <div class="form-group">
-                                <label>Password</label>
+                                <label>Contraseña</label>
                                 <input class="form-control" id="pwd_login" name="password" required="" type="password" value="">
                             </div>
                         </div>
@@ -46,7 +46,7 @@
 
                 </div>
                 <div class="card-footer">
-                    <button type="submit" name="login" class="btn btn-fill btn-primary">Login</button>
+                    <button type="submit" name="login" class="btn btn-fill btn-primary">Iniciar sesión</button>
                 </div>
 
             </form>

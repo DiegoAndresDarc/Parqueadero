@@ -7,7 +7,6 @@
             CP
           </a>
           <a rel="sponsored noopener noreferrer" class="simple-text logo-normal">
-
             {% if request.user.is_authenticated %}
             {{ co_ownership.name }}
             {% else %}
@@ -136,6 +135,12 @@
               <p>Eliminar</p>
             </a>
           </li>
+            <li>
+              <a href="{% url 'logout' %}" >
+                <i class="tim-icons icon-button-power"></i>
+                <p>Cerrar sesión</p>
+              </a>
+            </li>
 
           {% elif 'security_guards' ==  request.user.groups.all.0.name %}
 
@@ -149,7 +154,7 @@
                   <p>Iniciar</p>
                 </a>
               </li>
-              {% else %}
+            {% else %}
               <li>
                 <a href="{% url 'endShift' %}">
                   <p>Finalizar</p>
@@ -184,13 +189,15 @@
               </a>
             </li>
             {% endif %}
-          {% endif %}
-          <li>
+            {% if not shift_started %}
+              <li>
             <a href="{% url 'logout' %}" >
               <i class="tim-icons icon-button-power"></i>
               <p>Cerrar sesión</p>
             </a>
           </li>
+            {% endif %}
+          {% endif %}
           {% endif %}
                     
         </ul>

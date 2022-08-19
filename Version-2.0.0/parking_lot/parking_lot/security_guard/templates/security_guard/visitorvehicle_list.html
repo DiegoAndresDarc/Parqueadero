@@ -1,30 +1,53 @@
-{% extends "base_template.html" %}
+{% extends "layouts/base.html" %}
+
+{% block title %} Buscar/Registrar Vehículos del visitante {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
-<div class="nav-left">
-    <h3><a href="{% url 'securityGuardHome' %}">Volver</a></h3>
+<div class="row">
+    <div class="col-md-10">
+        <div class="card card-plain">
+            <div class="card-header">
+                <h3 class="title">Vehículos del visitante</h3>
+            </div>
+            <div class="card-body">
+                {% if visitorvehicle_list %}
+                <ul>
+                    {% for visitorvehicle in visitorvehicle_list %}
+                    <li>
+                        {% if action == 'entry' %}
+                        <a href="{% url 'barcodeVEntry' pk=visitorvehicle.id %}">
+                            <p>
+                                Vehículo: {{ visitorvehicle.brand }} {{ visitorvehicle.model }}
+                                {{ visitorvehicle.color }} Placa: ({{visitorvehicle.plate}})
+                            </p>
+                        </a>
+                        {% else %}
+                        <a href="{% url 'departureVisitorVehicle' pk=visitorvehicle.id %}">
+                            <p>
+                                Vehículo: {{ visitorvehicle.brand }} {{ visitorvehicle.model }}
+                                {{ visitorvehicle.color }} Placa: ({{visitorvehicle.plate}})
+                            </p>
+                        </a>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                    <p>No existen vehículos registrados para el visitante.</p>
+                {% endif %}
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'createVisitorVehicle' pk=pk %}"  class="text-primary">
+                    <p>Añadir un nuevo vehiculo</p>
+                </a>
+                <a href="{% url 'securityGuardHome' %}" class="text-primary">
+                    <p>Cancelar</p>
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
-<h1>Visitor Vehicles List</h1>
-
-{% if visitorvehicle_list %}
-<ul>
-
-    {% for visitorvehicle in visitorvehicle_list %}
-    <li>
-        {% if action == 'entry' %}
-        <a href="{% url 'barcodeVEntry' pk=visitorvehicle.id %}">{{ visitorvehicle.brand }} {{ visitorvehicle.model }}
-            {{ visitorvehicle.color }}</a> Plate: ({{visitorvehicle.plate}})
-        {% else %}
-        <a href="{% url 'departureVisitorVehicle' pk=visitorvehicle.id %}">{{ visitorvehicle.brand }} {{ visitorvehicle.model }}
-            {{ visitorvehicle.color }}</a> Plate: ({{visitorvehicle.plate}})
-        {% endif %}
-    </li>
-    {% endfor %}
-
-</ul>
-
-{% else %}
-<p>There are no vehicles for the visitor.</p>
-{% endif %}
-<a href="{% url 'createVisitorVehicle' pk=pk %}"><input type="button" value="Add new vehicle"></a>
 {% endblock %}

@@ -57,6 +57,20 @@ def create_visitor(request):
     :param request:
     :return: render
     """
+    security_guard = get_object_or_404(SecurityGuard, user=request.user)
+    co_ownership = security_guard.co_ownership
+    shift_started = False
+    try:
+        last_shift = Shift.objects.latest('id')
+        if last_shift.end_date is None:
+            shift_started = True
+    except Shift.DoesNotExist:
+        pass
+
+    context = {
+        'co_ownership': co_ownership,
+        'shift_started': shift_started,
+    }
     if request.method == 'POST':
 
         # Create a form instance and populate it with data from the request (binding):
@@ -69,8 +83,9 @@ def create_visitor(request):
             visitor.co_ownership = co_ownership
             visitor.save()
             # redirect to a new URL:
-            return HttpResponseRedirect(reverse('visitorVehicles', kwargs={'pk': visitor.pk}))
+            return HttpResponseRedirect(reverse('visitorEntry', kwargs={'pk': visitor.pk}))
             # If this is a GET (or any other method) create the default form.
     else:
         form = CreateVisitorForm()
-    return render(request, 'security_guard/visitor_form.html', {'form': form})
+    context['form'] = form
+    return render(request, 'security_guard/visitor_form.html', context)

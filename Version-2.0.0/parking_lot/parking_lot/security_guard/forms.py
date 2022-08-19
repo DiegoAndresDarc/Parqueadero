@@ -9,7 +9,7 @@ class GetParkingFromBarcodeForm(forms.Form):
 
 
 class GetVisitorFromIdentificationForm(forms.Form):
-    identification = forms.IntegerField()
+    identification = forms.IntegerField(label="Número de identificación")
 
 
 class CreateVisitorForm(ModelForm):

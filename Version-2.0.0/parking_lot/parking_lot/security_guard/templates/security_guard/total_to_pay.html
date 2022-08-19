@@ -1,9 +1,25 @@
-{% extends "base_template.html" %}
+{% extends "layouts/base.html" %}
+
+{% block title %} Pago total {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
-<div class="nav-left">
-    <h3><a href="{% url 'securityGuardHome' %}">Volver</a></h3>
+<div class="row">
+    <div class="col-md-10">
+        <div class="card card-plain">
+            <div class="card-body">
+                <h3 class="title">Valor a cancelar</h3>
+            </div>
+            <div class="card-body">
+                <h4>El valor total a cancelar es de: ${{money}} pesos</h4>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'makePayment' pk=pk money=money %}"><input type="button" class="btn btn-fill btn-primary" value="Realizar el pago"></a>
+                <a href="{% url 'securityGuardHome' %}" class="text-primary">Cancelar</a>
+            </div>
+        </div>
+    </div>
 </div>
-<h2>The total to pay is: ${{money}} pesos</h2>
-<a href="{% url 'makePayment' pk=pk money=money %}"><input type="button" value="Make the payment"></a>
 {% endblock %}

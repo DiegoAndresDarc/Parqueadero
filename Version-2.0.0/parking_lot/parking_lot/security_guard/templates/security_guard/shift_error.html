@@ -1,19 +1,29 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Añadir guardia de seguridad {% endblock %}
+{% block title %} Error en turno {% endblock %}
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
-<div class="nav-left">
-    <h3><a href="{% url 'securityGuardHome' %}">Volver</a></h3>
+<div class="row">
+    <div class="col-md-10">
+        <div class="card card-plain">
+            <div class="card-header">
+                <h3 class="title">Hay un error con el turno del guardia de seguridad</h3>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-danger">
+                    {% if action == 'start' %}
+                    <h3 class="title">El turno ya ha sido iniciado. Por favor termine el turno anterior.</h3>
+                    {% elif action == 'end' %}
+                    <h3 class="title">El turno ya ha sido finalizado. Por favor inicie un nuevo turno.</h3>
+                    {% else %}
+                    <h3 class="title">No existe un turno iniciado.</h3>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-{% if action == 'start' %}
-<h2>The shift has already started. Please finish the previous shift</h2>
-{% elif action == 'end' %}
-<h2>The shift has already ended. Please start a new shift</h2>
-{% else %}
-<h2>There is no shift started</h2>
-{% endif %}
 {% endblock %}

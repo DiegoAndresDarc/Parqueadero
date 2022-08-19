@@ -8,6 +8,7 @@ from django.views.generic import ListView
 from security_guard.models import VisitorVehicle, Visitor
 from security_guard.forms import CreateVisitorVehicleForm
 from . import is_security_guard
+from ..models import Shift, SecurityGuard
 
 
 class VisitorVehicleListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
@@ -24,6 +25,17 @@ class VisitorVehicleListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         action = self.kwargs.get('action', None)
         context['pk'] = owner_id
         context['action'] = action
+        security_guard = get_object_or_404(SecurityGuard, user=self.request.user)
+        co_ownership = security_guard.co_ownership
+        shift_started = False
+        try:
+            last_shift = Shift.objects.latest('id')
+            if last_shift.end_date is None:
+                shift_started = True
+        except Shift.DoesNotExist:
+            pass
+        context['co_ownership'] = co_ownership
+        context['shift_started'] = shift_started
         return context
 
     def test_func(self):
@@ -39,6 +51,21 @@ def create_visitor_vehicle(request, pk):
     :return: render
     """
     owner = get_object_or_404(Visitor, pk=pk)
+    security_guard = get_object_or_404(SecurityGuard, user=request.user)
+    co_ownership = security_guard.co_ownership
+    shift_started = False
+    try:
+        last_shift = Shift.objects.latest('id')
+        if last_shift.end_date is None:
+            shift_started = True
+    except Shift.DoesNotExist:
+        pass
+
+    context = {
+        'co_ownership': co_ownership,
+        'shift_started': shift_started,
+        'pk': pk
+    }
     if request.method == 'POST':
 
         # Create a form instance and populate it with data from the request (binding):
@@ -52,4 +79,5 @@ def create_visitor_vehicle(request, pk):
             return HttpResponseRedirect(reverse('barcodeVEntry', kwargs={'pk': visitor_vehicle.id}))
     else:
         form = CreateVisitorVehicleForm()
-    return render(request, 'security_guard/visitorvehicle_form.html', {'form': form, 'pk': pk})
+    context['form'] = form
+    return render(request, 'security_guard/visitorvehicle_form.html', context)
