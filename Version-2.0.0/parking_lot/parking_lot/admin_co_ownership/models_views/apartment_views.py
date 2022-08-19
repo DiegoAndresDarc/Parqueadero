@@ -8,6 +8,7 @@ from django.views.generic import ListView, DetailView, UpdateView, DeleteView
 from admin_co_ownership.forms import CreateApartmentForm
 from admin_co_ownership.models import CoOwnership, Apartment
 from . import is_admins_co_ownerships
+from ..models import Configuration
 
 
 @login_required
@@ -17,13 +18,14 @@ def create_apartment(request):
     :param request:
     :return: render
     """
+    co_ownership = get_object_or_404(CoOwnership, administrator=request.user)
+    context = {}
     if request.method == 'POST':
 
         # Create a form instance and populate it with data from the request (binding):
         form = CreateApartmentForm(request.POST)
         # Check if the form is valid:
         if form.is_valid():
-            co_ownership = get_object_or_404(CoOwnership, administrator=request.user)
             apartment = form.save(commit=False)
             apartment.co_ownership = co_ownership
             apartment.save()
@@ -32,7 +34,14 @@ def create_apartment(request):
             # If this is a GET (or any other method) create the default form.
     else:
         form = CreateApartmentForm()
-    return render(request, 'admin_co_ownership/apartment_form.html', {'form': form})
+        configuration = Configuration.objects.filter(co_ownership=co_ownership)
+        context = {
+            'co_ownership': co_ownership,
+            'configured': len(configuration) > 0,
+            'id_configuration': configuration[0].id if len(configuration) else 0,
+            'form': form
+        }
+    return render(request, 'admin_co_ownership/apartment_form.html', context)
 
 
 class ApartmentListView(LoginRequiredMixin, UserPassesTestMixin, ListView):

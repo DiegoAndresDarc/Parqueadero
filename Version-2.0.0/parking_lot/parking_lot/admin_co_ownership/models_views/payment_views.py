@@ -7,6 +7,7 @@ from admin_co_ownership.models import Inhabitant, InhabitantPayments, CoOwnershi
 from admin_co_ownership.forms import InhabitantPaymentForm
 
 from . import is_admins_co_ownerships
+from ..models import Configuration
 
 
 @login_required
@@ -33,5 +34,12 @@ def create_payment(request):
             # If this is a GET (or any other method) create the default form.
     else:
         form = InhabitantPaymentForm(co_ownership_id=co_ownership_id)
-    return render(request, 'admin_co_ownership/inhabitantpayments_form.html', {'form': form})
+        configuration = Configuration.objects.filter(co_ownership=co_ownership)
+        context = {
+            'co_ownership': co_ownership,
+            'configured': len(configuration) > 0,
+            'id_configuration': configuration[0].id if len(configuration) else 0,
+            'form': form
+        }
+    return render(request, 'admin_co_ownership/inhabitantpayments_form.html', context)
 

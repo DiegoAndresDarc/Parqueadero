@@ -11,6 +11,8 @@ from admin_co_ownership.forms import SecurityGuardForm
 from admin_co_ownership.models import CoOwnership
 from security_guard.models import SecurityGuard
 
+from ..models import Configuration
+
 
 @login_required
 @user_passes_test(is_admins_co_ownerships)
@@ -20,13 +22,13 @@ def create_security_guard(request):
     :return:
     """
 
+    co_ownership = get_object_or_404(CoOwnership, administrator=request.user)
     if request.method == 'POST':
 
         # Create a form instance and populate it with data from the request (binding):
         form = SecurityGuardForm(request.POST)
         # Check if the form is valid:
         if form.is_valid():
-            co_ownership = get_object_or_404(CoOwnership, administrator=request.user)
             user = form.save()
             group = Group.objects.get(name='security_guards')
             group.user_set.add(user)
@@ -39,7 +41,14 @@ def create_security_guard(request):
             return HttpResponseRedirect(reverse('adminHome'))
     else:
         form = SecurityGuardForm()
-    return render(request, 'admin_co_ownership/securityguard_form.html', {'form': form})
+        configuration = Configuration.objects.filter(co_ownership=co_ownership)
+        context = {
+            'co_ownership': co_ownership,
+            'configured': len(configuration) > 0,
+            'id_configuration': configuration[0].id if len(configuration) else 0,
+            'form': form
+        }
+    return render(request, 'admin_co_ownership/securityguard_form.html', context)
 
 
 class SecurityGuardListView(LoginRequiredMixin, UserPassesTestMixin, ListView):

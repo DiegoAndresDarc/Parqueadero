@@ -32,6 +32,7 @@ def set_configuration(request):
             # If this is a GET (or any other method) create the default form.
     else:
         form = SetConfigurationForm()
+        print(request)
     return render(request, 'admin_co_ownership/configuration_form.html', {'form': form})
 
 
@@ -44,6 +45,7 @@ def update_configuration(request, pk):
     :return:
     """
     configuration = get_object_or_404(Configuration, pk=pk)
+    context = {}
     if request.method == 'POST':
         # Create a form instance and populate it with data from the request (binding):
         form = ModConfigurationForm(request.POST, instance=configuration)
@@ -55,7 +57,14 @@ def update_configuration(request, pk):
             # If this is a GET (or any other method) create the default form.
     else:
         form = ModConfigurationForm(instance=configuration)
-    return render(request, 'admin_co_ownership/configuration_form.html', {'form': form})
+        co_ownership = get_object_or_404(CoOwnership, administrator=request.user)
+        context = {
+            'co_ownership': co_ownership,
+            'configured': True,
+            'id_configuration': pk,
+            'form': form
+        }
+    return render(request, 'admin_co_ownership/configuration_form.html', context)
 
 
 class ConfigurationDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):

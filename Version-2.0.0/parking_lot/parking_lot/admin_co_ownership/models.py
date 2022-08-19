@@ -130,7 +130,7 @@ class Inhabitant(Person):
     """
 
     email = models.EmailField(null=False, verbose_name="Correo electrónico")
-    apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE, null=False)
+    apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE, null=False, verbose_name="Apartamento")
     responsible = models.BooleanField(null=False, default=False, verbose_name="Es el responsable por el apartamento")
     up_to_date = models.BooleanField(default=False, verbose_name="Al día con pago del parqueadero")
 
@@ -221,7 +221,7 @@ class InhabitantPayments(models.Model):
     """
 
     # Fields
-    inhabitant = models.ForeignKey(Inhabitant, on_delete=models.CASCADE, null=False)
+    inhabitant = models.ForeignKey(Inhabitant, on_delete=models.CASCADE, null=False, verbose_name="Habitante/Residente")
     payment_date = models.DateTimeField(null=False, default=timezone.now, verbose_name='Fecha del pago')
 
     def get_absolute_url(self):

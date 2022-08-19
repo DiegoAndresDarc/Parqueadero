@@ -7,67 +7,188 @@
             CP
           </a>
           <a rel="sponsored noopener noreferrer" class="simple-text logo-normal">
-            Copropiedad
+
+            {% if request.user.is_authenticated %}
+            {{ co_ownership.name }}
+            {% else %}
+            COPROPIEDAD
+            {% endif %}
           </a>
         </div>
 
         <ul class="nav">
         {% if request.user.is_authenticated %}
           {% if 'admins_co_ownerships' ==  request.user.groups.all.0.name %}
-          parte restringida
-          {% endif %}
-          <li class="{% if 'index' in segment %} active {% endif %}">
-            <a href="/">
-              <i class="tim-icons icon-chart-pie-36"></i>
-              <p>Dashboard</p>
-            </a>
-          </li>
-          <li class="{% if 'icons' in segment %} active {% endif %}">
-            <a href="/ui-icons.html">
-              <i class="tim-icons icon-atom"></i>
-              <p>Icons</p>
-            </a>
-          </li>
-          <li class="{% if 'maps' in segment %} active {% endif %}">
-            <a href="/ui-maps.html">
-              <i class="tim-icons icon-pin"></i>
-              <p>Maps</p>
-            </a>
-          </li>
-          <li class="{% if 'notifications' in segment %} active {% endif %}">
-            <a href="/ui-notifications.html">
-              <i class="tim-icons icon-bell-55"></i>
-              <p>Notifications</p>
-            </a>
-          </li>
-          <li class="{% if 'page-user' in segment %} active {% endif %}">
-            <a href="/page-user.html">
+            <li class="">
+                <i class="tim-icons icon-chart-pie-36"></i>
+                <p>Configuración</p>
+            </li>
+            {% if not configured %}
+            <li class="">
+              <a href="{% url 'setConfig' %}">
+                <p>Añadir</p>
+              </a>
+            </li>
+            {% else %}
+            <li class="">
+              <a href="{% url 'modConfig' pk=id_configuration %}">
+                <p>Modificar</p>
+              </a>
+            </li>
+            <li class="">
+              <a href="{% url 'delConfig' pk=id_configuration %}">
+                <p>Eliminar</p>
+              </a>
+            </li>
+            {% endif %}
+            <li class="">
+                <i class="tim-icons icon-atom"></i>
+                <p>Apartamentos</p>
+            </li>
+            <li class="">
+              <a href="{% url 'addApto' %}">
+              <p>Añadir</p>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'apartments' %}">
+                <p>Modificar/Eliminar</p>
+              </a>
+            </li>
+
+            <li>
               <i class="tim-icons icon-single-02"></i>
-              <p>User Profile</p>
-            </a>
-          </li>
-          <li class="{% if 'tables' in segment %} active {% endif %}">
-            <a href="/ui-tables.html">
+              <p>Residentes</p>
+            </li>
+            <li>
+              <a href="{% url 'addInhabitant' %}">
+                <p>Añadir</p>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'inhabitants' %}">
+                <p>Modificar/Eliminar</p>
+              </a>
+            </li>
+            <li>
+              <i class="tim-icons icon-bell-55"></i>
+              <p>Parqueaderos</p>
+            </li>
+            <li>
+              <a href="{% url 'addParkingPlace' %}">
+                <p>Añadir</p>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'parkingPlaces' %}">
+                <p>Modificar/Eliminar</p>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'setParkingPlace' %}">
+                <p>Asignar</p>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'removeParkingPlace' %}">
+                <p>Quitar</p>
+              </a>
+            </li>
+            <li>
+              <i class="tim-icons icon-pin"></i>
+              <p>Vehículos</p>
+            </li>
+            <li>
+              <a href="{% url 'addInhabitantVehicle' %}">
+                <p>Añadir</p>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'vehicles' %}">
+                <p>Modificar/Eliminar</p>
+              </a>
+            </li>
+            <li>
               <i class="tim-icons icon-puzzle-10"></i>
-              <p>Table List</p>
-            </a>
-          </li>
-          <li class="{% if 'typography' in segment %} active {% endif %}">
-            <a href="/ui-typography.html">
+              <p>Pagos</p>
+            </li>
+            <li>
+              <a href="{% url 'addIPayment' %}">
+                <p>Individual</p>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'addMPayment' %}">
+                <p>Multiple</p>
+              </a>
+            </li>
+            <li>
               <i class="tim-icons icon-align-center"></i>
-              <p>Typography</p>
+              <p>Guardia de seguridad</p>
+            </li>
+            <li>
+              <a href="{% url 'addSecurityGuard' %}">
+                <p>Crear</p>
+              </a>
+            </li>
+            <li>
+            <a href="{% url 'securityGuards' %}">
+              <p>Eliminar</p>
             </a>
           </li>
-          <li class="{% if 'rtl-support' in segment %} active {% endif %}">
-            <a href="/page-rtl-support.html">
-              <i class="tim-icons icon-world"></i>
-              <p>RTL Support</p>
-            </a>
-          </li>
+
+          {% elif 'security_guards' ==  request.user.groups.all.0.name %}
+
+            <li>
+              <i class="tim-icons icon-align-center"></i>
+              <p>Turno</p>
+            </li>
+            {% if not shift_started %}
+              <li>
+                <a href="{% url 'startShift' %}">
+                  <p>Iniciar</p>
+                </a>
+              </li>
+              {% else %}
+              <li>
+                <a href="{% url 'endShift' %}">
+                  <p>Finalizar</p>
+                </a>
+              </li>
+              <li>
+                <i class="tim-icons icon-align-center"></i>
+                <p>Residentes</p>
+              </li>
+              <li>
+                <a href="{% url 'barcodeIEntry' %}">
+                  <p>Registrar entrada</p>
+                </a>
+              </li>
+              <li>
+                <a href="{% url 'barcodeIDeparture' %}">
+                  <p>Registrar salida</p>
+                </a>
+              </li>
+              <li>
+                <i class="tim-icons icon-align-center"></i>
+                <p>Visitantes</p>
+              </li>
+              <li>
+                <a href="{% url 'visitorEntry' %}">
+                  <p>Registrar entrada</p>
+                </a>
+              </li>
+              <li>
+              <a href="{% url 'visitorDeparture' %}">
+                <p>Registrar salida</p>
+              </a>
+            </li>
+            {% endif %}
+          {% endif %}
           <li>
             <a href="{% url 'logout' %}" >
               <i class="tim-icons icon-button-power"></i>
-              <p>Logout</p>
+              <p>Cerrar sesión</p>
             </a>
           </li>
           {% endif %}

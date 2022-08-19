@@ -8,6 +8,7 @@ from django.views.generic import ListView, DetailView, UpdateView, DeleteView
 from admin_co_ownership.models import ParkingPlace, CoOwnership
 from admin_co_ownership.forms import CreateParkingPlaceForm
 from . import is_admins_co_ownerships
+from ..models import Configuration
 
 
 @login_required
@@ -17,17 +18,24 @@ def create_parking_place(request):
     :param request:
     :return:
     """
+    co_ownership = get_object_or_404(CoOwnership, administrator=request.user)
     if request.method == 'POST':
         form = CreateParkingPlaceForm(request.POST)
         if form.is_valid():
-            co_ownership = get_object_or_404(CoOwnership, administrator=request.user)
             parking_place = form.save(commit=False)
             parking_place.co_ownership = co_ownership
             parking_place.save()
             return HttpResponseRedirect(reverse('adminHome'))
     else:
         form = CreateParkingPlaceForm()
-    return render(request, 'admin_co_ownership/parkingplace_form.html', {'form': form})
+        configuration = Configuration.objects.filter(co_ownership=co_ownership)
+        context = {
+            'co_ownership': co_ownership,
+            'configured': len(configuration) > 0,
+            'id_configuration': configuration[0].id if len(configuration) else 0,
+            'form': form
+        }
+    return render(request, 'admin_co_ownership/parkingplace_form.html', context)
 
 
 class ParkingPlaceListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
