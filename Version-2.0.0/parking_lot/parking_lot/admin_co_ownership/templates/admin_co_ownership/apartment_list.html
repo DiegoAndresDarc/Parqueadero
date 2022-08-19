@@ -1,23 +1,37 @@
-{% extends "base_template.html" %}
+{% extends "layouts/base.html" %}
+
+{% block title %} Apartamentos {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
-<div class="nav-left">
-    <h3><a href="{% url 'adminHome' %}">Volver</a></h3>
+
+<div class="row">
+    <div class="col-md-10">
+        <div class="card card-plain">
+            <div class="card  card-header">
+                <h4 class="title">Apartamentos</h4>
+            </div>
+            <div class="card-body">
+                {% if apartment_list %}
+                <ul class="">
+                    {% for apartment in apartment_list %}
+                    <li class="">
+                        <a href="{{ apartment.get_absolute_url }}">
+                            <p>Apartamento: {{ apartment.apartment }} (Bloque: {{apartment.block}})</p>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p>No hay apartamentos registrados en la copropiedad.</p>
+                {% endif %}
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'adminHome' %}" class="text-primary">Volver</a>
+            </div>
+        </div>
+    </div>
 </div>
-<h1>Apartment List</h1>
-
-{% if apartment_list %}
-<ul>
-
-    {% for apartment in apartment_list %}
-    <li>
-        <a href="{{ apartment.get_absolute_url }}">{{ apartment.apartment }}</a> ({{apartment.block}})
-    </li>
-    {% endfor %}
-
-</ul>
-
-{% else %}
-<p>There are no apartments in the co-ownership.</p>
-{% endif %}
 {% endblock %}

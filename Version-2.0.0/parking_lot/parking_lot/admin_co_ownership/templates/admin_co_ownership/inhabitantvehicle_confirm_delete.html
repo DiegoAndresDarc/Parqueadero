@@ -1,17 +1,32 @@
-{% extends "base_template.html" %}
+{% extends "layouts/base.html" %}
+
+{% block title %} Eliminar Vehículo {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
 
-<div class="nav-left">
-    <h3><a href="{% url 'adminHome' %}">Volver</a></h3>
+<div class="row">
+    <div class="col-md-10">
+        <div class="card card-plain">
+            <form role="form" action="" method="POST">
+              {% csrf_token %}
+                <div class="card-header">
+                    <h4 class="title">
+                        Eliminar Vehículo
+                    </h4>
+                    <h5 class="card-category">
+                        ¿Estás segur@ de que quieres eliminar el vehículo?
+                    </h5>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" name="Eliminar" class="btn btn-fill btn-primary">Si, Eliminar</button>
+                    <a href="{% url 'adminHome' %}" class="text-primary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
-<h1>Delete Vehicle</h1>
-
-<p>Are you sure you want to delete the Vehicle?</p>
-
-<form action="" method="POST">
-  {% csrf_token %}
-  <input type="submit" action="" value="Yes, delete." />
-</form>
 
 {% endblock %}

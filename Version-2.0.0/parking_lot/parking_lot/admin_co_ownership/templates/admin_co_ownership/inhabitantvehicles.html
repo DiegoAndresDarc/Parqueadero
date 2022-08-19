@@ -1,39 +1,59 @@
-{% extends "base_template.html" %}
+{% extends "layouts/base.html" %}
+
+{% block title %} Eliminar configuración {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
-<div class="nav-left">
-    <h3><a href="{% url 'adminHome' %}">Volver</a></h3>
+
+<div class="row">
+    <div class="col-md-10">
+        <div class="card card-plain">
+            <div class="card-header">
+                <h1>Vehículos</h1>
+            </div>
+            <div class="card-body">
+                {% if inhabitantvehicle_list %}
+                <ul>
+                    {% for inhabitantvehicle in inhabitantvehicle_list %}
+                        {% if action == 'set' %}
+                            {% if inhabitantvehicle.parking_place is None %}
+                                <li>
+                                    <a href="{% url 'vehicleStParkingPlace' pk=inhabitantvehicle.id %}">
+                                        <p>
+                                            (Propietario: {{inhabitantvehicle.owner}}) Vehículo: {{inhabitantvehicle.brand}} {{inhabitantvehicle.model}}
+                                            {{inhabitantvehicle.color}}
+                                        </p>
+                                    </a>
+                                </li>
+                            {% else %}
+                                <p>No existen vehículos sin parqueadero asignado en la copropiedad.</p>
+                            {% endif %}
+                        {% else %}
+                            {% if inhabitantvehicle.parking_place is not None %}
+                                <li>
+                                    <a href="{% url 'vehicleRmParkingPlace' pk=inhabitantvehicle.id %}">
+                                        <p>
+                                            (Propietario: {{inhabitantvehicle.owner}}) Vehículo: {{inhabitantvehicle.brand}} {{inhabitantvehicle.model}}
+                                            {{inhabitantvehicle.color}}
+                                        </p>
+                                    </a>
+                                </li>
+                            {% else %}
+                                <p>No existen vehículos sin parqueadero asignado en la copropiedad.</p>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p>No existen vehículos registrados en la copropiedad.</p>
+                {% endif %}
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'adminHome' %}" class="text-primary">Volver</a>
+            </div>
+        </div>
+    </div>
 </div>
-<h1>Select a vehicle:</h1>
-
-{% if inhabitantvehicle_list %}
-<ul>
-
-    {% for inhabitantvehicle in inhabitantvehicle_list %}
-    {% if action == 'set' %}
-    {% if inhabitantvehicle.parking_place is None %}
-    <li>
-        <a href="{% url 'vehicleStParkingPlace' pk=inhabitantvehicle.id %}">{{inhabitantvehicle.brand}} {{inhabitantvehicle.model}}
-            {{inhabitantvehicle.color}}</a> ({{inhabitantvehicle.owner}})
-    </li>
-    {% else %}
-    <p>There are no vehicles without parking place in the co-ownership.</p>
-    {% endif %}
-    {% else %}
-    {% if inhabitantvehicle.parking_place is not None %}
-    <li>
-        <a href="{% url 'vehicleRmParkingPlace' pk=inhabitantvehicle.id %}">{{ inhabitantvehicle.brand }} {{inhabitantvehicle.model}}
-            {{inhabitantvehicle.color}}</a> ({{inhabitantvehicle.owner}})
-    </li>
-    {% else %}
-    <p>There are no vehicles with parking place in the co-ownership.</p>
-    {% endif %}
-    {% endif %}
-    {% endfor %}
-
-</ul>
-
-{% else %}
-<p>There are no vehicles in the co-ownership.</p>
-{% endif %}
 {% endblock %}

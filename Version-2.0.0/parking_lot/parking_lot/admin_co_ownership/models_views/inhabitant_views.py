@@ -36,12 +36,30 @@ class InhabitantListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     def test_func(self):
         return is_admins_co_ownerships(self.request.user)
 
+    def get_context_data(self, *args, **kwargs):
+        context = super(InhabitantListView, self).get_context_data(*args, **kwargs)
+        co_ownership = get_object_or_404(CoOwnership, administrator=self.request.user)
+        context['co_ownership'] = co_ownership
+        configuration = Configuration.objects.filter(co_ownership=co_ownership)
+        context['configured'] = len(configuration) > 0
+        context['id_configuration'] = configuration[0].id if len(configuration) else 0
+        return context
+
 
 class InhabitantDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     model = Inhabitant
 
     def test_func(self):
         return is_admins_co_ownerships(self.request.user)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(InhabitantDetailView, self).get_context_data(*args, **kwargs)
+        co_ownership = get_object_or_404(CoOwnership, administrator=self.request.user)
+        context['co_ownership'] = co_ownership
+        configuration = Configuration.objects.filter(co_ownership=co_ownership)
+        context['configured'] = len(configuration) > 0
+        context['id_configuration'] = configuration[0].id if len(configuration) else 0
+        return context
 
 
 class InhabitantUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
@@ -51,6 +69,15 @@ class InhabitantUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def test_func(self):
         return is_admins_co_ownerships(self.request.user)
 
+    def get_context_data(self, *args, **kwargs):
+        context = super(InhabitantUpdate, self).get_context_data(*args, **kwargs)
+        co_ownership = get_object_or_404(CoOwnership, administrator=self.request.user)
+        context['co_ownership'] = co_ownership
+        configuration = Configuration.objects.filter(co_ownership=co_ownership)
+        context['configured'] = len(configuration) > 0
+        context['id_configuration'] = configuration[0].id if len(configuration) else 0
+        return context
+
 
 class InhabitantDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Inhabitant
@@ -58,5 +85,14 @@ class InhabitantDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
     def test_func(self):
         return is_admins_co_ownerships(self.request.user)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(InhabitantDelete, self).get_context_data(*args, **kwargs)
+        co_ownership = get_object_or_404(CoOwnership, administrator=self.request.user)
+        context['co_ownership'] = co_ownership
+        configuration = Configuration.objects.filter(co_ownership=co_ownership)
+        context['configured'] = len(configuration) > 0
+        context['id_configuration'] = configuration[0].id if len(configuration) else 0
+        return context
 
 

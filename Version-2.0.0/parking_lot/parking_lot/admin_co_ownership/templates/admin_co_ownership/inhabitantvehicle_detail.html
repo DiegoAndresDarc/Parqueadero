@@ -1,17 +1,38 @@
-{% extends "base_template.html" %}
+{% extends "layouts/base.html" %}
+
+{% block title %} Vehículo {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
 
-<div class="nav-left">
-    <h3><a href="{% url 'adminHome' %}">Volver</a></h3>
-</div>
-<h1>Vehicle: {{ inhabitantvehicle.brand }} {{ inhabitantvehicle.model }} {{ inhabitantvehicle.color }} </h1>
-<p>Owner: {{ inhabitantvehicle.owner }}</p>
-<div>
-    <h3>Acciones:</h3>
-    <ul>
-        <li><a href="{% url 'modInhabitantVehicle' pk=inhabitantvehicle.id %}">Modificar</a></li>
-        <li><a href="{% url 'delInhabitantVehicle' pk=inhabitantvehicle.id %}">Eliminar</a></li>
-    </ul>
+<div class="row">
+    <div class="col-md-10">
+        <div class="card card-plain">
+            <div class="card-header">
+                <h4 class="title">Vehículo: {{ inhabitantvehicle.brand }} {{ inhabitantvehicle.model }} {{ inhabitantvehicle.color }} </h4>
+                <h2 class="card-category">Propietario: {{ inhabitantvehicle.owner }}</h2>
+            </div>
+            <div class="card-body">
+                <h5 class="title">Acciones:</h5>
+                <ul>
+                    <li>
+                        <a href="{% url 'modInhabitantVehicle' pk=inhabitantvehicle.id %}">
+                            <p>Modificar</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'delInhabitantVehicle' pk=inhabitantvehicle.id %}">
+                            <p>Eliminar</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'vehicles' %}" class="text-primary">Volver</a>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

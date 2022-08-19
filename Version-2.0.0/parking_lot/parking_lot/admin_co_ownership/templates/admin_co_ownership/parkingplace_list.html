@@ -1,23 +1,56 @@
-{% extends "base_template.html" %}
+{% extends "layouts/base.html" %}
+
+{% block title %} Parqueaderos {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
-<div class="nav-left">
-    <h3><a href="{% url 'adminHome' %}">Volver</a></h3>
+
+<div class="row">
+    <div class="col-md-10">
+        <div class="card card-plain">
+            <div class="card-header">
+                <h4 class="title">Parqueaderos</h4>
+            </div>
+            <div class="card-body">
+                {% if parkingplace_list %}
+                    <h5 class="card-category">
+                        Parqueaderos de residentes/habitantes
+                    </h5>
+                    {% for parkingplace in parkingplace_list %}
+                        {% if parkingplace.user_type == 'H' %}
+                            <ul class="">
+                                <li>
+                                    <a href="{{ parkingplace.get_absolute_url }}">
+                                        <p>Código: {{ parkingplace.code }}</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        {% endif %}
+                    {% endfor %}
+                    <h5 class="card-category">
+                        Parqueaderos de visitantes
+                    </h5>
+                    {% for parkingplace in parkingplace_list %}
+                        {% if parkingplace.user_type == 'V' %}
+                            <ul class="">
+                                <li>
+                                    <a href="{{ parkingplace.get_absolute_url }}">
+                                        <p>Código: {{ parkingplace.code }}</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                <p>No hay parqueaderos registrados en la copropiedad.</p>
+                {% endif %}
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'adminHome' %}" class="text-primary">Volver</a>
+            </div>
+        </div>
+    </div>
 </div>
-<h1>ParkingPlace List</h1>
-
-{% if parkingplace_list %}
-<ul>
-
-    {% for parkingplace in parkingplace_list %}
-    <li>
-        <a href="{{ parkingplace.get_absolute_url }}">{{ parkingplace.code }}</a> ({{parkingplace.user_type}})
-    </li>
-    {% endfor %}
-
-</ul>
-
-{% else %}
-<p>There are no parking places in the co-ownership.</p>
-{% endif %}
 {% endblock %}

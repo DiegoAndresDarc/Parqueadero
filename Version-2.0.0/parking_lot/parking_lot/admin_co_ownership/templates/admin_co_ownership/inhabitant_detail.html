@@ -1,16 +1,37 @@
-{% extends "base_template.html" %}
+{% extends "layouts/base.html" %}
+
+{% block title %} Habitante/Residente {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
 
-<div class="nav-left">
-    <h3><a href="{% url 'adminHome' %}">Volver</a></h3>
-</div>
-<h1>Inhabitant: {{ inhabitant.last_name }}, {{inhabitant.first_name}} </h1>
-<div>
-    <h3>Acciones:</h3>
-    <ul>
-        <li><a href="{% url 'modInhabitant' pk=inhabitant.id %}">Modificar</a></li>
-        <li><a href="{% url 'delInhabitant' pk=inhabitant.id %}">Eliminar</a></li>
-    </ul>
+<div class="row">
+    <div class="col-md-10">
+        <div class="card card-plain">
+            <div class="card-header">
+                <h4 class="title">Habitante/Residente: {{ inhabitant.last_name }}, {{inhabitant.first_name}} </h4>
+            </div>
+            <div class="card-body">
+                <h5 class="title">Acciones:</h5>
+                <ul class="">
+                    <li>
+                        <a href="{% url 'modInhabitant' pk=inhabitant.id %}">
+                            <p>Modificar</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'delInhabitant' pk=inhabitant.id %}">
+                            <p>Eliminar</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'inhabitants' %}" class="text-primary">Volver</a>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

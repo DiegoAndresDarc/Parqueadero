@@ -9,7 +9,7 @@
 
 <div class="row">
     <div class="col-md-10">
-        <div class="card  card-plain">
+        <div class="card card-plain">
             <form action="" method="post">
                 {% csrf_token %}
                 <div class="card-header">
@@ -23,7 +23,7 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button type="submit" name="Guardar" class="btn btn-fill btn-primary">Guardar</button>
+                    <button type="submit" name="Realizar Pago" class="btn btn-fill btn-primary">Realizar Pago</button>
                     <a href="{% url 'adminHome' %}" class="text-primary">Cancelar</a>
                 </div>
             </form>

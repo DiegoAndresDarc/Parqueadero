@@ -1,23 +1,38 @@
-{% extends "base_template.html" %}
+{% extends "layouts/base.html" %}
+
+{% block title %} Guardias de seguridad {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
-<div class="nav-left">
-    <h3><a href="{% url 'adminHome' %}">Volver</a></h3>
+
+<div class="row">
+    <div class="col-md-10">
+        <div class="card card-plain">
+            <div class="card  card-header">
+                <h3 class="title">Guardias de seguridad</h3>
+            </div>
+            <div class="card-body">
+                {% if securityguard_list %}
+                    <ul>
+                        {% for securityguard in securityguard_list %}
+                            <li>
+                                <a href="{% url 'delSecurityGuard' pk=securityguard.pk %}">
+                                    <p>{{ securityguard.user.last_name }}, {{ securityguard.user.first_name }} </p>
+                                </a>
+                            </li>
+                        {% endfor %}
+
+                    </ul>
+                {% else %}
+                    <p>No existen guardias de seguridad registrados en la copropiedad.</p>
+                {% endif %}
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'adminHome' %}" class="text-primary">Volver</a>
+            </div>
+        </div>
+    </div>
 </div>
-<h1>Security Guard List</h1>
-
-{% if securityguard_list %}
-<ul>
-
-    {% for securityguard in securityguard_list %}
-    <li>
-        <a href="{% url 'delSecurityGuard' pk=securityguard.pk %}">{{ securityguard.user }}</a>
-    </li>
-    {% endfor %}
-
-</ul>
-
-{% else %}
-<p>There are no apartments in the co-ownership.</p>
-{% endif %}
 {% endblock %}

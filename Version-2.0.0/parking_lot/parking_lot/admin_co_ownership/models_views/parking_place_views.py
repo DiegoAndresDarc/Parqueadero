@@ -49,12 +49,30 @@ class ParkingPlaceListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     def test_func(self):
         return is_admins_co_ownerships(self.request.user)
 
+    def get_context_data(self, *args, **kwargs):
+        context = super(ParkingPlaceListView, self).get_context_data(*args, **kwargs)
+        co_ownership = get_object_or_404(CoOwnership, administrator=self.request.user)
+        context['co_ownership'] = co_ownership
+        configuration = Configuration.objects.filter(co_ownership=co_ownership)
+        context['configured'] = len(configuration) > 0
+        context['id_configuration'] = configuration[0].id if len(configuration) else 0
+        return context
+
 
 class ParkingPlaceDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     model = ParkingPlace
 
     def test_func(self):
         return is_admins_co_ownerships(self.request.user)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(ParkingPlaceDetailView, self).get_context_data(*args, **kwargs)
+        co_ownership = get_object_or_404(CoOwnership, administrator=self.request.user)
+        context['co_ownership'] = co_ownership
+        configuration = Configuration.objects.filter(co_ownership=co_ownership)
+        context['configured'] = len(configuration) > 0
+        context['id_configuration'] = configuration[0].id if len(configuration) else 0
+        return context
 
 
 class ParkingPlaceUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
@@ -65,6 +83,15 @@ class ParkingPlaceUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def test_func(self):
         return is_admins_co_ownerships(self.request.user)
 
+    def get_context_data(self, *args, **kwargs):
+        context = super(ParkingPlaceUpdate, self).get_context_data(*args, **kwargs)
+        co_ownership = get_object_or_404(CoOwnership, administrator=self.request.user)
+        context['co_ownership'] = co_ownership
+        configuration = Configuration.objects.filter(co_ownership=co_ownership)
+        context['configured'] = len(configuration) > 0
+        context['id_configuration'] = configuration[0].id if len(configuration) else 0
+        return context
+
 
 class ParkingPlaceDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = ParkingPlace
@@ -73,4 +100,11 @@ class ParkingPlaceDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         return is_admins_co_ownerships(self.request.user)
 
-
+    def get_context_data(self, *args, **kwargs):
+        context = super(ParkingPlaceDelete, self).get_context_data(*args, **kwargs)
+        co_ownership = get_object_or_404(CoOwnership, administrator=self.request.user)
+        context['co_ownership'] = co_ownership
+        configuration = Configuration.objects.filter(co_ownership=co_ownership)
+        context['configured'] = len(configuration) > 0
+        context['id_configuration'] = configuration[0].id if len(configuration) else 0
+        return context

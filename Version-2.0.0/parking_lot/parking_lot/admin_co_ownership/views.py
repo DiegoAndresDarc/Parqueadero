@@ -41,10 +41,14 @@ def inhabitant_vehicles(request, action):
     """
     co_ownership = get_object_or_404(CoOwnership, administrator=request.user)
     inhabitantvehicle_list = InhabitantVehicle.objects.filter(owner__apartment__co_ownership=co_ownership)
+    configuration = Configuration.objects.filter(co_ownership=co_ownership)
 
     context = {
         'action': action,
-        'inhabitantvehicle_list': inhabitantvehicle_list
+        'inhabitantvehicle_list': inhabitantvehicle_list,
+        'co_ownership': co_ownership,
+        'configured': len(configuration) > 0,
+        'id_configuration': configuration[0].id if len(configuration) else 0
     }
     return render(request, 'admin_co_ownership/inhabitantvehicles.html', context=context)
 

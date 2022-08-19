@@ -181,7 +181,7 @@ class Vehicle(models.Model):
         ordering = ['brand', 'model', 'type']
 
     # Fields
-    parking_place = models.ForeignKey(ParkingPlace, on_delete=models.CASCADE, null=True)
+    parking_place = models.ForeignKey(ParkingPlace, on_delete=models.CASCADE, null=True, verbose_name="Parqueadero")
     brand = models.CharField(max_length=20, null=False, verbose_name="Marca del vehiculo")
     model = models.CharField(max_length=20, null=False, verbose_name="Modelo del vehiculo")
 

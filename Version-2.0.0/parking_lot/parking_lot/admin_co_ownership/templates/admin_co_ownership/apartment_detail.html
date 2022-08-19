@@ -1,17 +1,38 @@
-{% extends "base_template.html" %}
+{% extends "layouts/base.html" %}
+
+{% block title %} Apartamento {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
 
-<div class="nav-left">
-    <h3><a href="{% url 'adminHome' %}">Volver</a></h3>
-</div>
-<h1>Apartment: {{ apartment.apartment }} </h1>
-<p>Block: {{apartment.block}}</p>
-<div>
-    <h3>Acciones:</h3>
-    <ul>
-        <li><a href="{% url 'modApto' pk=apartment.id %}">Modificar</a></li>
-        <li><a href="{% url 'delApto' pk=apartment.id %}">Eliminar</a></li>
-    </ul>
+<div class="row">
+    <div class="col-md-10">
+        <div class="card card-plain">
+            <div class="card-header">
+                <h4 class="title">Apartamento: {{ apartment.apartment }}</h4>
+                <h5 class="title">Bloque: {{apartment.block}}</h5>
+            </div>
+            <div class="card-body">
+                <h3 class="card-category">Acciones:</h3>
+                <ul>
+                    <li>
+                        <a href="{% url 'modApto' pk=apartment.id %}">
+                            <p>Modificar</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'delApto' pk=apartment.id %}">
+                            <p>Eliminar</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'apartments' %}" class="text-primary">Volver</a>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

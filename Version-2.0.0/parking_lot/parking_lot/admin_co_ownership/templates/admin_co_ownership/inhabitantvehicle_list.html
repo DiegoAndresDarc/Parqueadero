@@ -1,24 +1,40 @@
-{% extends "base_template.html" %}
+{% extends "layouts/base.html" %}
+
+{% block title %} Vehículos {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
-<div class="nav-left">
-    <h3><a href="{% url 'adminHome' %}">Volver</a></h3>
+
+<div class="row">
+    <div class="col-md-10">
+        <div class="card card-plain">
+            <div class="card-header">
+                <h3 class="title">Vehículos de los residentes/habitantes</h3>
+            </div>
+            <div class="card-body">
+                {% if inhabitantvehicle_list %}
+                    <ul class="">
+                        {% for inhabitantvehicle in inhabitantvehicle_list %}
+                        <li>
+                            <a href="{{ inhabitantvehicle.get_absolute_url }}">
+                                <p>
+                                    (Propietario: {{inhabitantvehicle.owner}}) Vehículo: {{ inhabitantvehicle.brand }} {{ inhabitantvehicle.model }}
+                                    {{ inhabitantvehicle.color }}
+                                </p>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No existen vehículos registrados en la copropiedad.</p>
+                {% endif %}
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'adminHome' %}" class="text-primary">Volver</a>
+            </div>
+        </div>
+    </div>
 </div>
-<h1>Inhabitant Vehicles List</h1>
-
-{% if inhabitantvehicle_list %}
-<ul>
-
-    {% for inhabitantvehicle in inhabitantvehicle_list %}
-    <li>
-        <a href="{{ inhabitantvehicle.get_absolute_url }}">{{ inhabitantvehicle.brand }} {{ inhabitantvehicle.model }}
-            {{ inhabitantvehicle.color }}</a> ({{inhabitantvehicle.owner}})
-    </li>
-    {% endfor %}
-
-</ul>
-
-{% else %}
-<p>There are no vehicles in the co-ownership.</p>
-{% endif %}
 {% endblock %}
