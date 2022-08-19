@@ -5,7 +5,7 @@ from security_guard.models import Visitor, VisitorVehicle
 
 
 class GetParkingFromBarcodeForm(forms.Form):
-    barcode = forms.CharField(widget=forms.PasswordInput)
+    barcode = forms.CharField(widget=forms.PasswordInput, label="Código de barras carné parqueadero")
 
 
 class GetVisitorFromIdentificationForm(forms.Form):

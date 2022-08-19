@@ -32,7 +32,6 @@ def set_configuration(request):
             # If this is a GET (or any other method) create the default form.
     else:
         form = SetConfigurationForm()
-        print(request)
     return render(request, 'admin_co_ownership/configuration_form.html', {'form': form})
 
 

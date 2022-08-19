@@ -1,26 +1,54 @@
-{% extends "base_template.html" %}
+{% extends "layouts/base.html" %}
+
+{% block title %} Uso de parqueadero {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
-<div class="nav-left">
-    <h3><a href="{% url 'securityGuardHome' %}">Volver</a></h3>
+<div class="row">
+    <div class="col-md-10">
+        <div class="card card-plain">
+            <div class="card-body">
+                {% if action == 'entry' %}
+                <div class="alert alert-success">
+                    <h3 class="title">Registro de entrada del vehículo exitoso.</h3>
+                </div>
+                {% elif action == 'departure' %}
+                <div class="alert alert-success">
+                    <h2 class="title">Registro de salida del vehículo exitoso.</h2>
+                </div>
+                {% elif action == 'in use' %}
+                <div class="alert alert-danger">
+                    <h2 class="title">El parqueadero ya está siendo utilizado.</h2>
+                </div>
+                {% elif action == 'not in use' %}
+                <div class="alert alert-danger">
+                    <h2 class="title">El parqueadero no está habilitado para su uso.</h2>
+                </div>
+                {% elif action == 'visitor not registered' %}
+                <div class="alert alert-danger">
+                    <h2 class="title">El visitante aún no ha sido registrado.</h2>
+                </div>
+                {% elif action == 'not entry' %}
+                <div class="alert alert-danger">
+                    <h2 class="title">El vehículo no registra una entrada.</h2>
+                </div>
+                {% elif action == 'soat is due' %}
+                <div class="alert alert-danger">
+                    <h2 class="title">El vehículo tiene el soat vencido, no se le permite la entrada.</h2>
+                </div>
+                {% elif action == 'not up to date' %}
+                <div class="alert alert-danger">
+                    <h2 class="title">El propietario del vehículo no está al día con el pago del parqueadero.</h2>
+                </div>
+                {% else %}
+                <div class="alert alert-danger">
+                    <h2 class="title">Hubo un error inesperado. Por favor intente nuevamente.</h2>
+                {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-{% if action == 'entry' %}
-<h2>The entry of the vehicle has been successful</h2>
-{% elif action == 'departure' %}
-<h2>The departure of the vehicle has been successful</h2>
-{% elif action == 'in use' %}
-<h2>The parking lot is already in use</h2>
-{% elif action == 'not in use' %}
-<h2>The parking lot does not register being in use</h2>
-{% elif action == 'visitor not registered' %}
-<h2>The visitor is not yet registered </h2>
-{% elif action == 'not entry' %}
-<h2>The vehicle does not register entry </h2>
-{% elif action == 'soat is due' %}
-<h2>The vehicle is not allowed entry, it has expired soat </h2>
-{% elif action == 'not up to date' %}
-<h2>The owner of the vehicle is not up to date with the parking payment </h2>
-{% else %}
-<h2>There was an unexpected error. Please try again </h2>
-{% endif %}
 {% endblock %}

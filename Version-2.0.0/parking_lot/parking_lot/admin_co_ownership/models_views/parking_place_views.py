@@ -19,6 +19,7 @@ def create_parking_place(request):
     :return:
     """
     co_ownership = get_object_or_404(CoOwnership, administrator=request.user)
+    context = {}
     if request.method == 'POST':
         form = CreateParkingPlaceForm(request.POST)
         if form.is_valid():

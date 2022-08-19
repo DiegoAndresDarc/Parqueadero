@@ -6,6 +6,7 @@ from django.urls import reverse
 from security_guard.models import Visitor, SecurityGuard
 from security_guard.forms import GetVisitorFromIdentificationForm, CreateVisitorForm
 from . import is_security_guard
+from ..models import Shift
 
 
 @login_required
@@ -16,7 +17,19 @@ def visitor_identification(request, action):
     :param request:
     :return render:
     """
+    security_guard = get_object_or_404(SecurityGuard, user=request.user)
+    co_ownership = security_guard.co_ownership
+    shift_started = False
+    try:
+        last_shift = Shift.objects.latest('id')
+        if last_shift.end_date is None:
+            shift_started = True
+    except Shift.DoesNotExist:
+        pass
+
     context = {
+        'co_ownership': co_ownership,
+        'shift_started': shift_started,
         'action': action
     }
     if request.method == 'POST':
@@ -26,13 +39,15 @@ def visitor_identification(request, action):
             visitor = Visitor.objects.filter(identification=identification)
             if len(visitor) == 0:
                 if action == 'departure':
-                    return render(request, 'security_guard/parking_use.html', {'action': ' visitor not registered'})
+                    context['action'] = ' visitor not registered'
+                    return render(request, 'security_guard/parking_use.html', context)
                 return HttpResponseRedirect(reverse('visitorCreate'))
             else:
                 return HttpResponseRedirect(reverse('visitorVehicles', kwargs={'pk': visitor[0].id, 'action': action}))
     else:
         form = GetVisitorFromIdentificationForm()
-    return render(request, 'security_guard/visitor_identification.html', {'form': form})
+    context['form'] = form
+    return render(request, 'security_guard/visitor_identification.html', context)
 
 
 @login_required

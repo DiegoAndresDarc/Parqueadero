@@ -22,7 +22,20 @@ def barcode_parking_place(request, action, person, pk=None):
     :param request:
     :return render:
     """
+
+    security_guard = get_object_or_404(SecurityGuard, user=request.user)
+    co_ownership = security_guard.co_ownership
+    shift_started = False
+    try:
+        last_shift = Shift.objects.latest('id')
+        if last_shift.end_date is None:
+            shift_started = True
+    except Shift.DoesNotExist:
+        pass
+
     context = {
+        'co_ownership': co_ownership,
+        'shift_started': shift_started,
         'action': action
     }
     if request.method == 'POST':
@@ -32,7 +45,8 @@ def barcode_parking_place(request, action, person, pk=None):
             parking_place = get_object_or_404(ParkingPlace, barcode=barcode)
             if action == 'entry':
                 if parking_place.in_use:
-                    return render(request, 'security_guard/parking_use.html', {'action': 'in use'})
+                    context['action'] = 'in use'
+                    return render(request, 'security_guard/parking_use.html', context)
                 if person == 'I':
                     vehicles = InhabitantVehicle.objects.filter(parking_place=parking_place)
                     context['inhabitant_vehicles'] = vehicles
@@ -48,7 +62,8 @@ def barcode_parking_place(request, action, person, pk=None):
                 return HttpResponseRedirect(reverse('departureInhabitantVehicle', kwargs={'parking_place_id': parking_place.id}))
     else:
         form = GetParkingFromBarcodeForm()
-    return render(request, 'security_guard/barcode_parking_place.html', {'form': form})
+    context['form'] = form
+    return render(request, 'security_guard/barcode_parking_place.html', context)
 
 
 @login_required
@@ -59,18 +74,35 @@ def entry_inhabitant_vehicle(request, pk):
     :param pk:
     :return render:
     """
+    security_guard = get_object_or_404(SecurityGuard, user=request.user)
+    co_ownership = security_guard.co_ownership
+    shift_started = False
+    try:
+        last_shift = Shift.objects.latest('id')
+        if last_shift.end_date is None:
+            shift_started = True
+    except Shift.DoesNotExist:
+        pass
+
+    context = {
+        'co_ownership': co_ownership,
+        'shift_started': shift_started,
+        'action': 'entry'
+    }
     vehicle = get_object_or_404(InhabitantVehicle, pk=pk)
-    if vehicle.due_date < timezone.now():
-        return render(request, 'security_guard/parking_use.html', {'action': 'soat is due'})
+    if vehicle.due_date < timezone.now().date():
+        context['action'] = 'soat is due'
+        return render(request, 'security_guard/parking_use.html', context)
     if not vehicle.owner.up_to_date:
-        return render(request, 'security_guard/parking_use.html', {'action': 'not up to date'})
+        context['action'] = 'not up to date'
+        return render(request, 'security_guard/parking_use.html', context)
     inhabitant_parking_use = InhabitantParkingUse()
     inhabitant_parking_use.vehicle = vehicle
     inhabitant_parking_use.save()
     parking_place = get_object_or_404(ParkingPlace, id=vehicle.parking_place_id)
     parking_place.in_use = True
     parking_place.save()
-    return render(request, 'security_guard/parking_use.html', {'action': 'entry'})
+    return render(request, 'security_guard/parking_use.html', context)
 
 
 @login_required

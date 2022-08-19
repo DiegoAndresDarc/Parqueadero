@@ -23,6 +23,12 @@ def create_security_guard(request):
     """
 
     co_ownership = get_object_or_404(CoOwnership, administrator=request.user)
+    configuration = Configuration.objects.filter(co_ownership=co_ownership)
+    context = {
+        'co_ownership': co_ownership,
+        'configured': len(configuration) > 0,
+        'id_configuration': configuration[0].id if len(configuration) else 0,
+    }
     if request.method == 'POST':
 
         # Create a form instance and populate it with data from the request (binding):
@@ -41,13 +47,7 @@ def create_security_guard(request):
             return HttpResponseRedirect(reverse('adminHome'))
     else:
         form = SecurityGuardForm()
-        configuration = Configuration.objects.filter(co_ownership=co_ownership)
-        context = {
-            'co_ownership': co_ownership,
-            'configured': len(configuration) > 0,
-            'id_configuration': configuration[0].id if len(configuration) else 0,
-            'form': form
-        }
+    context['form'] = form
     return render(request, 'admin_co_ownership/securityguard_form.html', context)
 
 

@@ -1,44 +1,70 @@
-{% extends "base_template.html" %}
+{% extends "layouts/base.html" %}
+
+{% block title %} Entrada/Salida de Vehículo {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
-<div class="nav-left">
-    <h3><a href="{% url 'securityGuardHome' %}">Volver</a></h3>
+
+<div class="row">
+    <div class="col-md-10">
+        <div class="card card-plain">
+            <div class="card-header">
+                <h1>Selecciona un vehículo</h1>
+            </div>
+            <div class="card-body">
+                {% if inhabitant_vehicles %}
+                <ul>
+                    {% for vehicle in inhabitant_vehicles %}
+                    <li>
+                        {% if action == 'entry' %}
+                        <a href="{% url 'entryInhabitantVehicle' pk=vehicle.id %}">
+                           <p>
+                               Propietario: {{vehicle.owner}} Vehículo: {{ vehicle.brand }} {{ vehicle.model }}
+                            {{ vehicle.color }}
+                           </p>
+                        </a>
+                        {% else %}
+                        <a href="{% url 'departureInhabitantVehicle' parking_place_id=vehicle.parking_place.id %}">
+                            <p>
+                                Propietario: {{vehicle.owner}} Vehículo: {{ vehicle.brand }} {{ vehicle.model }}
+                                {{ vehicle.color }}
+                            </p>
+                        </a>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% elif visitor_vehicles %}
+                <ul>
+                    {% for vehicle in visitor_vehicles %}
+                    <li>
+                        {% if action == 'entry' %}
+                        <a href="{% url 'entryVisitorVehicle' pk=vehicle.id %}">
+                            <p>
+                                Propietario: {{vehicle.owner}} Vehículo: {{ vehicle.brand }} {{ vehicle.model }}
+                                {{ vehicle.color }}
+                            </p>
+                        </a>
+                        {% else %}
+                        <a href="{% url 'departureVisitorVehicle' pk=vehicle.id %}">
+                            <p>
+                                Propietario:  {{vehicle.owner}} Vehículo: {{ vehicle.brand }} {{ vehicle.model }}
+                                {{ vehicle.color }}</p>
+                        </a>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p>No existen vehículos asociados al parqueadero.</p>
+                {% endif %}
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'securityGuardHome' %}" class="text-primary">Volver</a>
+            </div>
+        </div>
+    </div>
 </div>
-<h1>Select a vehicle</h1>
-
-{% if inhabitant_vehicles %}
-<ul>
-
-    {% for vehicle in inhabitant_vehicles %}
-    <li>
-        {% if action == 'entry' %}
-        <a href="{% url 'entryInhabitantVehicle' pk=vehicle.id %}">{{ vehicle.brand }} {{ vehicle.model }}
-            {{ vehicle.color }}</a> ({{vehicle.owner}})
-        {% else %}
-        <a href="{% url 'departureInhabitantVehicle' parking_place_id=vehicle.parking_place.id %}">{{ vehicle.brand }} {{ vehicle.model }}
-            {{ vehicle.color }}</a> ({{vehicle.owner}})
-        {% endif %}
-    </li>
-    {% endfor %}
-
-</ul>
-{% elif visitor_vehicles %}
-<ul>
-
-    {% for vehicle in visitor_vehicles %}
-    <li>
-        {% if action == 'entry' %}
-        <a href="{% url 'entryVisitorVehicle' pk=vehicle.id %}">{{ vehicle.brand }} {{ vehicle.model }}
-            {{ vehicle.color }}</a> ({{vehicle.owner}})
-        {% else %}
-        <a href="{% url 'departureVisitorVehicle' pk=vehicle.id %}">{{ vehicle.brand }} {{ vehicle.model }}
-            {{ vehicle.color }}</a> ({{vehicle.owner}})
-        {% endif %}
-    </li>
-    {% endfor %}
-
-</ul>
-{% else %}
-<p>There are no vehicles associated with the parking lot.</p>
-{% endif %}
 {% endblock %}

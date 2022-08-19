@@ -1,19 +1,6 @@
-{% extends "base_template.html" %}
+{% extends "layouts/base.html" %}
 
-{% block sidebar %}
-<li><a>Turno</a></li>
-{% if not shift_started %}
-<li><a href="{% url 'startShift' %}">Iniciar</a></li>
-{% else %}
-<li><a href="{% url 'endShift' %}">Finalizar</a></li>
-<li><a>Residentes</a></li>
-<li><a href="{% url 'barcodeIEntry' %}">Registrar entrada</a></li>
-<li><a href="{% url 'barcodeIDeparture' %}">Registrar salida</a></li>
-<li><a>Visitantes</a></li>
-<li><a href="{% url 'visitorEntry' %}">Registrar entrada</a></li>
-<li><a href="{% url 'visitorDeparture' %}">Registrar salida</a></li>
-{% endif %}
-{% if not shift_started %}
-<li><a href="{% url 'logout'%}">Logout</a></li>
-{% endif %}
-{% endblock %}
+{% block title %} Admin Copropiedad {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}

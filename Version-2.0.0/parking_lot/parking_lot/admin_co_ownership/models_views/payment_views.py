@@ -19,6 +19,7 @@ def create_payment(request):
     """
     co_ownership = get_object_or_404(CoOwnership, administrator=request.user)
     co_ownership_id = co_ownership.id
+    context = {}
     if request.method == 'POST':
 
         # Create a form instance and populate it with data from the request (binding):
