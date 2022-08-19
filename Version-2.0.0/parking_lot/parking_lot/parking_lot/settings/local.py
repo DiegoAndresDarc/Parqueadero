@@ -20,5 +20,5 @@ DATABASES = {
     }
 }
 
-MEDIA_URL = '/Users/bbotina/Documents/python/documents/'
+MEDIA_URL = './documents/'
 MEDIA_ROOT = os.path.join(BASE_DIR, MEDIA_URL)
