@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.forms import ModelForm
 from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from .models import Apartment, Configuration, ParkingPlace, InhabitantVehicle, InhabitantPayments, Inhabitant, CoOwnership
 
