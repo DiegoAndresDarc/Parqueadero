@@ -16,9 +16,9 @@ DATABASES = {
         'USER': 'root',
         'PASSWORD': '12345',
         'HOST': 'localhost',
-        'PORT': '3306',
+        'PORT': '3306'
     }
 }
 
-MEDIA_URL = '/Users/bbotina/Documents/python/documents/'
+MEDIA_URL = '../documents/'
 MEDIA_ROOT = os.path.join(BASE_DIR, MEDIA_URL)
