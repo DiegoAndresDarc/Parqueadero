@@ -21,7 +21,7 @@ nbdist/
 nbproject/    
 build/web/WEB-INF/classes/logic/
 build/web/WEB-INF/classes/servlet/
-Version-2.0.0/.idea/
-Version-2.0.0/venv/
-Version-2.0.0/parking_lot/venv/
+v2/.idea/
+v2/venv/
+v2/parking_lot/venv/
 .idea/
