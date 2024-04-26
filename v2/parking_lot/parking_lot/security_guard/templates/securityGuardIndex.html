@@ -1,19 +1,30 @@
 {% extends "base_template.html" %}
 
 {% block sidebar %}
-<li><a>Turno</a></li>
+<p class="menu-label">Turno</p>
+<ul class="menu-list">
 {% if not shift_started %}
 <li><a href="{% url 'startShift' %}">Iniciar</a></li>
 {% else %}
 <li><a href="{% url 'endShift' %}">Finalizar</a></li>
-<li><a>Residentes</a></li>
+</ul>
+
+<p class="menu-label">Residentes</p>
+<ul class="menu-list">
 <li><a href="{% url 'barcodeIEntry' %}">Registrar entrada</a></li>
 <li><a href="{% url 'barcodeIDeparture' %}">Registrar salida</a></li>
-<li><a>Visitantes</a></li>
+</ul>
+
+<p class="menu-label">Visitantes</p>
+<ul class="menu-list">
 <li><a href="{% url 'visitorEntry' %}">Registrar entrada</a></li>
 <li><a href="{% url 'visitorDeparture' %}">Registrar salida</a></li>
+</ul>
 {% endif %}
 {% if not shift_started %}
+<p class="menu-label">Logout</p>
+<ul class="menu-list">
 <li><a href="{% url 'logout'%}">Logout</a></li>
+</ul>
 {% endif %}
 {% endblock %}

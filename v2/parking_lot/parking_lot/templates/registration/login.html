@@ -3,46 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <title>Parqueaderos Copropiedad</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'assets/bulma.min.css' %}" type="text/css" media="all" />
+    <link rel="stylesheet" href="{% static 'assets/style.css' %}" type="text/css" media="all" />
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
 </head>
 <body>
+    <div class="login">
+        <div class="content-login">
+            <div class="box clogin">
+                <div class="field">
+                    {% if form.errors %}
+                    <div class="field">
+                      <div class="control">
+                        <transition name="slide">
+                          <p class="help is-danger is-medium">
+                            Your username and password didn't match. Please try again.
+                          </p>
+                        </transition>
+                      </div>
+                    </div>
+                    {% endif %}
 
-<div class="container-fluid">
-    {% if form.errors %}
-    <p>Your username and password didn't match. Please try again.</p>
-    {% endif %}
+                    {% if next %}
+                    <div class="field">
+                      <div class="control">
+                        <transition name="slide">
+                    {% if user.is_authenticated %}
+                          <p class="help is-danger is-medium">
+                            Your account doesn't have access to this page. To proceed,
+                        please login with an account that has access.
+                          </p>
+                            {% else %}
+                            <p class="help is-danger is-medium">Please login to see this page.</p>
+                        </transition>
+                      </div>
+                    </div>
+                    {% endif %}
+                    {% endif %}
 
-    {% if next %}
-    {% if user.is_authenticated %}
-    <p>Your account doesn't have access to this page. To proceed,
-        please login with an account that has access.</p>
-    {% else %}
-    <p>Please login to see this page.</p>
-    {% endif %}
-    {% endif %}
+                    <form method="post" action="{% url 'login' %}">
+                        {% csrf_token %}
+                        <h1 class="subtitle is-size-3">Incio de Sesión</h1>
 
-    <form method="post" action="{% url 'login' %}">
-        {% csrf_token %}
+                        <div class="field">
+                            <div class="control has-icons-left">
+                                <input
+                                  class="input is-medium"
+                                  type="text"
+                                  placeholder="username"
+                                  autocomplete="off"
+                                  name="username"
+                                  required
+                                />
+                                <span class="icon is-small is-left">
+                                <i class="mdi mdi-account"></i>
+                                </span>
+                            </div>
+                        </div>
 
-        <div>
-            <td>{{ form.username.label_tag }}</td>
-            <td>{{ form.username }}</td>
+                        <div class="field">
+                          <div class="control has-icons-left">
+                            <input
+                              class="input is-medium"
+                              type="password"
+                              placeholder="password"
+                              autocomplete="new-password"
+                              name="password"
+                              required
+                            />
+                            <span class="icon is-small is-left">
+                              <i class="mdi mdi-lock"></i>
+                            </span>
+                          </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="control">
+                                <button class="button is-link is-fullwidth">
+                                  Login
+                                </button>
+                            </div>
+                            <input type="hidden" name="next" value="{{ next }}"/>
+                        </div>
+                    </form>
+
+                    {# Assumes you setup the password_reset view in your URLconf #}
+
+                    <div class="field">
+                      <div class="control">
+                        <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+                      </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div>
-            <td>{{ form.password.label_tag }}</td>
-            <td>{{ form.password }}</td>
-        </div>
-
-        <div>
-            <input type="submit" value="login"/>
-            <input type="hidden" name="next" value="{{ next }}"/>
-        </div>
-    </form>
-
-    {# Assumes you setup the password_reset view in your URLconf #}
-    <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
-</div>
+    </div>
 </body>
+<style>
+h1,
+h2 {
+  font-weight: normal;
+}
+a {
+  text-decoration: underline;
+}
+.input {
+  border-color: none;
+  box-shadow: none;
+  max-width: 100%;
+  width: 100%;
+}
+</style>
 </html>

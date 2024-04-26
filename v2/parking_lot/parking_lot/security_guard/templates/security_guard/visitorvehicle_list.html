@@ -1,30 +1,43 @@
 {% extends "base_template.html" %}
 
 {% block content %}
-<div class="nav-left">
-    <h3><a href="{% url 'securityGuardHome' %}">Volver</a></h3>
-</div>
-<h1>Visitor Vehicles List</h1>
+<aside class="menu">
+    <ul class="menu-list">
+        <li><a href="{% url 'securityGuardHome' %}">Volver</a></li>
+    </ul>
+</aside>
 
-{% if visitorvehicle_list %}
-<ul>
 
-    {% for visitorvehicle in visitorvehicle_list %}
-    <li>
-        {% if action == 'entry' %}
-        <a href="{% url 'barcodeVEntry' pk=visitorvehicle.id %}">{{ visitorvehicle.brand }} {{ visitorvehicle.model }}
-            {{ visitorvehicle.color }}</a> Plate: ({{visitorvehicle.plate}})
+<div class="box">
+    <div class="content">
+        <h2>Visitor Vehicles List</h2>
+
+        {% if visitorvehicle_list %}
+        <ul>
+
+            {% for visitorvehicle in visitorvehicle_list %}
+            <li>
+                {% if action == 'entry' %}
+                <a href="{% url 'barcodeVEntry' pk=visitorvehicle.id %}">{{ visitorvehicle.brand }} {{ visitorvehicle.model }}
+                    {{ visitorvehicle.color }}</a> Plate: ({{visitorvehicle.plate}})
+                {% else %}
+                <a href="{% url 'departureVisitorVehicle' pk=visitorvehicle.id %}">{{ visitorvehicle.brand }} {{ visitorvehicle.model }}
+                    {{ visitorvehicle.color }}</a> Plate: ({{visitorvehicle.plate}})
+                {% endif %}
+            </li>
+            {% endfor %}
+
+        </ul>
+
         {% else %}
-        <a href="{% url 'departureVisitorVehicle' pk=visitorvehicle.id %}">{{ visitorvehicle.brand }} {{ visitorvehicle.model }}
-            {{ visitorvehicle.color }}</a> Plate: ({{visitorvehicle.plate}})
+        <p>There are no vehicles for the visitor.</p>
         {% endif %}
-    </li>
-    {% endfor %}
+        <div class="field">
+            <div class="control">
+                <a href="{% url 'createVisitorVehicle' pk=pk %}"><button class="button is-link">Add new vehicle</button></a>
+            </div>
+        </div>
 
-</ul>
-
-{% else %}
-<p>There are no vehicles for the visitor.</p>
-{% endif %}
-<a href="{% url 'createVisitorVehicle' pk=pk %}"><input type="button" value="Add new vehicle"></a>
+    </div>
+</div>
 {% endblock %}
