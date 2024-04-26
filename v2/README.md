@@ -23,16 +23,14 @@
 8. Set up the database running the following commands:
    ```shell
    mysql> CREATE DATABASE parking_lot;
-   $ python3 manage.py makemigrations
-   $ python3 manage.py migrate
+   $ python3 manage.py makemigrations --settings=parking_lot.settings.local
+   $ python3 manage.py migrate --settings=parking_lot.settings.local
    ```
 9. Create the admin for the project
     ```shell
-    export DJANGO_SETTINGS_MODULE=parking_lot.settings.local
-    $ python3 manage.py createsuperuser
+    $ python3 manage.py createsuperuser --settings=parking_lot.settings.local
     ```
 10. Start the project
    ```shell
-   $ export DJANGO_SETTINGS_MODULE=parking_lot.settings.local
-   $ python3 manage.py runserver
+   $ python3 manage.py runserver --settings=parking_lot.settings.local
    ```

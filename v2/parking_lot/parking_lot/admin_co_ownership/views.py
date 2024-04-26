@@ -1,5 +1,4 @@
 from django.contrib.auth.models import Group
-
 from .forms import SecurityGuardForm
 from .models_views.config_views import *
 from .models_views.apartment_views import *

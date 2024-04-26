@@ -1,5 +1,6 @@
 import datetime
 
+import django.forms
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -18,6 +19,13 @@ class SetConfigurationForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(SetConfigurationForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            if isinstance(self.fields[field], django.forms.fields.TypedChoiceField):
+                self.fields[field].widget.attrs.update({'class': 'select'})
+            elif isinstance(self.fields[field], django.forms.fields.CharField):
+                self.fields[field].widget.attrs.update({'class': 'textarea'})
+            else:
+                self.fields[field].widget.attrs.update({'class': 'input'})
 
     def clean_max_weight(self):
         data = self.cleaned_data['max_weight']
@@ -125,6 +133,13 @@ class ModConfigurationForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ModConfigurationForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            if isinstance(self.fields[field], django.forms.fields.TypedChoiceField):
+                self.fields[field].widget.attrs.update({'class': 'select'})
+            elif isinstance(self.fields[field], django.forms.fields.CharField):
+                self.fields[field].widget.attrs.update({'class': 'textarea'})
+            else:
+                self.fields[field].widget.attrs.update({'class': 'input'})
 
     def clean_max_weight(self):
         data = self.cleaned_data['max_weight']
@@ -230,11 +245,26 @@ class CreateApartmentForm(ModelForm):
         model = Apartment
         exclude = ['co_ownership', ]
 
+    def __init__(self, *args, **kwargs):
+        super(CreateApartmentForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'input'})
+
 
 class CreateParkingPlaceForm(ModelForm):
     class Meta:
         model = ParkingPlace
         exclude = ['co_ownership', ]
+
+    def __init__(self, *args, **kwargs):
+        super(CreateParkingPlaceForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            if isinstance(self.fields[field], django.forms.fields.TypedChoiceField):
+                self.fields[field].widget.attrs.update({'class': 'select'})
+            elif isinstance(self.fields[field], django.forms.fields.BooleanField):
+                self.fields[field].widget.attrs.update({'class': 'checkbox'})
+            else:
+                self.fields[field].widget.attrs.update({'class': 'input'})
 
     def clean_area(self):
         data = self.cleaned_data['area']
@@ -276,6 +306,18 @@ class InhabitantVehicleForm(ModelForm):
         if co_ownership_id:
             co_ownership = get_object_or_404(CoOwnership, id=co_ownership_id)
             self.fields['owner'].queryset = Inhabitant.objects.filter(apartment__co_ownership=co_ownership)
+
+        for field in self.fields:
+            if isinstance(self.fields[field], django.forms.fields.TypedChoiceField):
+                self.fields[field].widget.attrs.update({'class': 'select'})
+            elif isinstance(self.fields[field], django.forms.fields.CharField):
+                self.fields[field].widget.attrs.update({'class': 'textarea'})
+            elif isinstance(self.fields[field], django.forms.fields.FileField):
+                self.fields[field].widget.attrs.update({'class': 'file-label'})
+            elif isinstance(self.fields[field], django.forms.models.ModelChoiceField):
+                self.fields[field].widget.attrs.update({'class': 'select'})
+            else:
+                self.fields[field].widget.attrs.update({'class': 'input'})
 
     def clean_due_date(self):
         data = self.cleaned_data['due_date']
@@ -325,6 +367,10 @@ class InhabitantPaymentForm(ModelForm):
             co_ownership = get_object_or_404(CoOwnership, id=co_ownership_id)
             self.fields['inhabitant'].queryset = Inhabitant.objects.filter(apartment__co_ownership=co_ownership)
 
+        for field in self.fields:
+            if isinstance(self.fields[field], django.forms.models.ModelChoiceField):
+                self.fields[field].widget.attrs.update({'class': 'select'})
+
 
 class SecurityGuardForm(UserCreationForm):
     first_name = forms.CharField(max_length=100, help_text='First name')
@@ -333,3 +379,9 @@ class SecurityGuardForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'username', 'password1', 'password2', ]
+
+    def __init__(self, *args, **kwargs):
+        super(SecurityGuardForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            if isinstance(self.fields[field], django.forms.fields.CharField):
+                self.fields[field].widget.attrs.update({'class': 'input'})
