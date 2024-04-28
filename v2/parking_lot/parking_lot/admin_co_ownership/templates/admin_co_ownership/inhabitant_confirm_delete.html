@@ -1,17 +1,10 @@
-{% extends "base_template.html" %}
+{% extends "adminIndex.html" %}
 
 {% block content %}
-
-<div class="nav-left">
-    <h3><a href="{% url 'adminHome' %}">Volver</a></h3>
-</div>
 <h1>Delete Inhabitant</h1>
-
 <p>Are you sure you want to delete the Inhabitant?</p>
-
 <form action="" method="POST">
   {% csrf_token %}
   <input type="submit" action="" value="Yes, delete." />
 </form>
-
 {% endblock %}

@@ -1,20 +1,12 @@
-{% extends "base_template.html" %}
+{% extends "securityGuardIndex.html" %}
 
 {% block content %}
-<aside class="menu">
-    <ul class="menu-list">
-        <li><a href="{% url 'securityGuardHome' %}">Volver</a></li>
-    </ul>
-</aside>
-
-
 <div class="box">
     <div class="content">
         <h2>Visitor Vehicles List</h2>
 
         {% if visitorvehicle_list %}
         <ul>
-
             {% for visitorvehicle in visitorvehicle_list %}
             <li>
                 {% if action == 'entry' %}
@@ -26,9 +18,7 @@
                 {% endif %}
             </li>
             {% endfor %}
-
         </ul>
-
         {% else %}
         <p>There are no vehicles for the visitor.</p>
         {% endif %}
@@ -37,7 +27,6 @@
                 <a href="{% url 'createVisitorVehicle' pk=pk %}"><button class="button is-link">Add new vehicle</button></a>
             </div>
         </div>
-
     </div>
 </div>
 {% endblock %}

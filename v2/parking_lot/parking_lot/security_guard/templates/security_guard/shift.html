@@ -1,11 +1,6 @@
-{% extends "base_template.html" %}
+{% extends "securityGuardIndex.html" %}
 
 {% block content %}
-<aside class="menu">
-    <ul class="menu-list">
-        <li><a href="{% url 'securityGuardHome' %}">Volver</a></li>
-    </ul>
-</aside>
 <div class="box">
     {% if action == 'start' %}
     <div class="notification is-primary">Shift started with ${{money}} pesos</div>
