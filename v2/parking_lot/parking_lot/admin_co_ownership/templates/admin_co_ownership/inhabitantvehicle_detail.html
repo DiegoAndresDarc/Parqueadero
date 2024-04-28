@@ -1,8 +1,11 @@
 {% extends "adminIndex.html" %}
 
 {% block content %}
-<h1>Vehicle: {{ inhabitantvehicle.brand }} {{ inhabitantvehicle.model }} {{ inhabitantvehicle.color }} </h1>
-<p>Owner: {{ inhabitantvehicle.owner }}</p>
+<br>
+<h1 class="title text-center has-text-info">DETALLES DEL BEHICULO</h1>
+<br>
+<h3 class="subtitle is-4">Vehiculo: {{ inhabitantvehicle.brand }} {{ inhabitantvehicle.model }} {{ inhabitantvehicle.color }} </h1>
+<p>Propietario: {{ inhabitantvehicle.owner }}</p>
 <div>
     <h3>Acciones:</h3>
     <ul>

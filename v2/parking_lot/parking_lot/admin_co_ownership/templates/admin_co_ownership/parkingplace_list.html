@@ -1,8 +1,9 @@
 {% extends "adminIndex.html" %}
 
 {% block content %}
-<h1>ParkingPlace List</h1>
-
+<br>
+<h1 class="title text-center has-text-info">LISTA DE PARQUEADEROS</h1>
+<br>
 {% if parkingplace_list %}
 <ul>
     {% for parkingplace in parkingplace_list %}
@@ -12,6 +13,6 @@
     {% endfor %}
 </ul>
 {% else %}
-<p>There are no parking places in the co-ownership.</p>
+<p>No hay espacios de parqueadero en la co-propiedad.</p>
 {% endif %}
 {% endblock %}

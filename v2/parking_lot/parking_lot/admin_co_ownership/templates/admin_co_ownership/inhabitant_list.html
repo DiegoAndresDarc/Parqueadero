@@ -1,7 +1,8 @@
 {% extends "adminIndex.html" %}
 
 {% block content %}
-<h1>Inhabitant List</h1>
+<br>
+<h1 class="title text-center has-text-info">LISTA DE RESIDENTES</h1>
 
 {% if inhabitant_list %}
 <ul>
@@ -12,6 +13,6 @@
     {% endfor %}
 </ul>
 {% else %}
-<p>There are no inhabitants in the co-ownership.</p>
+<p>No hay residentes en la co-propiedad.</p>
 {% endif %}
 {% endblock %}

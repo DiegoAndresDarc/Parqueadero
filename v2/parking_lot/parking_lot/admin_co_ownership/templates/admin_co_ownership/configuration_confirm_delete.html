@@ -1,8 +1,10 @@
 {% extends "adminIndex.html" %}
 
 {% block content %}
-<h1>Delete Configuration</h1>
-<p>Are you sure you want to delete the configuration?</p>
+<br>
+<h1 class="title has-text-info">ELIMINAR LA CONFIGURACIÓN</h1>
+<br>
+<p>Está seguro que quiere eliminar la configuración?</p>
 <form action="" method="POST">
   {% csrf_token %}
   <input type="submit" action="" value="Yes, delete." />

@@ -1,8 +1,10 @@
 {% extends "adminIndex.html" %}
 
 {% block content %}
-<h1>Delete Inhabitant</h1>
-<p>Are you sure you want to delete the Inhabitant?</p>
+<br>
+<h1 class="title has-text-info">ELIMINAR RESIDENTE</h1>
+<br>
+<p>Está seguro de que quiere eliminar el residente?</p>
 <form action="" method="POST">
   {% csrf_token %}
   <input type="submit" action="" value="Yes, delete." />

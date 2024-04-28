@@ -1,8 +1,10 @@
 {% extends "adminIndex.html" %}
 
 {% block content %}
-<h1>Delete ParkingPlace</h1>
-<p>Are you sure you want to delete the ParkingPlace?</p>
+<br>
+<h1 class="title has-text-info">ELIMINAR ESPACIO DE PARQUEADERO</h1>
+<br>
+<p>Está seguro de que quiere eliminar éste Parqueadero?</p>
 <form action="" method="POST">
   {% csrf_token %}
   <input type="submit" action="" value="Yes, delete." />

@@ -1,8 +1,10 @@
 {% extends "adminIndex.html" %}
 
 {% block content %}
-<h1>Delete Vehicle</h1>
-<p>Are you sure you want to delete the Vehicle?</p>
+<br>
+<h1 class="title has-text-info">ELIMINAR VEHICULO</h1>
+<br>
+<p>Está seguro de que quiere eliminar el Vehiculo?</p>
 <form action="" method="POST">
   {% csrf_token %}
   <input type="submit" action="" value="Yes, delete." />

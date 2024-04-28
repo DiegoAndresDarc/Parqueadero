@@ -1,8 +1,10 @@
 {% extends "adminIndex.html" %}
 
 {% block content %}
-<h1>Select a vehicle:</h1>
-
+<br>
+<h1 class="title text-center has-text-info">ASIGNAR PARQUEADERO A RESIDENTE</h1>
+<br>
+<h3 class="subtitle is-4">Seleccione un vehiculo:</h3>
 {% if inhabitantvehicle_list %}
 <ul>
     {% for inhabitantvehicle in inhabitantvehicle_list %}
@@ -13,7 +15,7 @@
             {{inhabitantvehicle.color}}</a> ({{inhabitantvehicle.owner}})
     </li>
     {% else %}
-    <p>There are no vehicles without parking place in the co-ownership.</p>
+    <p>No hay vehiculos sin parqueadero en la co-propiedad.</p>
     {% endif %}
     {% else %}
     {% if inhabitantvehicle.parking_place is not None %}
@@ -22,12 +24,12 @@
             {{inhabitantvehicle.color}}</a> ({{inhabitantvehicle.owner}})
     </li>
     {% else %}
-    <p>There are no vehicles with parking place in the co-ownership.</p>
+    <p>No hay vehiculos con parqueadero en la co-propiedad.</p>
     {% endif %}
     {% endif %}
     {% endfor %}
 </ul>
 {% else %}
-<p>There are no vehicles in the co-ownership.</p>
+<p>No hay vehiculos en la co-propiedad.</p>
 {% endif %}
 {% endblock %}

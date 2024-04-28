@@ -1,8 +1,9 @@
 {% extends "adminIndex.html" %}
 
 {% block content %}
-<h1>Apartment List</h1>
-
+<br>
+<h1 class="title text-center has-text-info">LISTA DE APARTAMENTOS</h1>
+<br>
 {% if apartment_list %}
 <ul>
     {% for apartment in apartment_list %}
@@ -12,6 +13,6 @@
     {% endfor %}
 </ul>
 {% else %}
-<p>There are no apartments in the co-ownership.</p>
+<p>No hay apartamentos en la co-propiedad.</p>
 {% endif %}
 {% endblock %}
