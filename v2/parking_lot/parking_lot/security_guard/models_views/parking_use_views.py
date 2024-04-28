@@ -27,6 +27,20 @@ def barcode_parking_place(request, action, person, pk=None):
         'co_ownership': security_guard.co_ownership,
         'action': action
     }
+
+    shift_started = False
+    try:
+        last_shift = Shift.objects.latest('id')
+        if last_shift.end_date is None:
+            shift_started = True
+    except Shift.DoesNotExist:
+        pass
+    if not shift_started:
+        context['action'] = 'error'
+        return render(request, 'security_guard/shift_error.html', context=context)
+
+    context['shift_started'] = shift_started
+
     if request.method == 'POST':
         form = GetParkingFromBarcodeForm(request.POST)
         if form.is_valid():
@@ -69,6 +83,20 @@ def entry_inhabitant_vehicle(request, pk):
         'co_ownership': security_guard.co_ownership,
         'action': 'entry'
     }
+
+    shift_started = False
+    try:
+        last_shift = Shift.objects.latest('id')
+        if last_shift.end_date is None:
+            shift_started = True
+    except Shift.DoesNotExist:
+        pass
+    if not shift_started:
+        context['action'] = 'error'
+        return render(request, 'security_guard/shift_error.html', context=context)
+
+    context['shift_started'] = shift_started
+
     if vehicle.due_date < timezone.now():
         context['action'] = 'soat is due'
         return render(request, 'security_guard/parking_use.html', context=context)
@@ -93,16 +121,29 @@ def departure_inhabitant_vehicle(request, parking_place_id):
     :return render:
     """
     security_guard = get_object_or_404(SecurityGuard, user=request.user)
+    context = {
+        'co_ownership': security_guard.co_ownership,
+        'action': 'departure'
+    }
+
+    shift_started = False
+    try:
+        last_shift = Shift.objects.latest('id')
+        if last_shift.end_date is None:
+            shift_started = True
+    except Shift.DoesNotExist:
+        pass
+    if not shift_started:
+        context['action'] = 'error'
+        return render(request, 'security_guard/shift_error.html', context=context)
+    context['shift_started'] = shift_started
+
     parking_place = get_object_or_404(ParkingPlace, pk=parking_place_id)
     inhabitant_parking_use = InhabitantParkingUse.objects.filter(vehicle__parking_place=parking_place).latest('id')
     inhabitant_parking_use.departure_date = timezone.now()
     inhabitant_parking_use.save()
     parking_place.in_use = False
     parking_place.save()
-    context = {
-        'co_ownership': security_guard.co_ownership,
-        'action': 'departure'
-    }
     return render(request, 'security_guard/parking_use.html', context=context)
 
 
@@ -115,6 +156,22 @@ def entry_visitor_vehicle(request, pk):
     :return render:
     """
     security_guard = get_object_or_404(SecurityGuard, user=request.user)
+    context = {
+        'co_ownership': security_guard.co_ownership,
+        'action': 'entry'
+    }
+    shift_started = False
+    try:
+        last_shift = Shift.objects.latest('id')
+        if last_shift.end_date is None:
+            shift_started = True
+    except Shift.DoesNotExist:
+        pass
+    if not shift_started:
+        context['action'] = 'error'
+        return render(request, 'security_guard/shift_error.html', context=context)
+    context['shift_started'] = shift_started
+
     vehicle = get_object_or_404(VisitorVehicle, pk=pk)
     visitor_parking_use = VisitorParkingUse()
     visitor_parking_use.vehicle = vehicle
@@ -122,10 +179,6 @@ def entry_visitor_vehicle(request, pk):
     parking_place = get_object_or_404(ParkingPlace, id=vehicle.parking_place_id)
     parking_place.in_use = True
     parking_place.save()
-    context = {
-        'co_ownership': security_guard.co_ownership,
-        'action': 'entry'
-    }
     return render(request, 'security_guard/parking_use.html', context=context)
 
 
@@ -138,14 +191,29 @@ def departure_visitor_vehicle(request, pk):
     :return render:
     """
     security_guard = get_object_or_404(SecurityGuard, user=request.user)
+    context = {
+        'co_ownership': security_guard.co_ownership
+    }
+    shift_started = False
+    try:
+        last_shift = Shift.objects.latest('id')
+        if last_shift.end_date is None:
+            shift_started = True
+    except Shift.DoesNotExist:
+        pass
+    if not shift_started:
+        context['action'] = 'error'
+        return render(request, 'security_guard/shift_error.html', context=context)
+    context['shift_started'] = shift_started
+
     vehicle = get_object_or_404(VisitorVehicle, pk=pk)
     parking_place = vehicle.parking_place
     visitor_parking_use = VisitorParkingUse.objects.filter(vehicle=vehicle).latest('id')
     if visitor_parking_use.departure_date is not None:
-        return render(request, 'security_guard/parking_use.html', {'action': 'not entry'})
+        context['action'] = 'not entry'
+        return render(request, 'security_guard/parking_use.html', context=context)
     visitor_parking_use.departure_date = timezone.now()
     parking_place.in_use = False
-    security_guard = get_object_or_404(SecurityGuard, user=request.user)
     co_ownership = security_guard.co_ownership
     configuration = get_object_or_404(Configuration, co_ownership=co_ownership)
     visit_payment_type = configuration.visit_payment_type
@@ -170,11 +238,8 @@ def departure_visitor_vehicle(request, pk):
     total_pay = round(total_pay, 2)
     visitor_parking_use.save()
     parking_place.save()
-    context = {
-        'co_ownership': security_guard.co_ownership,
-        'pk': vehicle.owner.id,
-        'money': total_pay
-    }
+    context['pk'] = vehicle.owner.id
+    context['money'] = total_pay
     return render(request, 'security_guard/total_to_pay.html', context=context)
 
 
@@ -188,6 +253,22 @@ def make_payment(request, pk, money):
     :return:
     """
     security_guard = get_object_or_404(SecurityGuard, user=request.user)
+    context = {
+        'co_ownership': security_guard.co_ownership,
+        'action': 'departure'
+    }
+    shift_started = False
+    try:
+        last_shift = Shift.objects.latest('id')
+        if last_shift.end_date is None:
+            shift_started = True
+    except Shift.DoesNotExist:
+        pass
+    if not shift_started:
+        context['action'] = 'error'
+        return render(request, 'security_guard/shift_error.html', context=context)
+    context['shift_started'] = shift_started
+
     money = decimal.Decimal(money)
     shift = Shift.objects.latest('id')
     shift.final_money += money
@@ -196,8 +277,4 @@ def make_payment(request, pk, money):
     visitor_payment.visitor = get_object_or_404(Visitor, pk=pk)
     visitor_payment.value = money
     visitor_payment.save()
-    context = {
-        'co_ownership': security_guard.co_ownership,
-        'action': 'departure'
-    }
     return render(request, 'security_guard/parking_use.html', context=context)
