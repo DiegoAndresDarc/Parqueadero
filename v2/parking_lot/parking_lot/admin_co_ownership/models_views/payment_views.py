@@ -17,7 +17,6 @@ def create_payment(request):
     :return: render
     """
     co_ownership = get_object_or_404(CoOwnership, administrator=request.user)
-    co_ownership_id = co_ownership.id
     if request.method == 'POST':
 
         # Create a form instance and populate it with data from the request (binding):
@@ -32,6 +31,7 @@ def create_payment(request):
             return HttpResponseRedirect(reverse('adminHome'))
             # If this is a GET (or any other method) create the default form.
     else:
-        form = InhabitantPaymentForm(co_ownership_id=co_ownership_id)
-    return render(request, 'admin_co_ownership/inhabitantpayments_form.html', {'form': form})
+        form = InhabitantPaymentForm(co_ownership_id=co_ownership.id)
+    context = {'form': form, 'co_ownership': co_ownership}
+    return render(request, 'admin_co_ownership/inhabitantpayments_form.html', context=context)
 

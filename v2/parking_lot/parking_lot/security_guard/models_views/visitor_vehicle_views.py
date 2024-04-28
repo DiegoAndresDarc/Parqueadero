@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.views.generic import ListView
 
-from security_guard.models import VisitorVehicle, Visitor
+from security_guard.models import VisitorVehicle, Visitor, SecurityGuard
 from security_guard.forms import CreateVisitorVehicleForm
 from . import is_security_guard
 
@@ -24,6 +24,8 @@ class VisitorVehicleListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         action = self.kwargs.get('action', None)
         context['pk'] = owner_id
         context['action'] = action
+        security_guard = get_object_or_404(SecurityGuard, user=self.request.user)
+        context['co_ownership']: security_guard.co_ownership
         return context
 
     def test_func(self):
@@ -38,6 +40,7 @@ def create_visitor_vehicle(request, pk):
     :param request:
     :return: render
     """
+    security_guard = get_object_or_404(SecurityGuard, user=request.user)
     owner = get_object_or_404(Visitor, pk=pk)
     if request.method == 'POST':
 
@@ -52,4 +55,10 @@ def create_visitor_vehicle(request, pk):
             return HttpResponseRedirect(reverse('barcodeVEntry', kwargs={'pk': visitor_vehicle.id}))
     else:
         form = CreateVisitorVehicleForm()
-    return render(request, 'security_guard/visitorvehicle_form.html', {'form': form, 'pk': pk})
+
+    context = {
+        'co_ownership': security_guard.co_ownership,
+        'form': form,
+        'pk': pk
+    }
+    return render(request, 'security_guard/visitorvehicle_form.html', context=context)

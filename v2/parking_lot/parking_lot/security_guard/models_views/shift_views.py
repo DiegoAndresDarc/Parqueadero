@@ -28,6 +28,7 @@ def start_shift(request, action):
     shift.final_money = money
     shift.save()
     context = {
+        'co_ownership': security_guard.co_ownership,
         'action': action,
         'money': money
     }
@@ -53,6 +54,7 @@ def end_shift(request, action):
     except Shift.DoesNotExist:
         return render(request, 'security_guard/shift_error.html', {'action': 'error'})
     context = {
+        'co_ownership': security_guard.co_ownership,
         'action': action,
         'money': money
     }

@@ -17,13 +17,13 @@ def create_apartment(request):
     :param request:
     :return: render
     """
+    co_ownership = get_object_or_404(CoOwnership, administrator=request.user)
     if request.method == 'POST':
 
         # Create a form instance and populate it with data from the request (binding):
         form = CreateApartmentForm(request.POST)
         # Check if the form is valid:
         if form.is_valid():
-            co_ownership = get_object_or_404(CoOwnership, administrator=request.user)
             apartment = form.save(commit=False)
             apartment.co_ownership = co_ownership
             apartment.save()
@@ -32,7 +32,8 @@ def create_apartment(request):
             # If this is a GET (or any other method) create the default form.
     else:
         form = CreateApartmentForm()
-    return render(request, 'admin_co_ownership/apartment_form.html', {'form': form})
+    context = {'form': form, 'co_ownership': co_ownership}
+    return render(request, 'admin_co_ownership/apartment_form.html', context=context)
 
 
 class ApartmentListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
@@ -43,6 +44,12 @@ class ApartmentListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         co_ownership = get_object_or_404(CoOwnership, administrator=self.request.user)
         return Apartment.objects.filter(co_ownership=co_ownership)
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ApartmentListView, self).get_context_data(**kwargs)
+        co_ownership = get_object_or_404(CoOwnership, administrator=self.request.user)
+        context['co_ownership'] = co_ownership
+        return context
+
     def test_func(self):
         return is_admins_co_ownerships(self.request.user)
 
@@ -50,21 +57,39 @@ class ApartmentListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
 class ApartmentDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     model = Apartment
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ApartmentDetailView, self).get_context_data(**kwargs)
+        co_ownership = get_object_or_404(CoOwnership, administrator=self.request.user)
+        context['co_ownership'] = co_ownership
+        return context
+
     def test_func(self):
         return is_admins_co_ownerships(self.request.user)
 
 
-class ApartmentUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class ApartmentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Apartment
     fields = ['block', 'apartment']
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ApartmentUpdateView, self).get_context_data(**kwargs)
+        co_ownership = get_object_or_404(CoOwnership, administrator=self.request.user)
+        context['co_ownership'] = co_ownership
+        return context
+
     def test_func(self):
         return is_admins_co_ownerships(self.request.user)
 
 
-class ApartmentDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class ApartmentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Apartment
     success_url = reverse_lazy('adminHome')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ApartmentDeleteView, self).get_context_data(**kwargs)
+        co_ownership = get_object_or_404(CoOwnership, administrator=self.request.user)
+        context['co_ownership'] = co_ownership
+        return context
 
     def test_func(self):
         return is_admins_co_ownerships(self.request.user)

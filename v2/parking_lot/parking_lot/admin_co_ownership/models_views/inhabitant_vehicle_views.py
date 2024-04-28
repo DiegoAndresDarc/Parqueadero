@@ -18,7 +18,6 @@ def create_vehicle(request):
     :return: render
     """
     co_ownership = get_object_or_404(CoOwnership, administrator=request.user)
-    co_ownership_id = co_ownership.id
     if request.method == 'POST':
 
         # Create a form instance and populate it with data from the request (binding):
@@ -30,8 +29,9 @@ def create_vehicle(request):
             return HttpResponseRedirect(reverse('adminHome'))
             # If this is a GET (or any other method) create the default form.
     else:
-        form = InhabitantVehicleForm(co_ownership_id=co_ownership_id)
-    return render(request, 'admin_co_ownership/inhabitantvehicle_form.html', {'form': form})
+        form = InhabitantVehicleForm(co_ownership_id=co_ownership.id)
+    context = {'form': form, 'co_ownership': co_ownership}
+    return render(request, 'admin_co_ownership/inhabitantvehicle_form.html', context=context)
 
 
 class InhabitantVehicleListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
@@ -42,6 +42,12 @@ class InhabitantVehicleListView(LoginRequiredMixin, UserPassesTestMixin, ListVie
         co_ownership = get_object_or_404(CoOwnership, administrator=self.request.user)
         return InhabitantVehicle.objects.filter(owner__apartment__co_ownership=co_ownership)
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(InhabitantVehicleListView, self).get_context_data(**kwargs)
+        co_ownership = get_object_or_404(CoOwnership, administrator=self.request.user)
+        context['co_ownership'] = co_ownership
+        return context
+
     def test_func(self):
         return is_admins_co_ownerships(self.request.user)
 
@@ -49,30 +55,54 @@ class InhabitantVehicleListView(LoginRequiredMixin, UserPassesTestMixin, ListVie
 class InhabitantVehicleDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     model = InhabitantVehicle
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(InhabitantVehicleDetailView, self).get_context_data(**kwargs)
+        co_ownership = get_object_or_404(CoOwnership, administrator=self.request.user)
+        context['co_ownership'] = co_ownership
+        return context
+
     def test_func(self):
         return is_admins_co_ownerships(self.request.user)
 
 
-class InhabitantVehicleUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class InhabitantVehicleUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = InhabitantVehicle
     fields = '__all__'
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(InhabitantVehicleUpdateView, self).get_context_data(**kwargs)
+        co_ownership = get_object_or_404(CoOwnership, administrator=self.request.user)
+        context['co_ownership'] = co_ownership
+        return context
+
     def test_func(self):
         return is_admins_co_ownerships(self.request.user)
 
 
-class InhabitantVehicleDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class InhabitantVehicleDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = InhabitantVehicle
     success_url = reverse_lazy('adminHome')
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(InhabitantVehicleDeleteView, self).get_context_data(**kwargs)
+        co_ownership = get_object_or_404(CoOwnership, administrator=self.request.user)
+        context['co_ownership'] = co_ownership
+        return context
+
     def test_func(self):
         return is_admins_co_ownerships(self.request.user)
 
 
-class SetParkingPlace(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class SetParkingPlaceView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = InhabitantVehicle
     fields = ['parking_place']
     success_url = reverse_lazy('setParkingPlace')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(SetParkingPlaceView, self).get_context_data(**kwargs)
+        co_ownership = get_object_or_404(CoOwnership, administrator=self.request.user)
+        context['co_ownership'] = co_ownership
+        return context
 
     def test_func(self):
         return is_admins_co_ownerships(self.request.user)

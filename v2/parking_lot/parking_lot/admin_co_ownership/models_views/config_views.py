@@ -17,13 +17,13 @@ def set_configuration(request):
     :param request:
     :return: render
     """
+    co_ownership = get_object_or_404(CoOwnership, administrator=request.user)
     if request.method == 'POST':
 
         # Create a form instance and populate it with data from the request (binding):
         form = SetConfigurationForm(request.POST)
         # Check if the form is valid:
         if form.is_valid():
-            co_ownership = get_object_or_404(CoOwnership, administrator=request.user)
             configuration = form.save(commit=False)
             configuration.co_ownership = co_ownership
             configuration.save()
@@ -32,7 +32,8 @@ def set_configuration(request):
             # If this is a GET (or any other method) create the default form.
     else:
         form = SetConfigurationForm()
-    return render(request, 'admin_co_ownership/configuration_form.html', {'form': form})
+    context = {'form': form, 'co_ownership': co_ownership}
+    return render(request, 'admin_co_ownership/configuration_form.html', context=context)
 
 
 @login_required
@@ -44,6 +45,7 @@ def update_configuration(request, pk):
     :return:
     """
     configuration = get_object_or_404(Configuration, pk=pk)
+    co_ownership = get_object_or_404(CoOwnership, administrator=request.user)
     if request.method == 'POST':
         # Create a form instance and populate it with data from the request (binding):
         form = ModConfigurationForm(request.POST, instance=configuration)
@@ -55,12 +57,19 @@ def update_configuration(request, pk):
             # If this is a GET (or any other method) create the default form.
     else:
         form = ModConfigurationForm(instance=configuration)
-    return render(request, 'admin_co_ownership/configuration_form.html', {'form': form})
+    context = {'form': form, 'co_ownership': co_ownership}
+    return render(request, 'admin_co_ownership/configuration_form.html', context=context)
 
 
-class ConfigurationDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class ConfigurationDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Configuration
     success_url = reverse_lazy('adminHome')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ConfigurationDeleteView, self).get_context_data(**kwargs)
+        co_ownership = get_object_or_404(CoOwnership, administrator=self.request.user)
+        context['co_ownership'] = co_ownership
+        return context
 
     def test_func(self):
         return is_admins_co_ownerships(self.request.user)

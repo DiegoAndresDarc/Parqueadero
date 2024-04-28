@@ -16,7 +16,9 @@ def visitor_identification(request, action):
     :param request:
     :return render:
     """
+    security_guard = get_object_or_404(SecurityGuard, user=request.user)
     context = {
+        'co_ownership': security_guard.co_ownership,
         'action': action
     }
     if request.method == 'POST':
@@ -26,13 +28,18 @@ def visitor_identification(request, action):
             visitor = Visitor.objects.filter(identification=identification)
             if len(visitor) == 0:
                 if action == 'departure':
-                    return render(request, 'security_guard/parking_use.html', {'action': ' visitor not registered'})
+                    context['action'] = ' visitor not registered'
+                    return render(request, 'security_guard/parking_use.html', context=context)
                 return HttpResponseRedirect(reverse('visitorCreate'))
             else:
-                return HttpResponseRedirect(reverse('visitorVehicles', kwargs={'pk': visitor[0].id, 'action': action}))
+                context['pk'] = visitor[0].id
+                return HttpResponseRedirect(reverse('visitorVehicles', kwargs={
+                    'pk': visitor[0].id, 'action': action, 'co_ownership': security_guard.co_ownership
+                }))
     else:
         form = GetVisitorFromIdentificationForm()
-    return render(request, 'security_guard/visitor_identification.html', {'form': form})
+    context['form'] = form
+    return render(request, 'security_guard/visitor_identification.html', context=context)
 
 
 @login_required
@@ -42,6 +49,10 @@ def create_visitor(request):
     :param request:
     :return: render
     """
+    security_guard = get_object_or_404(SecurityGuard, user=request.user)
+    context = {
+        'co_ownership': security_guard.co_ownership
+    }
     if request.method == 'POST':
 
         # Create a form instance and populate it with data from the request (binding):
@@ -54,8 +65,11 @@ def create_visitor(request):
             visitor.co_ownership = co_ownership
             visitor.save()
             # redirect to a new URL:
-            return HttpResponseRedirect(reverse('visitorVehicles', kwargs={'pk': visitor.pk}))
+            return HttpResponseRedirect(reverse('visitorVehicles', kwargs={
+                'pk': visitor.pk,
+                'co_ownership': security_guard.co_ownership}))
             # If this is a GET (or any other method) create the default form.
     else:
         form = CreateVisitorForm()
-    return render(request, 'security_guard/visitor_form.html', {'form': form})
+    context['form'] = form
+    return render(request, 'security_guard/visitor_form.html', context=context)

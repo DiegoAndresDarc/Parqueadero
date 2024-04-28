@@ -14,7 +14,6 @@ def security_guard_home(request):
     :return render:
     """
     security_guard = get_object_or_404(SecurityGuard, user=request.user)
-    co_ownership = security_guard.co_ownership
     shift_started = False
     try:
         last_shift = Shift.objects.latest('id')
@@ -24,7 +23,7 @@ def security_guard_home(request):
         pass
 
     context = {
-        'co_ownership': co_ownership,
+        'co_ownership': security_guard.co_ownership,
         'shift_started': shift_started
     }
     return render(request, 'securityGuardIndex.html', context=context)
