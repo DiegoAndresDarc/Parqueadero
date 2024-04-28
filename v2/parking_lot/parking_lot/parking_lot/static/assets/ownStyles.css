@@ -1,18 +1,39 @@
-.d-flex{
-    display: flex;
+.d-flex {
+  display: flex;
 }
-.d-initial{
-    display: initial;
+.d-initial {
+  display: initial;
 }
-.align-items{
-    align-items:first baseline;
+.align-items {
+  align-items: first baseline;
 }
-.text-center{
-    text-align: center
+.text-center {
+  text-align: center;
+}
+.v-align-middle {
+  vertical-align: middle;
+}
+.justify-center {
+  justify-content: center;
 }
 .user {
-    width: 120px; /* Set the width of the container */
-    /* white-space: nowrap; */ /* Prevent text wrapping */
-    overflow: hidden; /* Hide overflowing text */
-    text-overflow: ellipsis; /* Add ellipsis (...) for truncated text */
-  }
+  width: 120px; /* Set the width of the container */
+  /* white-space: nowrap; */ /* Prevent text wrapping */
+  overflow: hidden; /* Hide overflowing text */
+  text-overflow: ellipsis; /* Add ellipsis (...) for truncated text */
+}
+
+.padding-L-R-20 {
+  padding-left: 20%;
+  padding-right: 20%;
+}
+.padding-10{
+    padding: 10%;
+}
+
+.height-40{
+    height: 40px;
+}
+.align-content-space-evenly{
+    align-content: space-evenly;
+}
