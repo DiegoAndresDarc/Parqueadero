@@ -1,14 +1,10 @@
-{% extends "base_template.html" %}
+{% extends "securityGuardIndex.html" %}
 
 {% block content %}
-<div class="nav-left">
-    <h3><a href="{% url 'securityGuardHome' %}">Volver</a></h3>
-</div>
 <h1>Select a vehicle</h1>
 
 {% if inhabitant_vehicles %}
 <ul>
-
     {% for vehicle in inhabitant_vehicles %}
     <li>
         {% if action == 'entry' %}
@@ -20,11 +16,9 @@
         {% endif %}
     </li>
     {% endfor %}
-
 </ul>
 {% elif visitor_vehicles %}
 <ul>
-
     {% for vehicle in visitor_vehicles %}
     <li>
         {% if action == 'entry' %}
@@ -36,7 +30,6 @@
         {% endif %}
     </li>
     {% endfor %}
-
 </ul>
 {% else %}
 <p>There are no vehicles associated with the parking lot.</p>

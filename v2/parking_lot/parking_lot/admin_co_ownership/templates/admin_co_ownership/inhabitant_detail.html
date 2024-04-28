@@ -1,10 +1,6 @@
-{% extends "base_template.html" %}
+{% extends "adminIndex.html" %}
 
 {% block content %}
-
-<div class="nav-left">
-    <h3><a href="{% url 'adminHome' %}">Volver</a></h3>
-</div>
 <h1>Inhabitant: {{ inhabitant.last_name }}, {{inhabitant.first_name}} </h1>
 <div>
     <h3>Acciones:</h3>
