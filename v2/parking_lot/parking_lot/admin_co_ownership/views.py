@@ -42,6 +42,7 @@ def inhabitant_vehicles(request, action):
     inhabitantvehicle_list = InhabitantVehicle.objects.filter(owner__apartment__co_ownership=co_ownership)
 
     context = {
+        'co_ownership': co_ownership,
         'action': action,
         'inhabitantvehicle_list': inhabitantvehicle_list
     }
@@ -58,4 +59,10 @@ def remove_parking_place_to_vehicle(request, pk):
     vehicle = get_object_or_404(InhabitantVehicle, pk=pk)
     vehicle.parking_place = None
     vehicle.save()
-    return inhabitant_vehicles(request, {'action': 'remove'})
+    co_ownership = get_object_or_404(CoOwnership, administrator=request.user)
+
+    context = {
+        'co_ownership': co_ownership,
+        'action': 'remove'
+    }
+    return inhabitant_vehicles(request, context=context)

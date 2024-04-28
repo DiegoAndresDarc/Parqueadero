@@ -22,7 +22,9 @@ def barcode_parking_place(request, action, person, pk=None):
     :param request:
     :return render:
     """
+    security_guard = get_object_or_404(SecurityGuard, user=request.user)
     context = {
+        'co_ownership': security_guard.co_ownership,
         'action': action
     }
     if request.method == 'POST':
@@ -44,11 +46,13 @@ def barcode_parking_place(request, action, person, pk=None):
                     return HttpResponseRedirect(reverse('entryVisitorVehicle', kwargs={'pk': vehicle.id}))
             if action == 'departure':
                 if not parking_place.in_use:
-                    return render(request, 'security_guard/parking_use.html', {'action': 'not in use'})
+                    context['action'] = 'not in use'
+                    return render(request, 'security_guard/parking_use.html', context=context)
                 return HttpResponseRedirect(reverse('departureInhabitantVehicle', kwargs={'parking_place_id': parking_place.id}))
     else:
         form = GetParkingFromBarcodeForm()
-    return render(request, 'security_guard/barcode_parking_place.html', {'form': form})
+    context['form'] = form
+    return render(request, 'security_guard/barcode_parking_place.html', context=context)
 
 
 @login_required
@@ -59,18 +63,25 @@ def entry_inhabitant_vehicle(request, pk):
     :param pk:
     :return render:
     """
+    security_guard = get_object_or_404(SecurityGuard, user=request.user)
     vehicle = get_object_or_404(InhabitantVehicle, pk=pk)
+    context = {
+        'co_ownership': security_guard.co_ownership,
+        'action': 'entry'
+    }
     if vehicle.due_date < timezone.now():
-        return render(request, 'security_guard/parking_use.html', {'action': 'soat is due'})
+        context['action'] = 'soat is due'
+        return render(request, 'security_guard/parking_use.html', context=context)
     if not vehicle.owner.up_to_date:
-        return render(request, 'security_guard/parking_use.html', {'action': 'not up to date'})
+        context['action'] = 'not up to date'
+        return render(request, 'security_guard/parking_use.html', context=context)
     inhabitant_parking_use = InhabitantParkingUse()
     inhabitant_parking_use.vehicle = vehicle
     inhabitant_parking_use.save()
     parking_place = get_object_or_404(ParkingPlace, id=vehicle.parking_place_id)
     parking_place.in_use = True
     parking_place.save()
-    return render(request, 'security_guard/parking_use.html', {'action': 'entry'})
+    return render(request, 'security_guard/parking_use.html', context=context)
 
 
 @login_required
@@ -81,13 +92,18 @@ def departure_inhabitant_vehicle(request, parking_place_id):
     :param request:
     :return render:
     """
+    security_guard = get_object_or_404(SecurityGuard, user=request.user)
     parking_place = get_object_or_404(ParkingPlace, pk=parking_place_id)
     inhabitant_parking_use = InhabitantParkingUse.objects.filter(vehicle__parking_place=parking_place).latest('id')
     inhabitant_parking_use.departure_date = timezone.now()
     inhabitant_parking_use.save()
     parking_place.in_use = False
     parking_place.save()
-    return render(request, 'security_guard/parking_use.html', {'action': 'departure'})
+    context = {
+        'co_ownership': security_guard.co_ownership,
+        'action': 'departure'
+    }
+    return render(request, 'security_guard/parking_use.html', context=context)
 
 
 @login_required
@@ -98,6 +114,7 @@ def entry_visitor_vehicle(request, pk):
     :param pk:
     :return render:
     """
+    security_guard = get_object_or_404(SecurityGuard, user=request.user)
     vehicle = get_object_or_404(VisitorVehicle, pk=pk)
     visitor_parking_use = VisitorParkingUse()
     visitor_parking_use.vehicle = vehicle
@@ -105,7 +122,11 @@ def entry_visitor_vehicle(request, pk):
     parking_place = get_object_or_404(ParkingPlace, id=vehicle.parking_place_id)
     parking_place.in_use = True
     parking_place.save()
-    return render(request, 'security_guard/parking_use.html', {'action': 'entry'})
+    context = {
+        'co_ownership': security_guard.co_ownership,
+        'action': 'entry'
+    }
+    return render(request, 'security_guard/parking_use.html', context=context)
 
 
 @login_required
@@ -116,6 +137,7 @@ def departure_visitor_vehicle(request, pk):
     :param request:
     :return render:
     """
+    security_guard = get_object_or_404(SecurityGuard, user=request.user)
     vehicle = get_object_or_404(VisitorVehicle, pk=pk)
     parking_place = vehicle.parking_place
     visitor_parking_use = VisitorParkingUse.objects.filter(vehicle=vehicle).latest('id')
@@ -148,7 +170,12 @@ def departure_visitor_vehicle(request, pk):
     total_pay = round(total_pay, 2)
     visitor_parking_use.save()
     parking_place.save()
-    return render(request, 'security_guard/total_to_pay.html', {'pk': vehicle.owner.id, 'money': total_pay})
+    context = {
+        'co_ownership': security_guard.co_ownership,
+        'pk': vehicle.owner.id,
+        'money': total_pay
+    }
+    return render(request, 'security_guard/total_to_pay.html', context=context)
 
 
 @login_required
@@ -160,6 +187,7 @@ def make_payment(request, pk, money):
     :param money:
     :return:
     """
+    security_guard = get_object_or_404(SecurityGuard, user=request.user)
     money = decimal.Decimal(money)
     shift = Shift.objects.latest('id')
     shift.final_money += money
@@ -168,4 +196,8 @@ def make_payment(request, pk, money):
     visitor_payment.visitor = get_object_or_404(Visitor, pk=pk)
     visitor_payment.value = money
     visitor_payment.save()
-    return render(request, 'security_guard/parking_use.html', {'action': 'departure'})
+    context = {
+        'co_ownership': security_guard.co_ownership,
+        'action': 'departure'
+    }
+    return render(request, 'security_guard/parking_use.html', context=context)
