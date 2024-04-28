@@ -1,22 +1,16 @@
-{% extends "base_template.html" %}
+{% extends "adminIndex.html" %}
 
 {% block content %}
-<div class="nav-left">
-    <h3><a href="{% url 'adminHome' %}">Volver</a></h3>
-</div>
 <h1>Apartment List</h1>
 
 {% if apartment_list %}
 <ul>
-
     {% for apartment in apartment_list %}
     <li>
         <a href="{{ apartment.get_absolute_url }}">{{ apartment.apartment }}</a> ({{apartment.block}})
     </li>
     {% endfor %}
-
 </ul>
-
 {% else %}
 <p>There are no apartments in the co-ownership.</p>
 {% endif %}

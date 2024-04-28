@@ -1,12 +1,6 @@
-{% extends "base_template.html" %}
+{% extends "adminIndex.html" %}
 
 {% block content %}
-
-<aside class="menu">
-    <ul class="menu-list">
-        <li><a href="{% url 'adminHome' %}">Volver</a></li>
-    </ul>
-</aside>
 <form class="box" action="" method="post">
     {% csrf_token %}
     <div class="field">
@@ -20,7 +14,5 @@
             <button class="button is-link"> Submit</button>
         </div>
     </div>
-
 </form>
-
 {% endblock %}

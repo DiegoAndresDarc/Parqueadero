@@ -1,14 +1,10 @@
-{% extends "base_template.html" %}
+{% extends "adminIndex.html" %}
 
 {% block content %}
-<div class="nav-left">
-    <h3><a href="{% url 'adminHome' %}">Volver</a></h3>
-</div>
 <h1>Select a vehicle:</h1>
 
 {% if inhabitantvehicle_list %}
 <ul>
-
     {% for inhabitantvehicle in inhabitantvehicle_list %}
     {% if action == 'set' %}
     {% if inhabitantvehicle.parking_place is None %}
@@ -30,9 +26,7 @@
     {% endif %}
     {% endif %}
     {% endfor %}
-
 </ul>
-
 {% else %}
 <p>There are no vehicles in the co-ownership.</p>
 {% endif %}

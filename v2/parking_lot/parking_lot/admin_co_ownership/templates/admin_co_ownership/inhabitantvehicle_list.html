@@ -1,23 +1,17 @@
-{% extends "base_template.html" %}
+{% extends "adminIndex.html" %}
 
 {% block content %}
-<div class="nav-left">
-    <h3><a href="{% url 'adminHome' %}">Volver</a></h3>
-</div>
 <h1>Inhabitant Vehicles List</h1>
 
 {% if inhabitantvehicle_list %}
 <ul>
-
     {% for inhabitantvehicle in inhabitantvehicle_list %}
     <li>
         <a href="{{ inhabitantvehicle.get_absolute_url }}">{{ inhabitantvehicle.brand }} {{ inhabitantvehicle.model }}
             {{ inhabitantvehicle.color }}</a> ({{inhabitantvehicle.owner}})
     </li>
     {% endfor %}
-
 </ul>
-
 {% else %}
 <p>There are no vehicles in the co-ownership.</p>
 {% endif %}
