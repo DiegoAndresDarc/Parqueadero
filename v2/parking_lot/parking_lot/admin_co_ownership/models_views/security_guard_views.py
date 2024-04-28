@@ -20,13 +20,12 @@ def create_security_guard(request):
     :return:
     """
 
+    co_ownership = get_object_or_404(CoOwnership, administrator=request.user)
     if request.method == 'POST':
-
         # Create a form instance and populate it with data from the request (binding):
         form = SecurityGuardForm(request.POST)
         # Check if the form is valid:
         if form.is_valid():
-            co_ownership = get_object_or_404(CoOwnership, administrator=request.user)
             user = form.save()
             group = Group.objects.get(name='security_guards')
             group.user_set.add(user)
@@ -39,7 +38,8 @@ def create_security_guard(request):
             return HttpResponseRedirect(reverse('adminHome'))
     else:
         form = SecurityGuardForm()
-    return render(request, 'admin_co_ownership/securityguard_form.html', {'form': form})
+    context = {'form': form, 'co_ownership': co_ownership}
+    return render(request, 'admin_co_ownership/securityguard_form.html', context=context)
 
 
 class SecurityGuardListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
@@ -49,6 +49,12 @@ class SecurityGuardListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     def get_queryset(self):
         co_ownership = get_object_or_404(CoOwnership, administrator=self.request.user)
         return SecurityGuard.objects.filter(co_ownership=co_ownership)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(SecurityGuardListView, self).get_context_data(**kwargs)
+        co_ownership = get_object_or_404(CoOwnership, administrator=self.request.user)
+        context['co_ownership'] = co_ownership
+        return context
 
     def test_func(self):
         return is_admins_co_ownerships(self.request.user)
