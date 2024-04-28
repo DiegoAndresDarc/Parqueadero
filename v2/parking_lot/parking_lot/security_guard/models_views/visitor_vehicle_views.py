@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.views.generic import ListView
 
-from security_guard.models import VisitorVehicle, Visitor, SecurityGuard
+from security_guard.models import VisitorVehicle, Visitor, SecurityGuard, Shift
 from security_guard.forms import CreateVisitorVehicleForm
 from . import is_security_guard
 
@@ -26,6 +26,19 @@ class VisitorVehicleListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         context['action'] = action
         security_guard = get_object_or_404(SecurityGuard, user=self.request.user)
         context['co_ownership']: security_guard.co_ownership
+
+        shift_started = False
+        try:
+            last_shift = Shift.objects.latest('id')
+            if last_shift.end_date is None:
+                shift_started = True
+        except Shift.DoesNotExist:
+            pass
+        if not shift_started:
+            context['action'] = 'error'
+            return render(self.request, 'security_guard/shift_error.html', context=context)
+
+        context['shift_started'] = shift_started
         return context
 
     def test_func(self):
@@ -41,7 +54,23 @@ def create_visitor_vehicle(request, pk):
     :return: render
     """
     security_guard = get_object_or_404(SecurityGuard, user=request.user)
+    context = {
+        'co_ownership': security_guard.co_ownership
+    }
+    shift_started = False
+    try:
+        last_shift = Shift.objects.latest('id')
+        if last_shift.end_date is None:
+            shift_started = True
+    except Shift.DoesNotExist:
+        pass
+    if not shift_started:
+        context['action'] = 'error'
+        return render(request, 'security_guard/shift_error.html', context=context)
+    context['shift_started'] = shift_started
+
     owner = get_object_or_404(Visitor, pk=pk)
+
     if request.method == 'POST':
 
         # Create a form instance and populate it with data from the request (binding):
@@ -52,13 +81,12 @@ def create_visitor_vehicle(request, pk):
             visitor_vehicle.owner = owner
             visitor_vehicle.save()
             # redirect to a new URL:
-            return HttpResponseRedirect(reverse('barcodeVEntry', kwargs={'pk': visitor_vehicle.id}))
+            return HttpResponseRedirect(reverse('barcodeVEntry', kwargs={
+                'pk': visitor_vehicle.id, 'co_ownership': security_guard.co_ownership
+            }))
     else:
         form = CreateVisitorVehicleForm()
 
-    context = {
-        'co_ownership': security_guard.co_ownership,
-        'form': form,
-        'pk': pk
-    }
+    context['form'] = form
+    context['pk'] = pk
     return render(request, 'security_guard/visitorvehicle_form.html', context=context)
