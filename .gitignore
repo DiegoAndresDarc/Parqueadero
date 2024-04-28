@@ -12,6 +12,8 @@
 *.ear
 *.sar
 *.class
+*.pyc
+*.gitignore
 .cvsignore
 nbproject/private/
 build/
