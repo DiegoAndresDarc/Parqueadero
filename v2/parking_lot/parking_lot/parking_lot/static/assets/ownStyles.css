@@ -1,0 +1,18 @@
+.d-flex{
+    display: flex;
+}
+.d-initial{
+    display: initial;
+}
+.align-items{
+    align-items:first baseline;
+}
+.text-center{
+    text-align: center
+}
+.user {
+    width: 120px; /* Set the width of the container */
+    /* white-space: nowrap; */ /* Prevent text wrapping */
+    overflow: hidden; /* Hide overflowing text */
+    text-overflow: ellipsis; /* Add ellipsis (...) for truncated text */
+  }
