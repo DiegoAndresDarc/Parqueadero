@@ -27,5 +27,10 @@ v2/parking_lot/venv/
 .idea/
 v2/parking_lot/parking_lot/documents/
 v2/parking_lot/parking_lot/parking_lot/__pycache__/
+v2/parking_lot/parking_lot/parking_lot/settings/__pycache__/
 v2/parking_lot/parking_lot/admin_co_ownership/__pycache__/
+v2/parking_lot/parking_lot/admin_co_ownership/migrations/__pycache__/
+v2/parking_lot/parking_lot/admin_co_ownership/models_views/__pycache__/
 v2/parking_lot/parking_lot/security_guard/__pycache__/
+v2/parking_lot/parking_lot/security_guard/migrations/__pycache__/
+v2/parking_lot/parking_lot/security_guard/models_views/__pycache__/
