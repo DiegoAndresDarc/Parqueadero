@@ -44,9 +44,12 @@ def visitor_identification(request, action):
                     return render(request, 'security_guard/parking_use.html', context=context)
                 return HttpResponseRedirect(reverse('visitorCreate'))
             else:
-                return HttpResponseRedirect(reverse('visitorVehicles', kwargs={
-                    'pk': visitor[0].id, 'action': action, 'co_ownership': security_guard.co_ownership
-                }))
+                return HttpResponseRedirect(reverse(
+                    'visitorVehicles',
+                    kwargs={
+                        'pk': visitor[0].id,
+                        'action': action
+                    }))
     else:
         form = GetVisitorFromIdentificationForm()
     context['form'] = form
@@ -77,21 +80,18 @@ def create_visitor(request):
     context['shift_started'] = shift_started
 
     if request.method == 'POST':
-
-        # Create a form instance and populate it with data from the request (binding):
         form = CreateVisitorForm(request.POST)
-        # Check if the form is valid:
         if form.is_valid():
             security_guard = get_object_or_404(SecurityGuard, user=request.user)
             co_ownership = security_guard.co_ownership
             visitor = form.save(commit=False)
             visitor.co_ownership = co_ownership
             visitor.save()
-            # redirect to a new URL:
-            return HttpResponseRedirect(reverse('visitorVehicles', kwargs={
-                'pk': visitor.pk,
-                'co_ownership': security_guard.co_ownership}))
-            # If this is a GET (or any other method) create the default form.
+            return HttpResponseRedirect(reverse(
+                'visitorVehicles',
+                kwargs={
+                    'pk': visitor.pk, 'action': 'create'
+                }))
     else:
         form = CreateVisitorForm()
     context['form'] = form

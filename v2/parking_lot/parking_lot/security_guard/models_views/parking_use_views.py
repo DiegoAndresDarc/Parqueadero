@@ -45,10 +45,15 @@ def barcode_parking_place(request, action, person, pk=None):
         form = GetParkingFromBarcodeForm(request.POST)
         if form.is_valid():
             barcode = form.cleaned_data['barcode']
-            parking_place = get_object_or_404(ParkingPlace, barcode=barcode)
+            parking_place = ParkingPlace.objects.filter(barcode=barcode)
+            if len(parking_place) == 0:
+                context['action'] = 'parking not registered'
+                return render(request, 'security_guard/parking_use.html', context=context)
+            parking_place = parking_place[0]
             if action == 'entry':
                 if parking_place.in_use:
-                    return render(request, 'security_guard/parking_use.html', {'action': 'in use'})
+                    context['action'] = 'in use'
+                    return render(request, 'security_guard/parking_use.html', context=context)
                 if person == 'I':
                     vehicles = InhabitantVehicle.objects.filter(parking_place=parking_place)
                     context['inhabitant_vehicles'] = vehicles
@@ -223,9 +228,9 @@ def departure_visitor_vehicle(request, pk):
     if visit_payment_type == 'H':
         multiplier = dt.seconds / 60 / 60
     elif visit_payment_type == 'M':
-        multiplier = decimal.Decimal(dt.seconds / 60)
+        multiplier = dt.seconds / 60
     elif visit_payment_type == 'D':
-        multiplier = decimal.Decimal(dt.days / 7)
+        multiplier = dt.days / 7
     if vehicle.type == 'C':
         payment_value = float(configuration.car_payment_value)
     elif vehicle.type == 'M':
