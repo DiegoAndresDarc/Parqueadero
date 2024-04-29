@@ -228,9 +228,9 @@ def departure_visitor_vehicle(request, pk):
     if visit_payment_type == 'H':
         multiplier = dt.seconds / 60 / 60
     elif visit_payment_type == 'M':
-        multiplier = decimal.Decimal(dt.seconds / 60)
+        multiplier = dt.seconds / 60
     elif visit_payment_type == 'D':
-        multiplier = decimal.Decimal(dt.days / 7)
+        multiplier = dt.days / 7
     if vehicle.type == 'C':
         payment_value = float(configuration.car_payment_value)
     elif vehicle.type == 'M':
