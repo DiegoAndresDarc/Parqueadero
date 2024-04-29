@@ -18,6 +18,8 @@
     <div class="notification is-danger">The vehicle is not allowed entry, it has expired soat </div>
     {% elif action == 'not up to date' %}
     <div class="notification is-danger">The owner of the vehicle is not up to date with the parking payment </div>
+    {% elif action == 'parking not registered' %}
+    <div class="notification is-danger">A parking place with that barcode is not registered. Please enter a valid barcode </div>
     {% else %}
     <div class="notification is-danger">There was an unexpected error. Please try again </div>
     {% endif %}

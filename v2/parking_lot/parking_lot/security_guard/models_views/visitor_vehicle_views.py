@@ -72,7 +72,6 @@ def create_visitor_vehicle(request, pk):
     owner = get_object_or_404(Visitor, pk=pk)
 
     if request.method == 'POST':
-
         # Create a form instance and populate it with data from the request (binding):
         form = CreateVisitorVehicleForm(request.POST, request.FILES)
         # Check if the form is valid:
@@ -81,9 +80,7 @@ def create_visitor_vehicle(request, pk):
             visitor_vehicle.owner = owner
             visitor_vehicle.save()
             # redirect to a new URL:
-            return HttpResponseRedirect(reverse('barcodeVEntry', kwargs={
-                'pk': visitor_vehicle.id, 'co_ownership': security_guard.co_ownership
-            }))
+            return HttpResponseRedirect(reverse('barcodeVEntry', kwargs={'pk': visitor_vehicle.id}))
     else:
         form = CreateVisitorVehicleForm()
 

@@ -24,6 +24,7 @@ def start_shift(request, action):
     try:
         last_shift = Shift.objects.latest('id')
         if last_shift.end_date is None:
+            context['shift_started'] = True
             return render(request, 'security_guard/shift_error.html', context=context)
         money = last_shift.final_money
     except Shift.DoesNotExist:
@@ -52,7 +53,7 @@ def end_shift(request, action):
     try:
         last_shift = Shift.objects.filter(security_guard=security_guard).latest('id')
         if last_shift.end_date is not None:
-            return render(request, 'security_guard/shift_error.html', {'action': action})
+            return render(request, 'security_guard/shift_error.html', context=context)
         last_shift.end_date = timezone.now()
         money = last_shift.final_money
         last_shift.save()
