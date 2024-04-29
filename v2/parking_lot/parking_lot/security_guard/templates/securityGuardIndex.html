@@ -1,6 +1,5 @@
 {% extends "base_template.html" %} {% block sidebar %}
 <br />
-
 <br />
 <div class="padding-L-R-20">
     
@@ -9,42 +8,57 @@
         <h1 class="title text-center has-text-info">
             SESION DE GUARDA: {{ user.first_name }} {{ user.last_name }} ( {{user.get_username}} )
           </h1>
-
     </div>
-    <div class="card-content">
+    <div class="card-content is-centered">
+      <h2 class="height-40 align-content-space-evenly has-text-info has-text-centered">
+        Opciones
+      </h2>
+      <div class="d-flex justify-center">
+        {% if not shift_started %}
+        <a class="button is-primary border-radius-12" href="{% url 'startShift' %}">Iniciar Turno</a>
+        {% else %}
+          <a class="button is-danger border-radius-12" href="{% url 'endShift' %}">Finalizar Turno</a>
+          {% endif %}
+      </div>
     
-        <h2
-          class="height-40 align-content-space-evenly has-text-info has-text-centered"
-        >
-          Opciones
-        </h2>
-        <ul class="menu-list">
-          {% if not shift_started %}
-          <li>
-            <a class="button is-primary" href="{% url 'startShift' %}">Iniciar Turno</a>
-          </li>
-          {% else %}
-          <li>
-            <a class="button is-danger" href="{% url 'endShift' %}">Finalizar Turno</a>
-          </li>
-        </ul>
     </div>
   </div>
+  <br><br>
+  {% if shift_started %}
+
+  <div class="card is-large">
+    <div class="card-content d-flex justify-space-around">
+      <div class="d-inline-block">
+        <h1 class="title">Residentes</h1>
+        <h2 class="subtitle">
+          Registre el ingreso o salida de residentes.
+        </h2>
+        <div class="card-content ">
+            <a class="button is-info  border-radius-12" href="{% url 'barcodeIEntry' %}">Registrar entrada</a>
+            <a class="button is-dark is-warning border-radius-12" href="{% url 'barcodeIDeparture' %}">Registrar salida</a>
+          </ul>
+        </div>
+      </div>
+      <div class="d-inline-block ">
+        <h1 class="title">Visitantes</h1>
+        <h2 class="subtitle">
+          Registre el ingreso o salida de visitantes.
+        </h2>
+        <div class="card-content">
+            <a class="button is-info border-radius-12" href="{% url 'visitorEntry' %}">Registrar entrada</a>
+            <a class="button is-dark is-warning border-radius-12" href="{% url 'visitorDeparture' %}">Registrar salida</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %} 
+</div>
+<div class="padding-L-R-20 d-flex justify-center">
+  {% if not shift_started %}
+  <br>
+  <a class="button is-dark border-radius-12" href="{% url 'logout'%}">Desconectarse</a>
+  
+  {% endif %} 
 </div>
 
-<p class="menu-label">Residentes</p>
-<ul class="menu-list">
-  <li><a href="{% url 'barcodeIEntry' %}">Registrar entrada</a></li>
-  <li><a href="{% url 'barcodeIDeparture' %}">Registrar salida</a></li>
-</ul>
-
-<p class="menu-label">Visitantes</p>
-<ul class="menu-list">
-  <li><a href="{% url 'visitorEntry' %}">Registrar entrada</a></li>
-  <li><a href="{% url 'visitorDeparture' %}">Registrar salida</a></li>
-</ul>
-{% endif %} {% if not shift_started %}
-<br>
-<a class="button is-warning" href="{% url 'logout'%}">Desconectarse</a>
-
-{% endif %} {% endblock %}
+{% endblock %}
