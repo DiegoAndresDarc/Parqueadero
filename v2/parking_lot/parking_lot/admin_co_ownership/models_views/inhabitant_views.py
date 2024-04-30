@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
 
 from admin_co_ownership.models import Inhabitant, CoOwnership
-from . import is_admins_co_ownerships
+from . import is_admins_co_ownerships, set_default_context
 
 
 class InhabitantCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
@@ -13,8 +13,7 @@ class InhabitantCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(InhabitantCreateView, self).get_context_data(**kwargs)
-        co_ownership = get_object_or_404(CoOwnership, administrator=self.request.user)
-        context['co_ownership'] = co_ownership
+        set_default_context(self.request.user, context)
         return context
 
     def test_func(self):
@@ -27,8 +26,7 @@ class InhabitantListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(InhabitantListView, self).get_context_data(**kwargs)
-        co_ownership = get_object_or_404(CoOwnership, administrator=self.request.user)
-        context['co_ownership'] = co_ownership
+        set_default_context(self.request.user, context)
         return context
 
     def get_queryset(self):
@@ -44,8 +42,7 @@ class InhabitantDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(InhabitantDetailView, self).get_context_data(**kwargs)
-        co_ownership = get_object_or_404(CoOwnership, administrator=self.request.user)
-        context['co_ownership'] = co_ownership
+        set_default_context(self.request.user, context)
         return context
 
     def test_func(self):
@@ -58,8 +55,7 @@ class InhabitantUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(InhabitantUpdateView, self).get_context_data(**kwargs)
-        co_ownership = get_object_or_404(CoOwnership, administrator=self.request.user)
-        context['co_ownership'] = co_ownership
+        set_default_context(self.request.user, context)
         return context
 
     def test_func(self):
@@ -72,8 +68,7 @@ class InhabitantDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(InhabitantDeleteView, self).get_context_data(**kwargs)
-        co_ownership = get_object_or_404(CoOwnership, administrator=self.request.user)
-        context['co_ownership'] = co_ownership
+        set_default_context(self.request.user, context)
         return context
 
     def test_func(self):
