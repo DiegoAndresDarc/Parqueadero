@@ -3,21 +3,25 @@ from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.utils import timezone
+from datetime import date
 
 
 def photo_directory_path(instance, filename):
-    # file will be uploaded to MEDIA_ROOT/photo_<type>_<brand>_<model>/<filename>
-    return 'photo_{0}_{1}_{2}/{3}'.format(instance.type, instance.brand, instance.model, filename)
+    # file will be uploaded to MEDIA_ROOT/plate/photo_dd_MM_YYYY
+    today = date.today().strftime('%d_%m_%Y')
+    return '{0}/foto_{1}{2}'.format(instance.plate, today, filename[filename.rindex('.'):])
 
 
 def property_letter_directory_path(instance, filename):
-    # file will be uploaded to MEDIA_ROOT/property_letter_<type>_<brand>_<model>_<id>/<filename>
-    return 'property_letter_{0}_{1}_{2}_{3}/{4}'.format(instance.type, instance.brand, instance.model, instance.owner.id, filename)
+    # file will be uploaded to MEDIA_ROOT/plate/property_letter_dd_MM_YYYY
+    today = date.today().strftime('%d_%m_%Y')
+    return '{0}/carta_de_propiedad_{1}{2}'.format(instance.plate, today, filename[filename.rindex('.'):])
 
 
 def soat_directory_path(instance, filename):
-    # file will be uploaded to MEDIA_ROOT/soat_<type>_<brand>_<model>_<id>/<filename>
-    return 'soat_{0}_{1}_{2}_{3}/{4}'.format(instance.type, instance.brand, instance.model, instance.owner.id, filename)
+    # file will be uploaded to MEDIA_ROOT/plate/soat_dd_MM_YYYY
+    today = date.today().strftime('%d_%m_%Y')
+    return '{0}/soat_{1}{2}'.format(instance.plate, today, filename[filename.rindex('.'):])
 
 
 class Person(models.Model):
@@ -130,7 +134,7 @@ class Inhabitant(Person):
     """
 
     email = models.EmailField(null=False, verbose_name="Correo electrónico")
-    apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE, null=False)
+    apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE, null=False, verbose_name="Apartamento")
     responsible = models.BooleanField(null=False, default=False, verbose_name="Es el responsable por el apartamento")
     up_to_date = models.BooleanField(default=False, verbose_name="Al día con pago del parqueadero")
 
@@ -148,7 +152,7 @@ class ParkingPlace(models.Model):
     area = models.DecimalField(decimal_places=2, max_digits=4, null=False, verbose_name="Área")
     admitted_weight = models.DecimalField(decimal_places=2, max_digits=5, null=False, verbose_name="Peso máximo admitido")
     admitted_axis = models.IntegerField(null=False, verbose_name="Ejes máximos admitidos")
-    barcode = models.CharField(max_length=20, null=False, verbose_name="Código de barras del carnet")
+    barcode = models.CharField(max_length=20, unique=True, null=False, verbose_name="Código de barras del carnet")
     supports_car = models.BooleanField(null=False, default=False, verbose_name="Admite carros")
     supports_motorcycle = models.BooleanField(null=False, default=False, verbose_name="Admite motocicletas")
     supports_bicycle = models.BooleanField(null=False, default=False, verbose_name="Admite bicicletas")
@@ -181,7 +185,7 @@ class Vehicle(models.Model):
         ordering = ['brand', 'model', 'type']
 
     # Fields
-    parking_place = models.ForeignKey(ParkingPlace, on_delete=models.CASCADE, null=True)
+    parking_place = models.ForeignKey(ParkingPlace, on_delete=models.CASCADE, null=True, verbose_name="Parqueadero")
     brand = models.CharField(max_length=20, null=False, verbose_name="Marca del vehiculo")
     model = models.CharField(max_length=20, null=False, verbose_name="Modelo del vehiculo")
 
@@ -206,7 +210,7 @@ class InhabitantVehicle(Vehicle):
     """
     Clase para administrar los vehículos de los habitantes de la copropiedad
     """
-    owner = models.ForeignKey(Inhabitant, on_delete=models.CASCADE, null=False)
+    owner = models.ForeignKey(Inhabitant, on_delete=models.CASCADE, null=False, verbose_name="Propietario")
     property_letter = models.FileField(upload_to=property_letter_directory_path, null=False, verbose_name="Carta de propiedad")
     soat = models.FileField(upload_to=soat_directory_path, null=True, verbose_name="Soporte del SOAT")
     due_date = models.DateField(null=True, verbose_name="Fecha de vencimiento del SOAT")
@@ -221,8 +225,8 @@ class InhabitantPayments(models.Model):
     """
 
     # Fields
-    inhabitant = models.ForeignKey(Inhabitant, on_delete=models.CASCADE, null=False)
-    payment_date = models.DateTimeField(null=False, default=timezone.now, verbose_name='Fecha del pago')
+    inhabitant = models.ForeignKey(Inhabitant, on_delete=models.CASCADE, null=False, verbose_name="Residente")
+    payment_date = models.DateTimeField(null=False, default=timezone.now, verbose_name="Fecha del pago")
 
     def get_absolute_url(self):
         return reverse('payment-detail', args=[str(self.id)])

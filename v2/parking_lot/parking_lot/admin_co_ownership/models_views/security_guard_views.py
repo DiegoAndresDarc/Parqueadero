@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views.generic import ListView
 
-from . import is_admins_co_ownerships
+from . import is_admins_co_ownerships, set_default_context
 from admin_co_ownership.forms import SecurityGuardForm
 from admin_co_ownership.models import CoOwnership
 from security_guard.models import SecurityGuard
@@ -19,13 +19,12 @@ def create_security_guard(request):
     :param request:
     :return:
     """
-
-    co_ownership = get_object_or_404(CoOwnership, administrator=request.user)
     if request.method == 'POST':
         # Create a form instance and populate it with data from the request (binding):
         form = SecurityGuardForm(request.POST)
         # Check if the form is valid:
         if form.is_valid():
+            co_ownership = get_object_or_404(CoOwnership, administrator=request.user)
             user = form.save()
             group = Group.objects.get(name='security_guards')
             group.user_set.add(user)
@@ -38,7 +37,8 @@ def create_security_guard(request):
             return HttpResponseRedirect(reverse('adminHome'))
     else:
         form = SecurityGuardForm()
-    context = {'form': form, 'co_ownership': co_ownership}
+    context = set_default_context(request.user, None)
+    context['form'] = form
     return render(request, 'admin_co_ownership/securityguard_form.html', context=context)
 
 
@@ -52,8 +52,7 @@ class SecurityGuardListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(SecurityGuardListView, self).get_context_data(**kwargs)
-        co_ownership = get_object_or_404(CoOwnership, administrator=self.request.user)
-        context['co_ownership'] = co_ownership
+        set_default_context(self.request.user, context)
         return context
 
     def test_func(self):
