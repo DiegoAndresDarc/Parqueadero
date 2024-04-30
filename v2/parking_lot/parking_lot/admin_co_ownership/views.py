@@ -61,8 +61,4 @@ def remove_parking_place_to_vehicle(request, pk):
     vehicle.save()
     co_ownership = get_object_or_404(CoOwnership, administrator=request.user)
 
-    context = {
-        'co_ownership': co_ownership,
-        'action': 'remove'
-    }
-    return inhabitant_vehicles(request, context=context)
+    return inhabitant_vehicles(request, action='remove')

@@ -27,7 +27,7 @@ class Visitor(Person):
 
 class VisitorVehicle(Vehicle):
     # Clase para administrar la información de los vehículos de los visitantes
-    owner = models.ForeignKey(Visitor, on_delete=models.CASCADE, null=True)
+    owner = models.ForeignKey(Visitor, on_delete=models.CASCADE, null=True, verbose_name='Propietario')
 
     def get_absolute_url(self):
         return reverse('visitor-vehicle-detail', args=[str(self.id)])
@@ -39,7 +39,7 @@ class VisitorsPayments(models.Model):
     """
 
     # Fields
-    visitor = models.ForeignKey(Visitor, on_delete=models.CASCADE, null=False)
+    visitor = models.ForeignKey(Visitor, on_delete=models.CASCADE, null=False, verbose_name='Visitante')
     payment_date = models.DateTimeField(null=False, default=timezone.now, verbose_name='Fecha del pago')
     value = models.DecimalField(decimal_places=2, max_digits=5, null=False, verbose_name='Valor del pago')
 
@@ -63,17 +63,17 @@ class ParkingUseRecord(models.Model):
         abstract = True
 
     # Fields
-    entry_date = models.DateTimeField(null=False, default=timezone.now, verbose_name='Fecha de ingreso')
+    entry_date = models.DateTimeField(null=False, default=timezone.now, verbose_name='Fecha y hora de ingreso')
     departure_date = models.DateTimeField(null=True, verbose_name='Fecha y hora de salida')
 
 
 class VisitorParkingUse(ParkingUseRecord):
 
     # Fields
-    vehicle = models.ForeignKey(VisitorVehicle, on_delete=models.CASCADE, null=False)
+    vehicle = models.ForeignKey(VisitorVehicle, on_delete=models.CASCADE, null=False, verbose_name='Vehículo')
 
 
 class InhabitantParkingUse(ParkingUseRecord):
 
     # Fields
-    vehicle = models.ForeignKey(InhabitantVehicle, on_delete=models.CASCADE, null=False)
+    vehicle = models.ForeignKey(InhabitantVehicle, on_delete=models.CASCADE, null=False, verbose_name='Vehículo')
