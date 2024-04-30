@@ -37,9 +37,9 @@
           {% if not configured %}
             <a class="navbar-item" href="{% url 'setConfig' %}">Añadir</a>
           {% else %}
-            <a class="navbar-item" href="{% url 'modConfig' pk=id_configuration %}">
+            <a class="navbar-item" href="{% url 'modConfig' pk=id_configuration %}">Modificar</a>
             <hr class="navbar-divider" />
-            <a class="navbar-item" href="{% url 'delConfig' pk=id_configuration %}">
+            <a class="navbar-item" href="{% url 'delConfig' pk=id_configuration %}">Eliminar</a>
           {% endif %}
           <!-- <hr class="navbar-divider" /> -->
         </div>
