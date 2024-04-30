@@ -2,7 +2,7 @@
 
 1. Install python3
 2. Install pyenv
-3. Install mysql5.6
+3. Install mysql8
 4. Install docker
 5. Run the command to install project dependencies
    ```shell
@@ -10,7 +10,7 @@
    ```
 6. Start mysql database with docker
    ```shell
-   $ docker run -d --name=mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=12345 mysql/mysql-server:latest
+   $ docker run -d --name=mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password mysql/mysql-server:latest
    ```
 7. Copy the password and the run the following commands to change the password
    ```shell
@@ -30,7 +30,8 @@
     ```shell
     $ python3 manage.py createsuperuser --settings=parking_lot.settings.local
     ```
-10. Start the project
+10. Create a document folder in [this route](./parking_lot/parking_lot/parking_lot)
+11. Start the project
    ```shell
    $ python3 manage.py runserver --settings=parking_lot.settings.local
    ```

@@ -7,7 +7,7 @@ from django.views.generic import DeleteView
 
 from admin_co_ownership.forms import SetConfigurationForm, ModConfigurationForm
 from admin_co_ownership.models import CoOwnership, Configuration
-from . import is_admins_co_ownerships
+from . import is_admins_co_ownerships, set_default_context
 
 
 @login_required
@@ -18,6 +18,13 @@ def set_configuration(request):
     :return: render
     """
     co_ownership = get_object_or_404(CoOwnership, administrator=request.user)
+    configuration = Configuration.objects.filter(co_ownership=co_ownership)
+    if len(configuration) > 0:
+        return render(
+            request,
+            'admin_co_ownership/configuration_form_error.html',
+            context=set_default_context(request.user, None)
+        )
     if request.method == 'POST':
 
         # Create a form instance and populate it with data from the request (binding):
@@ -32,7 +39,8 @@ def set_configuration(request):
             # If this is a GET (or any other method) create the default form.
     else:
         form = SetConfigurationForm()
-    context = {'form': form, 'co_ownership': co_ownership}
+    context = set_default_context(request.user, None)
+    context['form'] = form
     return render(request, 'admin_co_ownership/configuration_form.html', context=context)
 
 
@@ -45,7 +53,6 @@ def update_configuration(request, pk):
     :return:
     """
     configuration = get_object_or_404(Configuration, pk=pk)
-    co_ownership = get_object_or_404(CoOwnership, administrator=request.user)
     if request.method == 'POST':
         # Create a form instance and populate it with data from the request (binding):
         form = ModConfigurationForm(request.POST, instance=configuration)
@@ -57,7 +64,8 @@ def update_configuration(request, pk):
             # If this is a GET (or any other method) create the default form.
     else:
         form = ModConfigurationForm(instance=configuration)
-    context = {'form': form, 'co_ownership': co_ownership}
+    context = set_default_context(request.user, None)
+    context['form'] = form
     return render(request, 'admin_co_ownership/configuration_form.html', context=context)
 
 
@@ -67,8 +75,7 @@ class ConfigurationDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteVie
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ConfigurationDeleteView, self).get_context_data(**kwargs)
-        co_ownership = get_object_or_404(CoOwnership, administrator=self.request.user)
-        context['co_ownership'] = co_ownership
+        set_default_context(self.request.user, context)
         return context
 
     def test_func(self):

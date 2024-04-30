@@ -7,7 +7,7 @@ from django.views.generic import ListView, DetailView, UpdateView, DeleteView
 
 from admin_co_ownership.forms import CreateApartmentForm
 from admin_co_ownership.models import CoOwnership, Apartment
-from . import is_admins_co_ownerships
+from . import is_admins_co_ownerships, set_default_context
 
 
 @login_required
@@ -17,22 +17,22 @@ def create_apartment(request):
     :param request:
     :return: render
     """
-    co_ownership = get_object_or_404(CoOwnership, administrator=request.user)
     if request.method == 'POST':
-
         # Create a form instance and populate it with data from the request (binding):
         form = CreateApartmentForm(request.POST)
         # Check if the form is valid:
         if form.is_valid():
+            co_ownership = get_object_or_404(CoOwnership, administrator=request.user)
             apartment = form.save(commit=False)
             apartment.co_ownership = co_ownership
             apartment.save()
             # redirect to a new URL:
             return HttpResponseRedirect(reverse('adminHome'))
-            # If this is a GET (or any other method) create the default form.
+    # If this is a GET (or any other method) create the default form.
     else:
         form = CreateApartmentForm()
-    context = {'form': form, 'co_ownership': co_ownership}
+    context = set_default_context(request.user, None)
+    context['form'] = form
     return render(request, 'admin_co_ownership/apartment_form.html', context=context)
 
 
@@ -46,8 +46,7 @@ class ApartmentListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ApartmentListView, self).get_context_data(**kwargs)
-        co_ownership = get_object_or_404(CoOwnership, administrator=self.request.user)
-        context['co_ownership'] = co_ownership
+        set_default_context(self.request.user, context)
         return context
 
     def test_func(self):
@@ -59,8 +58,7 @@ class ApartmentDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ApartmentDetailView, self).get_context_data(**kwargs)
-        co_ownership = get_object_or_404(CoOwnership, administrator=self.request.user)
-        context['co_ownership'] = co_ownership
+        set_default_context(self.request.user, context)
         return context
 
     def test_func(self):
@@ -73,8 +71,7 @@ class ApartmentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ApartmentUpdateView, self).get_context_data(**kwargs)
-        co_ownership = get_object_or_404(CoOwnership, administrator=self.request.user)
-        context['co_ownership'] = co_ownership
+        set_default_context(self.request.user, context)
         return context
 
     def test_func(self):
@@ -87,8 +84,7 @@ class ApartmentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ApartmentDeleteView, self).get_context_data(**kwargs)
-        co_ownership = get_object_or_404(CoOwnership, administrator=self.request.user)
-        context['co_ownership'] = co_ownership
+        set_default_context(self.request.user, context)
         return context
 
     def test_func(self):

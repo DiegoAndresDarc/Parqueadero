@@ -7,7 +7,7 @@ from django.views.generic import ListView, DetailView, UpdateView, DeleteView
 
 from admin_co_ownership.models import InhabitantVehicle, CoOwnership
 from admin_co_ownership.forms import InhabitantVehicleForm
-from . import is_admins_co_ownerships
+from . import is_admins_co_ownerships, set_default_context
 
 
 @login_required
@@ -17,7 +17,6 @@ def create_vehicle(request):
     :param request:
     :return: render
     """
-    co_ownership = get_object_or_404(CoOwnership, administrator=request.user)
     if request.method == 'POST':
 
         # Create a form instance and populate it with data from the request (binding):
@@ -29,8 +28,10 @@ def create_vehicle(request):
             return HttpResponseRedirect(reverse('adminHome'))
             # If this is a GET (or any other method) create the default form.
     else:
+        co_ownership = get_object_or_404(CoOwnership, administrator=request.user)
         form = InhabitantVehicleForm(co_ownership_id=co_ownership.id)
-    context = {'form': form, 'co_ownership': co_ownership}
+    context = set_default_context(request.user, None)
+    context['form'] = form
     return render(request, 'admin_co_ownership/inhabitantvehicle_form.html', context=context)
 
 
@@ -44,8 +45,7 @@ class InhabitantVehicleListView(LoginRequiredMixin, UserPassesTestMixin, ListVie
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(InhabitantVehicleListView, self).get_context_data(**kwargs)
-        co_ownership = get_object_or_404(CoOwnership, administrator=self.request.user)
-        context['co_ownership'] = co_ownership
+        set_default_context(self.request.user, context)
         return context
 
     def test_func(self):
@@ -57,8 +57,7 @@ class InhabitantVehicleDetailView(LoginRequiredMixin, UserPassesTestMixin, Detai
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(InhabitantVehicleDetailView, self).get_context_data(**kwargs)
-        co_ownership = get_object_or_404(CoOwnership, administrator=self.request.user)
-        context['co_ownership'] = co_ownership
+        set_default_context(self.request.user, context)
         return context
 
     def test_func(self):
@@ -71,8 +70,7 @@ class InhabitantVehicleUpdateView(LoginRequiredMixin, UserPassesTestMixin, Updat
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(InhabitantVehicleUpdateView, self).get_context_data(**kwargs)
-        co_ownership = get_object_or_404(CoOwnership, administrator=self.request.user)
-        context['co_ownership'] = co_ownership
+        set_default_context(self.request.user, context)
         return context
 
     def test_func(self):
@@ -85,8 +83,7 @@ class InhabitantVehicleDeleteView(LoginRequiredMixin, UserPassesTestMixin, Delet
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(InhabitantVehicleDeleteView, self).get_context_data(**kwargs)
-        co_ownership = get_object_or_404(CoOwnership, administrator=self.request.user)
-        context['co_ownership'] = co_ownership
+        set_default_context(self.request.user, context)
         return context
 
     def test_func(self):
@@ -100,8 +97,7 @@ class SetParkingPlaceView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(SetParkingPlaceView, self).get_context_data(**kwargs)
-        co_ownership = get_object_or_404(CoOwnership, administrator=self.request.user)
-        context['co_ownership'] = co_ownership
+        set_default_context(self.request.user, context)
         return context
 
     def test_func(self):
