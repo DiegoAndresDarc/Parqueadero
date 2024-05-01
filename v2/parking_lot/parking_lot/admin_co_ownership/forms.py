@@ -310,14 +310,6 @@ class InhabitantVehicleForm(ModelForm):
         for field in self.fields:
             if isinstance(self.fields[field], django.forms.fields.TypedChoiceField):
                 self.fields[field].widget.attrs.update({'class': 'select'})
-            elif isinstance(self.fields[field], django.forms.fields.CharField):
-                self.fields[field].widget.attrs.update({'class': 'textarea'})
-            elif isinstance(self.fields[field], django.forms.fields.FileField):
-                self.fields[field].widget.attrs.update({'class': 'file-label'})
-            elif isinstance(self.fields[field], django.forms.models.ModelChoiceField):
-                self.fields[field].widget.attrs.update({'class': 'select'})
-            else:
-                self.fields[field].widget.attrs.update({'class': 'input'})
 
     def clean_due_date(self):
         data = self.cleaned_data['due_date']
