@@ -6,10 +6,89 @@
 
 <form class="box" action="" method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    <div class="field">
-        <table class="table is-bordered is-narrow is-striped is-hoverable">
-            {{ form.as_table }}
-        </table>
+    <div class="field is-grouped">
+        <label class="label control">Parqueadero</label>
+        <div class="control">
+            {{ form.parking_place }}
+        </div>
+    </div>
+
+    <div class="field is-grouped">
+        <label class="label control">Propietario</label>
+        <div class="control">
+            {{ form.owner }}
+        </div>
+    </div>
+
+    <div class="field is-grouped">
+        <label class="label control">Marca del Vehiculo</label>
+        <div class="control">
+            <input class="input" type="text" name="brand">
+        </div>
+    </div>
+
+    <div class="field is-grouped">
+        <label class="label control">Modelo del Vehiculo</label>
+        <div class="control">
+            <input class="input" type="text" name="model">
+        </div>
+    </div>
+
+    <div class="field is-grouped">
+        <label class="label control">Color</label>
+        <div class="control">
+            <input class="input" type="text" name="color">
+        </div>
+    </div>
+
+    <div class="field is-grouped">
+        <label class="label control">Tipo de Vehiculo</label>
+        <div class="control">
+            {{ form.type }}
+        </div>
+    </div>
+
+    <div class="field is-grouped">
+        <label class="label control">Peso</label>
+        <div class="control">
+            <input class="input" type="number" name="weight">
+        </div>
+    </div>
+
+    <div class="field is-grouped">
+        <label class="label control">Número de ejes</label>
+        <div class="control">
+            <input class="input" type="number" name="axis">
+        </div>
+    </div>
+
+    <div class="field is-grouped">
+        <label class="label control">Placa</label>
+        <div class="control">
+            <input class="input" type="text" name="plate">
+        </div>
+    </div>
+
+    <div class="field is-grouped">
+        <label class="label control">Foto a Color</label>
+        {{ form.picture }}
+    </div>
+
+    <div class="field is-grouped">
+        <label class="label control">Carta de Propiedad</label>
+        {{ form.property_letter }}
+    </div>
+
+    <div class="field is-grouped">
+        <label class="label control">SOAT</label>
+        {{ form.soat }}
+    </div>
+
+    <div class="field is-grouped">
+        <label class="label control">Fecha de Vencimiento del SOAT</label>
+        <div class="control">
+            <input class="input" type="date" name="due_date">
+        </div>
     </div>
 
     <div class="field">

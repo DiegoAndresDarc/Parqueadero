@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
+from datetime import date
 
 from security_guard.models import VisitorParkingUse, InhabitantParkingUse, VisitorVehicle, Visitor, SecurityGuard, Shift, VisitorsPayments
 from admin_co_ownership.models import CoOwnership, ParkingPlace, InhabitantVehicle, Configuration
@@ -45,7 +46,7 @@ def barcode_parking_place(request, action, person, pk=None):
         form = GetParkingFromBarcodeForm(request.POST)
         if form.is_valid():
             barcode = form.cleaned_data['barcode']
-            parking_place = ParkingPlace.objects.filter(barcode=barcode)
+            parking_place = ParkingPlace.objects.filter(barcode=barcode, user_type=person)
             if len(parking_place) == 0:
                 context['action'] = 'parking not registered'
                 return render(request, 'security_guard/parking_use.html', context=context)
@@ -102,7 +103,7 @@ def entry_inhabitant_vehicle(request, pk):
 
     context['shift_started'] = shift_started
 
-    if vehicle.due_date < timezone.now():
+    if vehicle.due_date < date.today():
         context['action'] = 'soat is due'
         return render(request, 'security_guard/parking_use.html', context=context)
     if not vehicle.owner.up_to_date:

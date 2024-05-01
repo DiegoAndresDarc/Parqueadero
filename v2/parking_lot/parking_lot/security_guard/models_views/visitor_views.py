@@ -44,12 +44,7 @@ def visitor_identification(request, action):
                     return render(request, 'security_guard/parking_use.html', context=context)
                 return HttpResponseRedirect(reverse('visitorCreate'))
             else:
-                return HttpResponseRedirect(reverse(
-                    'visitorVehicles',
-                    kwargs={
-                        'pk': visitor[0].id,
-                        'action': action
-                    }))
+                return HttpResponseRedirect(reverse('visitorVehicles', kwargs={'pk': visitor[0].id, 'action': action}))
     else:
         form = GetVisitorFromIdentificationForm()
     context['form'] = form
@@ -87,11 +82,7 @@ def create_visitor(request):
             visitor = form.save(commit=False)
             visitor.co_ownership = co_ownership
             visitor.save()
-            return HttpResponseRedirect(reverse(
-                'visitorVehicles',
-                kwargs={
-                    'pk': visitor.pk, 'action': 'create'
-                }))
+            return HttpResponseRedirect(reverse('visitorVehicles', kwargs={'pk': visitor.pk, 'action': 'create'}))
     else:
         form = CreateVisitorForm()
     context['form'] = form
