@@ -158,11 +158,11 @@ class ParkingPlace(models.Model):
     supports_bicycle = models.BooleanField(null=False, default=False, verbose_name="Admite bicicletas")
 
     USERS_TYPE = (
-        ('R', 'Residentes'),
+        ('I', 'Residentes'),
         ('V', 'Visitantes')
     )
 
-    user_type = models.CharField(max_length=1, choices=USERS_TYPE, null=False, default='H', verbose_name="Para ser usado por")
+    user_type = models.CharField(max_length=1, choices=USERS_TYPE, null=False, default='I', verbose_name="Para ser usado por")
     in_use = models.BooleanField(null=False, default=False, verbose_name="Parqueadero en uso")
 
     class Meta:

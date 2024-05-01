@@ -45,7 +45,7 @@ def barcode_parking_place(request, action, person, pk=None):
         form = GetParkingFromBarcodeForm(request.POST)
         if form.is_valid():
             barcode = form.cleaned_data['barcode']
-            parking_place = ParkingPlace.objects.filter(barcode=barcode)
+            parking_place = ParkingPlace.objects.filter(barcode=barcode, user_type=person)
             if len(parking_place) == 0:
                 context['action'] = 'parking not registered'
                 return render(request, 'security_guard/parking_use.html', context=context)
