@@ -23,8 +23,8 @@
 8. Set up the database running the following commands:
    ```shell
    mysql> CREATE DATABASE parking_lot;
-   $ python3 manage.py makemigrations --settings=parking_lot.settings.local
-   $ python3 manage.py migrate --settings=parking_lot.settings.local
+   $ python manage.py makemigrations --settings=parking_lot.settings.local
+   $ python manage.py migrate --settings=parking_lot.settings.local
    ```
 9. Create the admin for the project
     ```shell
@@ -33,5 +33,5 @@
 10. Create a document folder in [this route](./parking_lot/parking_lot/parking_lot)
 11. Start the project
    ```shell
-   $ python3 manage.py runserver --settings=parking_lot.settings.local
+   $ python manage.py runserver --settings=parking_lot.settings.local
    ```
