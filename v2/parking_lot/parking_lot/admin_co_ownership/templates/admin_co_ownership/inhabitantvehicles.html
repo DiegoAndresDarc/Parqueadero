@@ -8,25 +8,26 @@
 {% if inhabitantvehicle_list %}
 <ul>
     {% for inhabitantvehicle in inhabitantvehicle_list %}
-    {% if action == 'set' %}
-    {% if inhabitantvehicle.parking_place is None %}
-    <li>
-        <a href="{% url 'vehicleStParkingPlace' pk=inhabitantvehicle.id %}">{{inhabitantvehicle.brand}} {{inhabitantvehicle.model}}
-            {{inhabitantvehicle.color}}</a> ({{inhabitantvehicle.owner}})
-    </li>
-    {% else %}
-    <p>No hay vehiculos sin parqueadero en la co-propiedad.</p>
-    {% endif %}
-    {% else %}
-    {% if inhabitantvehicle.parking_place is not None %}
-    <li>
-        <a href="{% url 'vehicleRmParkingPlace' pk=inhabitantvehicle.id %}">{{ inhabitantvehicle.brand }} {{inhabitantvehicle.model}}
-            {{inhabitantvehicle.color}}</a> ({{inhabitantvehicle.owner}})
-    </li>
-    {% else %}
-    <p>No hay vehiculos con parqueadero en la co-propiedad.</p>
-    {% endif %}
-    {% endif %}
+        {% if action == 'set' %}
+            {% if inhabitantvehicle.parking_place is None %}
+                <li>
+                    <a href="{% url 'vehicleStParkingPlace' pk=inhabitantvehicle.id %}">{{inhabitantvehicle.brand}} 
+                        {{inhabitantvehicle.model}}
+                        {{inhabitantvehicle.color}}</a> ({{inhabitantvehicle.owner}})
+                </li>
+            {% else %}
+                <p>No hay vehiculos sin parqueadero en la co-propiedad.</p>
+            {% endif %}
+        {% else %}
+            {% if inhabitantvehicle.parking_place is not None %}
+            <li>
+                <a href="{% url 'vehicleRmParkingPlace' pk=inhabitantvehicle.id %}">{{ inhabitantvehicle.brand }} {{inhabitantvehicle.model}}
+                    {{inhabitantvehicle.color}}</a> ({{inhabitantvehicle.owner}})
+            </li>
+            {% else %}
+            <p>No hay vehiculos con parqueadero en la co-propiedad.</p>
+            {% endif %}
+        {% endif %}
     {% endfor %}
 </ul>
 {% else %}

@@ -4,13 +4,19 @@
 <br>
 <h1 class="title text-center has-text-info">DETALLE DEL PARQUEADERO</h1>
 <br>
-<h3 class="subtitle is-4">Código: {{ parkingplace.code }} </h1>
-<p>Usado por: {% if parkingplace.user_type == 'H' %}Residentes{% else %}Visitantes{% endif %}</p>
-<div>
-    <h3>Acciones:</h3>
-    <ul>
-        <li><a href="{% url 'modParkingPlace' pk=parkingplace.id %}">Modificar</a></li>
-        <li><a href="{% url 'delParkingPlace' pk=parkingplace.id %}">Eliminar</a></li>
-    </ul>
+<div class="card">
+    <div class="card-content ">
+        <h3 class="subtitle is-4">Código: {{ parkingplace.code }} </h1>
+        <p>Usado por: {% if parkingplace.user_type == 'H' %}Residentes{% else %}Visitantes{% endif %}</p>
+        <h1 class="title">Acciones</h1>
+        <h2 class="subtitle">
+          Seleccione si modificar o eliminar el parqueadero.
+        </h2>
+        <div class="d-flex justify-space-around">
+            <a class="button is-info  border-radius-12" href="{% url 'modParkingPlace' pk=parkingplace.id %}">Modificar</a>
+            <a class="button is-dark is-warning border-radius-12" href="{% url 'delParkingPlace' pk=parkingplace.id %}">Eliminar</a>
+        </div>
+      </ul>
+    </div>
 </div>
 {% endblock %}
