@@ -15,7 +15,7 @@
 7. Copy the password and the run the following commands to change the password
    ```shell
    $ docker exec -it mysql mysql -u root -p
-   mysql> CREATE USER root@'%' IDENTIFIED WITH mysql_native_password BY 'password';
+   mysql> CREATE USER root@'%' IDENTIFIED WITH mysql_native_password BY '12345';
    mysql> GRANT ALL PRIVILEGES ON *.* TO 'root'@'%';
    mysql> FLUSH PRIVILEGES;
    ```
@@ -28,9 +28,9 @@
    ```
 9. Create the admin for the project
     ```shell
-    $ python3 manage.py createsuperuser --settings=parking_lot.settings.local
+    $ python manage.py createsuperuser --settings=parking_lot.settings.local
     ```
-10. Create a document folder in [this route](./parking_lot/parking_lot/parking_lot)
+10. Create a documents folder in [this route](./parking_lot/parking_lot/parking_lot)
 11. Start the project
    ```shell
    $ python manage.py runserver --settings=parking_lot.settings.local
