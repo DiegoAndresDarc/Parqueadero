@@ -12,7 +12,7 @@
             {{ form.parking_place }}
         </div>
     </div>
-
+    {% if not set_parking_place %}
     <div class="field is-grouped">
         <label class="label control">Propietario</label>
         <div class="control">
@@ -23,21 +23,21 @@
     <div class="field is-grouped">
         <label class="label control">Marca del Vehiculo</label>
         <div class="control">
-            <input class="input" type="text" name="brand">
+            <input class="input" type="text" name="brand" value="{{ object.brand }}">
         </div>
     </div>
 
     <div class="field is-grouped">
         <label class="label control">Modelo del Vehiculo</label>
         <div class="control">
-            <input class="input" type="text" name="model">
+            <input class="input" type="text" name="model" value="{{ object.model }}">
         </div>
     </div>
 
     <div class="field is-grouped">
         <label class="label control">Color</label>
         <div class="control">
-            <input class="input" type="text" name="color">
+            <input class="input" type="text" name="color" value="{{ object.color }}">
         </div>
     </div>
 
@@ -51,21 +51,21 @@
     <div class="field is-grouped">
         <label class="label control">Peso</label>
         <div class="control">
-            <input class="input" type="number" name="weight">
+            <input class="input" type="number" name="weight" value="{{ object.weight }}">
         </div>
     </div>
 
     <div class="field is-grouped">
         <label class="label control">Número de ejes</label>
         <div class="control">
-            <input class="input" type="number" name="axis">
+            <input class="input" type="number" name="axis" value="{{ object.axis }}">
         </div>
     </div>
 
     <div class="field is-grouped">
         <label class="label control">Placa</label>
         <div class="control">
-            <input class="input" type="text" name="plate">
+            <input class="input" type="text" name="plate" value="{{ object.plate }}">
         </div>
     </div>
 
@@ -87,10 +87,10 @@
     <div class="field is-grouped">
         <label class="label control">Fecha de Vencimiento del SOAT</label>
         <div class="control">
-            <input class="input" type="date" name="due_date">
+            <input class="input" type="date" name="due_date" value="{{ object.due_date|date:'Y-m-d' }}" required>
         </div>
     </div>
-
+    {% endif %}
     <div class="field">
         <div class="control text-center">
             <button class="button is-link"> Guardar</button>

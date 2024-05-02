@@ -5,22 +5,13 @@ from security_guard.models import Visitor, VisitorVehicle
 
 
 class GetParkingFromBarcodeForm(forms.Form):
-    barcode = forms.CharField(widget=forms.PasswordInput)
+    barcode = forms.CharField(widget=forms.TextInput)
 
     def __init__(self, *args, **kwargs):
         super(GetParkingFromBarcodeForm, self).__init__(*args, **kwargs)
         for field in self.fields:
             if isinstance(self.fields[field], forms.fields.CharField):
                 self.fields[field].widget.attrs.update({'class': 'input'})
-
-
-class GetVisitorFromIdentificationForm(forms.Form):
-    identification = forms.IntegerField()
-
-    def __init__(self, *args, **kwargs):
-        super(GetVisitorFromIdentificationForm, self).__init__(*args, **kwargs)
-        for field in self.fields:
-            self.fields[field].widget.attrs.update({'class': 'input'})
 
 
 class CreateVisitorForm(ModelForm):
@@ -40,7 +31,7 @@ class CreateVisitorForm(ModelForm):
 class CreateVisitorVehicleForm(ModelForm):
     class Meta:
         model = VisitorVehicle
-        exclude = ['owner', 'parking_place', ]
+        exclude = ['owner', ]
 
     def __init__(self, *args, **kwargs):
         super(CreateVisitorVehicleForm, self).__init__(*args, **kwargs)
@@ -51,4 +42,3 @@ class CreateVisitorVehicleForm(ModelForm):
                 self.fields[field].widget.attrs.update({'class': 'file-label'})
             else:
                 self.fields[field].widget.attrs.update({'class': 'input'})
-
