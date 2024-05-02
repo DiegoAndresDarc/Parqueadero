@@ -3,9 +3,9 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 
-from security_guard.models import Visitor, SecurityGuard, Shift
-from security_guard.forms import GetVisitorFromIdentificationForm, CreateVisitorForm
-from . import is_security_guard
+from security_guard.models import Visitor, SecurityGuard, Shift, VisitorVehicle
+from security_guard.forms import CreateVisitorForm, CreateVisitorVehicleForm
+from . import is_security_guard, set_default_context
 
 
 @login_required
@@ -16,74 +16,62 @@ def visitor_identification(request, action):
     :param request:
     :return render:
     """
-    security_guard = get_object_or_404(SecurityGuard, user=request.user)
-    context = {
-        'co_ownership': security_guard.co_ownership,
-        'action': action
-    }
-    shift_started = False
-    try:
-        last_shift = Shift.objects.latest('id')
-        if last_shift.end_date is None:
-            shift_started = True
-    except Shift.DoesNotExist:
-        pass
-    if not shift_started:
+    context = set_default_context(request.user)
+    if not context['shift_started']:
         context['action'] = 'error'
         return render(request, 'security_guard/shift_error.html', context=context)
-    context['shift_started'] = shift_started
 
+    context['action'] = action
     if request.method == 'POST':
-        form = GetVisitorFromIdentificationForm(request.POST)
-        if form.is_valid():
-            identification = form.cleaned_data['identification']
-            visitor = Visitor.objects.filter(identification=identification)
+        visitor_form = CreateVisitorForm(request.POST)
+        vehicule_form = CreateVisitorVehicleForm(request.POST)
+        if visitor_form.is_valid() and vehicule_form.is_valid():
+            apartment = visitor_form.cleaned_data['apartment']
+            visitor = Visitor.objects.filter(apartment=apartment)
             if len(visitor) == 0:
                 if action == 'departure':
                     context['action'] = ' visitor not registered'
                     return render(request, 'security_guard/parking_use.html', context=context)
-                return HttpResponseRedirect(reverse('visitorCreate'))
+                visitor = create_visitor(visitor_form)
             else:
-                return HttpResponseRedirect(reverse('visitorVehicles', kwargs={'pk': visitor[0].id, 'action': action}))
+                visitor = visitor[0]
+            vehicule_plate = vehicule_form.cleaned_data['plate']
+            vehicule = VisitorVehicle.objects.filter(owner=visitor, plate=vehicule_plate)
+            if len(vehicule) == 0:
+                vehicule = create_vehicule(vehicule_form, visitor)
+            else:
+                vehicule = vehicule[0]
+            if action == 'entry':
+                return HttpResponseRedirect(reverse('barcodeVEntry', kwargs={'pk': vehicule.id}))
+            return HttpResponseRedirect(reverse('barcodeVDeparture', kwargs={'pk': vehicule.id}))
     else:
-        form = GetVisitorFromIdentificationForm()
-    context['form'] = form
+        visitor_form = CreateVisitorForm()
+        vehicule_form = CreateVisitorVehicleForm()
+    context['visitor_form'] = visitor_form
+    context['vehicule_form'] = vehicule_form
     return render(request, 'security_guard/visitor_identification.html', context=context)
 
 
-@login_required
-@user_passes_test(is_security_guard)
-def create_visitor(request):
+def create_visitor(form):
     """
-    :param request:
+    :param form:
     :return: render
     """
-    security_guard = get_object_or_404(SecurityGuard, user=request.user)
-    context = {
-        'co_ownership': security_guard.co_ownership
-    }
-    shift_started = False
-    try:
-        last_shift = Shift.objects.latest('id')
-        if last_shift.end_date is None:
-            shift_started = True
-    except Shift.DoesNotExist:
-        pass
-    if not shift_started:
-        context['action'] = 'error'
-        return render(request, 'security_guard/shift_error.html', context=context)
-    context['shift_started'] = shift_started
+    apartment = form.cleaned_data['apartment']
+    visitor = form.save(commit=False)
+    visitor.co_ownership = apartment.co_ownership
+    visitor.save()
+    return visitor
 
-    if request.method == 'POST':
-        form = CreateVisitorForm(request.POST)
-        if form.is_valid():
-            security_guard = get_object_or_404(SecurityGuard, user=request.user)
-            co_ownership = security_guard.co_ownership
-            visitor = form.save(commit=False)
-            visitor.co_ownership = co_ownership
-            visitor.save()
-            return HttpResponseRedirect(reverse('visitorVehicles', kwargs={'pk': visitor.pk, 'action': 'create'}))
-    else:
-        form = CreateVisitorForm()
-    context['form'] = form
-    return render(request, 'security_guard/visitor_form.html', context=context)
+
+def create_vehicule(form, owner):
+    """
+    :param form:
+    :param owner:
+    :return: render
+    """
+    vehicule = form.save(commit=False)
+    vehicule.owner = owner
+    vehicule.save()
+    return vehicule
+

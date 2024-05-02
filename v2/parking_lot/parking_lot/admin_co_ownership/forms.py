@@ -306,10 +306,12 @@ class InhabitantVehicleForm(ModelForm):
         if co_ownership_id:
             co_ownership = get_object_or_404(CoOwnership, id=co_ownership_id)
             self.fields['owner'].queryset = Inhabitant.objects.filter(apartment__co_ownership=co_ownership)
+            self.fields['parking_place'].queryset = ParkingPlace.objects.filter(co_ownership=co_ownership, in_use=False)
 
         for field in self.fields:
             if isinstance(self.fields[field], django.forms.fields.TypedChoiceField):
                 self.fields[field].widget.attrs.update({'class': 'select'})
+        self.fields['parking_place'].required = False
 
     def clean_due_date(self):
         data = self.cleaned_data['due_date']

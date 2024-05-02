@@ -3,7 +3,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 
-from admin_co_ownership.models import CoOwnership, Person, Vehicle, InhabitantVehicle
+from admin_co_ownership.models import CoOwnership, Person, Vehicle, InhabitantVehicle, Apartment
 
 
 # Create your models here.
@@ -15,19 +15,28 @@ class SecurityGuard(models.Model):
     co_ownership = models.ForeignKey(CoOwnership, on_delete=models.CASCADE, null=False)
 
 
-class Visitor(Person):
+class Visitor(models.Model):
     """
     Clase para administrar la información de los visitantes de la copropiedad
     """
     co_ownership = models.ForeignKey(CoOwnership, on_delete=models.CASCADE, null=False)
+    apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE, null=False, verbose_name='Apartamento')
 
     def get_absolute_url(self):
         return reverse('visitor-detail', args=[str(self.id)])
 
 
-class VisitorVehicle(Vehicle):
+class VisitorVehicle(models.Model):
     # Clase para administrar la información de los vehículos de los visitantes
     owner = models.ForeignKey(Visitor, on_delete=models.CASCADE, null=True, verbose_name='Propietario')
+    plate = models.CharField(max_length=8, null=False, verbose_name="Número de placa")
+    VEHICLE_TYPES = (
+        ('C', 'Carro'),
+        ('M', 'Moto'),
+        ('B', 'Bicicleta')
+    )
+
+    type = models.CharField(max_length=1, choices=VEHICLE_TYPES, null=False, verbose_name="Tipo de vehiculo")
 
     def get_absolute_url(self):
         return reverse('visitor-vehicle-detail', args=[str(self.id)])
@@ -41,7 +50,7 @@ class VisitorsPayments(models.Model):
     # Fields
     visitor = models.ForeignKey(Visitor, on_delete=models.CASCADE, null=False, verbose_name='Visitante')
     payment_date = models.DateTimeField(null=False, default=timezone.now, verbose_name='Fecha del pago')
-    value = models.DecimalField(decimal_places=2, max_digits=5, null=False, verbose_name='Valor del pago')
+    value = models.DecimalField(decimal_places=2, max_digits=10, null=False, verbose_name='Valor del pago')
 
 
 class Shift(models.Model):
