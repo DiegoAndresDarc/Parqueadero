@@ -67,6 +67,7 @@ class InhabitantVehicleDetailView(LoginRequiredMixin, UserPassesTestMixin, Detai
 class InhabitantVehicleUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = InhabitantVehicle
     fields = '__all__'
+    success_url = reverse_lazy('adminHome')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(InhabitantVehicleUpdateView, self).get_context_data(**kwargs)
@@ -98,6 +99,7 @@ class SetParkingPlaceView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(SetParkingPlaceView, self).get_context_data(**kwargs)
         set_default_context(self.request.user, context)
+        context['set_parking_place'] = True
         return context
 
     def test_func(self):

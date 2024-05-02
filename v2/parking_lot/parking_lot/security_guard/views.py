@@ -1,7 +1,6 @@
 from .models_views.shift_views import *
 from .models_views.parking_use_views import *
 from .models_views.visitor_views import *
-from .models_views.visitor_vehicle_views import *
 from .models import SecurityGuard, Shift
 
 

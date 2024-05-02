@@ -27,6 +27,7 @@ class VisitorVehicleAdmin(admin.ModelAdmin):
 class VisitorsPaymentsAdmin(admin.ModelAdmin):
     pass
 
+
 @admin.register(Shift)
 class ShiftAdmin(admin.ModelAdmin):
     pass

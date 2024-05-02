@@ -6,6 +6,8 @@
     <div class="notification is-primary">The entry of the vehicle has been successful</div>
     {% elif action == 'departure' %}
     <div class="notification is-primary">The departure of the vehicle has been successful</div>
+    {% elif action == 'departureVisitor' %}
+    <div class="notification is-primary">The total to pay is: ${{money}} pesos. Thanks for your visit</div>
     {% elif action == 'in use' %}
     <div class="notification is-danger">The parking lot is already in use</div>
     {% elif action == 'not in use' %}
