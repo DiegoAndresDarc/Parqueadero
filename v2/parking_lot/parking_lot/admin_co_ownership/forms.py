@@ -101,6 +101,14 @@ class SetConfigurationForm(ModelForm):
         # Remember to always return the cleaned data.
         return data
 
+    def clean_payment_value_after_one_day(self):
+        data = self.cleaned_data['payment_value_after_one_day']
+
+        if data < 0:
+            raise ValidationError(_('Payment value after one day cannot be less than 0'))
+        # Remember to always return the cleaned data.
+        return data
+
     def clean_car_payment_value(self):
         data = self.cleaned_data['car_payment_value']
 
@@ -212,6 +220,14 @@ class ModConfigurationForm(ModelForm):
 
         if data < 0:
             raise ValidationError(_('Grace time cannot be less than 0'))
+        # Remember to always return the cleaned data.
+        return data
+
+    def clean_payment_value_after_one_day(self):
+        data = self.cleaned_data['payment_value_after_one_day']
+
+        if data < 0:
+            raise ValidationError(_('Payment value after one day cannot be less than 0'))
         # Remember to always return the cleaned data.
         return data
 

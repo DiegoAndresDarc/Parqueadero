@@ -95,6 +95,7 @@ class Configuration(models.Model):
     )
     visit_payment_type = models.CharField(max_length=1, choices=PAYMENT_TYPE, null=False, verbose_name="Tipo de pago para visitantes")
     grace_time = models.DecimalField(decimal_places=2, max_digits=4, null=False, default=0.0, verbose_name="Tiempo de gracia para el periodo especificado")
+    payment_value_after_one_day = models.DecimalField(decimal_places=2, max_digits=10, null=False, verbose_name="Valor extra a cobrar después de un dia de uso")
     car_payment_value = models.DecimalField(decimal_places=2, max_digits=10, null=False, verbose_name="Valor del pago para carros")
     motorcycle_payment_value = models.DecimalField(decimal_places=2, max_digits=10, null=False, verbose_name="Valor del pago para motocicletas")
     bicycle_payment_value = models.DecimalField(decimal_places=2, max_digits=10, null=False, verbose_name="Valor del pago para bicicletas")
@@ -159,7 +160,8 @@ class ParkingPlace(models.Model):
 
     USERS_TYPE = (
         ('I', 'Residentes'),
-        ('V', 'Visitantes')
+        ('V', 'Visitantes'),
+        ('M', 'MultiUso')
     )
 
     user_type = models.CharField(max_length=1, choices=USERS_TYPE, null=False, default='I', verbose_name="Para ser usado por")
