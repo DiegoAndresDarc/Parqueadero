@@ -101,11 +101,19 @@ class SetConfigurationForm(ModelForm):
         # Remember to always return the cleaned data.
         return data
 
-    def clean_payment_value_after_one_day(self):
-        data = self.cleaned_data['payment_value_after_one_day']
+    def clean_payment_value_after_max_hours(self):
+        data = self.cleaned_data['payment_value_after_max_hours']
 
         if data < 0:
-            raise ValidationError(_('Payment value after one day cannot be less than 0'))
+            raise ValidationError(_('Payment value after max hours cannot be less than 0'))
+        # Remember to always return the cleaned data.
+        return data
+
+    def clean_max_hours_before_change_payment_to_days(self):
+        data = self.cleaned_data['max_hours_before_change_payment_to_days']
+
+        if data < 0:
+            raise ValidationError(_('Max hours before change the payment to days cannot be less than 0'))
         # Remember to always return the cleaned data.
         return data
 
@@ -223,11 +231,19 @@ class ModConfigurationForm(ModelForm):
         # Remember to always return the cleaned data.
         return data
 
-    def clean_payment_value_after_one_day(self):
-        data = self.cleaned_data['payment_value_after_one_day']
+    def clean_payment_value_after_max_hours(self):
+        data = self.cleaned_data['payment_value_after_max_hours']
 
         if data < 0:
-            raise ValidationError(_('Payment value after one day cannot be less than 0'))
+            raise ValidationError(_('Payment value after max hours cannot be less than 0'))
+        # Remember to always return the cleaned data.
+        return data
+
+    def clean_max_hours_before_change_payment_to_days(self):
+        data = self.cleaned_data['max_hours_before_change_payment_to_days']
+
+        if data < 0:
+            raise ValidationError(_('Max hours before change the payment to days cannot be less than 0'))
         # Remember to always return the cleaned data.
         return data
 

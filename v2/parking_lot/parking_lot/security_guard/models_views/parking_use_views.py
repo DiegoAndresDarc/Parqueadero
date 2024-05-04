@@ -4,8 +4,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
-from django.utils import timezone
-from datetime import date
+from datetime import date, datetime, timezone
 
 from security_guard.models import VisitorParkingUse, InhabitantParkingUse, VisitorVehicle, Visitor, SecurityGuard, Shift, VisitorsPayments
 from admin_co_ownership.models import CoOwnership, ParkingPlace, InhabitantVehicle, Configuration
@@ -110,7 +109,7 @@ def departure_inhabitant_vehicle(request, parking_place_id):
     context['action'] = 'departure'
     parking_place = get_object_or_404(ParkingPlace, pk=parking_place_id)
     inhabitant_parking_use = InhabitantParkingUse.objects.filter(vehicle__parking_place=parking_place).latest('id')
-    inhabitant_parking_use.departure_date = timezone.now()
+    inhabitant_parking_use.departure_date = datetime.now(timezone.utc)
     inhabitant_parking_use.save()
     parking_place.in_use = False
     parking_place.save()
@@ -162,26 +161,27 @@ def departure_visitor_vehicle(request, pk, barcode):
     if visitor_parking_use.departure_date is not None:
         context['action'] = 'not entry'
         return render(request, 'security_guard/parking_use.html', context=context)
-    visitor_parking_use.departure_date = timezone.now()
+    visitor_parking_use.departure_date = datetime.now(timezone.utc)
     parking_place.in_use = False
     co_ownership = context['co_ownership']
     configuration = get_object_or_404(Configuration, co_ownership=co_ownership)
     visit_payment_type = configuration.visit_payment_type
     multiplier = 0
-    payment_value = 0.0
+    extra_payment_value = 0.0
     dt = visitor_parking_use.departure_date - visitor_parking_use.entry_date
-    if visit_payment_type == 'H':
-        multiplier = dt.seconds / 60 / 60
-    elif visit_payment_type == 'M':
-        multiplier = dt.seconds / 60
-    elif visit_payment_type == 'D':
-        multiplier = dt.days / 7
-    if vehicle.type == 'C':
-        payment_value = float(configuration.car_payment_value)
-    elif vehicle.type == 'M':
-        payment_value = float(configuration.motorcycle_payment_value)
-    elif vehicle.type == 'B':
-        payment_value = float(configuration.bicycle_payment_value)
+    if configuration.max_hours_before_change_payment_to_days > 0:
+        hours = get_total_time_in_specific_format(dt.total_seconds(), 'H')
+        if hours > configuration.max_hours_before_change_payment_to_days:
+            multiplier = dt.days
+            extra_payment_value = float(configuration.payment_value_after_max_hours)
+    else:
+        if visit_payment_type == 'H':
+            multiplier = get_total_time_in_specific_format(dt.total_seconds(), 'H')
+        elif visit_payment_type == 'M':
+            multiplier = get_total_time_in_specific_format(dt.total_seconds(), 'M')
+        elif visit_payment_type == 'D':
+            multiplier = dt.days
+    payment_value = get_payment_by_vehicule_type(vehicle.type, configuration) + extra_payment_value
     multiplier -= float(configuration.grace_time)
     multiplier = multiplier if multiplier > 0 else 0
     total_pay = payment_value * multiplier
@@ -199,3 +199,24 @@ def departure_visitor_vehicle(request, pk, barcode):
     context['action'] = 'departureVisitor'
     context['money'] = total_pay
     return render(request, 'security_guard/parking_use.html', context=context)
+
+
+def get_total_time_in_specific_format(seconds, format):
+    days = int(seconds / 60 / 60 / 24)
+    if format == 'D':
+        return days
+    hours = int(seconds / 60 / 60)
+    if format == 'H':
+        return hours
+    minutes = int(seconds / 60)
+    return minutes
+
+
+def get_payment_by_vehicule_type(vehicle_type, configuration):
+    if vehicle_type == 'C':
+        return float(configuration.car_payment_value)
+    elif vehicle_type == 'M':
+        return float(configuration.motorcycle_payment_value)
+    elif vehicle_type == 'B':
+        return float(configuration.bicycle_payment_value)
+    return 0.0
