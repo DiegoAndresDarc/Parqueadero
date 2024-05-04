@@ -166,23 +166,20 @@ def departure_visitor_vehicle(request, pk, barcode):
     co_ownership = context['co_ownership']
     configuration = get_object_or_404(Configuration, co_ownership=co_ownership)
     visit_payment_type = configuration.visit_payment_type
-    multiplier = 0
-    extra_payment_value = 0.0
     dt = visitor_parking_use.departure_date - visitor_parking_use.entry_date
     if configuration.max_hours_before_change_payment_to_days > 0:
         hours = get_total_time_in_specific_format(dt.total_seconds(), 'H')
         if hours > configuration.max_hours_before_change_payment_to_days:
             multiplier = dt.days
-            extra_payment_value = float(configuration.payment_value_after_max_hours)
+            payment_value = float(configuration.payment_value_after_max_hours)
+        else:
+            multiplier = (get_multiplier_by_visit_payment_type(visit_payment_type, dt.total_seconds())
+                          - float(configuration.grace_time))
+            payment_value = get_payment_by_vehicule_type(vehicle.type, configuration)
     else:
-        if visit_payment_type == 'H':
-            multiplier = get_total_time_in_specific_format(dt.total_seconds(), 'H')
-        elif visit_payment_type == 'M':
-            multiplier = get_total_time_in_specific_format(dt.total_seconds(), 'M')
-        elif visit_payment_type == 'D':
-            multiplier = dt.days
-    payment_value = get_payment_by_vehicule_type(vehicle.type, configuration) + extra_payment_value
-    multiplier -= float(configuration.grace_time)
+        multiplier = (get_multiplier_by_visit_payment_type(visit_payment_type, dt.total_seconds())
+                      - float(configuration.grace_time))
+        payment_value = get_payment_by_vehicule_type(vehicle.type, configuration)
     multiplier = multiplier if multiplier > 0 else 0
     total_pay = payment_value * multiplier
     total_pay = round(total_pay, 2)
@@ -220,3 +217,13 @@ def get_payment_by_vehicule_type(vehicle_type, configuration):
     elif vehicle_type == 'B':
         return float(configuration.bicycle_payment_value)
     return 0.0
+
+
+def get_multiplier_by_visit_payment_type(visit_payment_type, seconds):
+    if visit_payment_type == 'H':
+        return get_total_time_in_specific_format(seconds, 'H')
+    elif visit_payment_type == 'M':
+        return get_total_time_in_specific_format(seconds, 'M')
+    elif visit_payment_type == 'D':
+        return get_total_time_in_specific_format(seconds, 'D')
+    return 0
