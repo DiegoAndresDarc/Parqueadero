@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
-from django.utils import timezone
+from datetime import datetime
 
 from admin_co_ownership.models import CoOwnership, Person, Vehicle, InhabitantVehicle, Apartment
 
@@ -49,7 +49,7 @@ class VisitorsPayments(models.Model):
 
     # Fields
     visitor = models.ForeignKey(Visitor, on_delete=models.CASCADE, null=False, verbose_name='Visitante')
-    payment_date = models.DateTimeField(null=False, default=timezone.now, verbose_name='Fecha del pago')
+    payment_date = models.DateTimeField(null=False, default=datetime.now, verbose_name='Fecha del pago')
     value = models.DecimalField(decimal_places=2, max_digits=10, null=False, verbose_name='Valor del pago')
 
 
@@ -60,7 +60,7 @@ class Shift(models.Model):
 
     # Fields
     security_guard = models.ForeignKey(SecurityGuard, on_delete=models.CASCADE, null=False)
-    start_date = models.DateTimeField(null=False, default=timezone.now, verbose_name='Fecha de inicio del turno')
+    start_date = models.DateTimeField(null=False, default=datetime.now, verbose_name='Fecha de inicio del turno')
     end_date = models.DateTimeField(null=True, verbose_name='Fecha de fin del turno')
     starting_money = models.DecimalField(decimal_places=2, max_digits=10, null=False, verbose_name='Dinero inicial')
     final_money = models.DecimalField(decimal_places=2, max_digits=10, null=False, verbose_name='Dinero final')
@@ -72,7 +72,7 @@ class ParkingUseRecord(models.Model):
         abstract = True
 
     # Fields
-    entry_date = models.DateTimeField(null=False, default=timezone.now, verbose_name='Fecha y hora de ingreso')
+    entry_date = models.DateTimeField(null=False, default=datetime.now, verbose_name='Fecha y hora de ingreso')
     departure_date = models.DateTimeField(null=True, verbose_name='Fecha y hora de salida')
 
 
